@@ -1,0 +1,20 @@
+[tool.poetry]
+authors = ["Konstantin-Dudersky <Konstantin.Dudersky@gmail.com>"]
+description = ""
+name = "smarthome-docs"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+konstantin-docs = "*"
+poethepoet = "*"
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+
+[tool.poe.tasks]
+docs = {script = "konstantin_docs.main:generate_images('dia_src', 'dia_dist')"}
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]

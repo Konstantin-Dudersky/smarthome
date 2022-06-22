@@ -1,0 +1,36 @@
+@startuml
+
+!include C4_Dynamic.puml
+!include <tupadr3/common>
+!include <tupadr3/font-awesome-5/sun>
+!include <tupadr3/devicons/postgresql>
+!include <tupadr3/devicons/sqllite>
+!include <tupadr3/devicons/angular>
+!include <tupadr3/devicons/python>
+title C4
+
+System_Boundary(140427290053648, $label="smarthome"){
+	Container(140427291144880, $label="web app", $techn="angular", $descr="", $sprite="angular")
+Container(140427290052688, $label="desktop app", $techn="angular, tauri", $descr="", $sprite="angular")
+Container(140427290052784, $label="Deconz", $techn="Zigbee", $descr="")
+Container_Boundary(140427290053408, $label="Server"){
+	Component(140427290052928, $label="API", $techn="FastAPI", $descr="", $sprite="python")
+Component(140427290053072, $label="weather-service", $techn="Python", $descr="", $sprite="python")
+Component(140427290053216, $label="deconz-service", $techn="aiohttp", $descr="", $sprite="python")
+ComponentDb(140427290053360, $label="DB", $techn="SQLite", $descr="Для сохранения состояния и настроек", $sprite="sqllite")
+
+}
+ContainerDb(140427290053552, $label="DB", $techn="PostgreSQL+TimescaleDB", $descr="Для архивов", $sprite="postgresql")
+
+}
+System_Ext(140427290053792, $label="Weather", $descr="", $sprite="sun")
+
+
+
+Rel(140427291144880, 140427290052928, "Uses", "http", "")
+Rel(140427290052688, 140427290052928, "Uses", "http", "")
+Rel(140427290053072, 140427290053792, "Uses", "http", "")
+Rel(140427290053216, 140427290052784, "Uses", "REST API, websockets", "")
+Rel(140427290053408, 140427290053552, "R/W", "sqlalchemy+psycopg", "")
+SHOW_LEGEND()
+@enduml

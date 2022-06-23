@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "76f17421-063d-44b3-a105-8ceea382f447",
+    "colName": "init",
+    "created": "2022-06-22T06:01:04.604Z",
+    "sortNum": 10000,
+    "folders": []
+  },
+  {
+    "_id": "bb464746-3209-4dab-9126-bdc8edd566bb",
+    "colName": "sensors",
+    "created": "2022-06-22T06:53:01.462Z",
+    "sortNum": 20000,
+    "folders": []
+  },
+  {
+    "_id": "c7ffe4b3-dd17-4302-8c93-06b4347e3fa1",
+    "colName": "configuration",
+    "created": "2022-06-22T09:19:02.864Z",
+    "sortNum": 30000,
+    "folders": []
+  }
+]

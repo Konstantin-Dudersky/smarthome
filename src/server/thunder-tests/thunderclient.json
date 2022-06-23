@@ -1,0 +1,63 @@
+[
+  {
+    "_id": "3d726492-c737-46b6-a2a0-3141ee5d07b0",
+    "colId": "76f17421-063d-44b3-a105-8ceea382f447",
+    "containerId": "",
+    "name": "Acquire an API key",
+    "url": "{{base_url}}",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2022-06-22T06:01:34.189Z",
+    "modified": "2022-06-22T06:21:17.674Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\"devicetype\" : \"smarthome\"}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3d4f43b5-b3b6-4ba4-a672-fd4187d94428",
+    "colId": "bb464746-3209-4dab-9126-bdc8edd566bb",
+    "containerId": "",
+    "name": "Get all Sensors",
+    "url": "{{base_url}}/{{api_key}}/sensors",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-06-22T06:53:20.678Z",
+    "modified": "2022-06-22T06:53:47.496Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "4b301eb9-2fb2-43b9-8918-97665dbbc368",
+    "colId": "bb464746-3209-4dab-9126-bdc8edd566bb",
+    "containerId": "",
+    "name": "Get sensor",
+    "url": "{{base_url}}/{{api_key}}/sensors/5",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-06-22T06:55:59.146Z",
+    "modified": "2022-06-22T06:58:42.915Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "e205ac2f-49f5-4f23-96a8-eb65e3d787ad",
+    "colId": "c7ffe4b3-dd17-4302-8c93-06b4347e3fa1",
+    "containerId": "",
+    "name": "Get configuration",
+    "url": "{{base_url}}/{{api_key}}/config",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-06-22T09:19:31.803Z",
+    "modified": "2022-06-22T09:19:56.641Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]

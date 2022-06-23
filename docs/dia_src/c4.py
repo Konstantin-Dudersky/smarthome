@@ -11,9 +11,15 @@ desktop_app = container.Container(
     techn="angular, tauri",
     sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.ANGULAR),
 )
-deconz = container.Container(
+deconz = container.ContainerExt(
     label="Deconz",
-    techn="Zigbee",
+    techn="REST API, websockets",
+    sprite=sprite.tupadr3.FontAwesome5(sprite.tupadr3.FontAwesome5Lib.SERVER),
+)
+zigbee = container.ContainerExt(
+    label="Zigbee sensors",
+    techn="T, P, ...",
+    sprite=sprite.tupadr3.FontAwesome5(sprite.tupadr3.FontAwesome5Lib.THERMOMETER),
 )
 # core app
 api = component.Component(
@@ -51,7 +57,7 @@ db = container.ContainerDb(
 
 smarthome = context.SystemBoundary(
     label="smarthome",
-    links_container=[web_app, desktop_app, deconz, server, db],
+    links_container=[web_app, desktop_app, deconz, server, db, zigbee],
 )
 weather = context.SystemExt(
     label="Weather",
@@ -66,7 +72,8 @@ dia = C4(
         rel.Rel(label="Uses", links=(web_app, api), techn="http"),
         rel.Rel(label="Uses", links=(desktop_app, api), techn="http"),
         rel.Rel(label="Uses", links=(server_weather, weather), techn="http"),
-        rel.Rel(label="Uses", links=(server_deconz, deconz), techn="REST API, websockets"),
+        rel.Rel(label="Uses", links=(server_deconz, deconz), techn="http"),
+        rel.Rel(label="Uses", links=(deconz, zigbee), techn="zigbee"),
         rel.Rel(label="R/W", links=(server, db), techn="sqlalchemy+psycopg"),
     ],
 )

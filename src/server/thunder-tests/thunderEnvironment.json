@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "9e3939ca-87a3-45a4-895a-f381658448fa",
+    "name": "(Global Env)",
+    "default": false,
+    "global": true,
+    "sortNum": -1,
+    "created": "2022-06-22T06:00:02.554Z",
+    "modified": "2022-06-22T06:10:14.074Z",
+    "data": [
+      {
+        "name": "base_url",
+        "value": "http://192.168.100.5:8080/api"
+      },
+      {
+        "name": "api_key",
+        "value": "303E2AD17F"
+      }
+    ]
+  }
+]

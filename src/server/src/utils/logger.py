@@ -1,9 +1,10 @@
 """Setup logging.
 
 in files:
-    from src.utils.logger import LoggerLevel, get_logger
-    logger = get_logger(__name__)
-    logger.setLevel(LoggerLevel.INFO)
+
+from src.utils.logger import LoggerLevel, get_logger
+logger = get_logger(__name__)
+logger.setLevel(LoggerLevel.INFO)
 """
 
 import logging

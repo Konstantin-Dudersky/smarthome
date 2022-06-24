@@ -1,6 +1,7 @@
 """Модели Pydantic."""
 
 from datetime import datetime
+from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -52,3 +53,106 @@ class ConfigModel(BaseModel):
         alias="disablePermitJoinAutoOff",
     )
     utc: datetime = Field(..., alias="UTC")
+
+
+class SensorConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    on: bool
+    reachable: bool
+    temperature: int
+
+
+class SensorOpenCloseState(BaseModel):
+    """Состояние датчика открытия/закрытия."""
+
+    lastupdated: datetime
+    opened: bool = Field(..., alias="open")
+
+
+class SensorOpenClose(BaseModel):
+    """Датчик открытия/закрытия."""
+
+    config: SensorConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: SensorOpenCloseState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str
+
+
+# websocket -------------------------------------------------------------------
+
+
+class WsEvents(Enum):
+    """The event type of the message."""
+
+    ADDED = "added"
+    CHANGED = "changed"
+    DELETED = "deleted"
+    SCENE_CALLED = "scene-called"
+
+
+class WsResources(Enum):
+    """The resource type to which the message belongs."""
+
+    GROUPS = "groups"
+    LIGHTS = "lights"
+    SCENES = "scenes"
+    SENSORS = "sensors"
+
+
+class WsTypes(Enum):
+    """The type of the message."""
+
+    EVENT = "event"
+
+
+class WsAttr(BaseModel):
+    """Атрибуты сообщения."""
+
+    resource_id: int = Field(..., alias="id")
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    swversion: str
+    attr_type: str = Field(..., alias="type")
+    uniqueid: str
+
+
+class WsMsg(BaseModel):
+    """Базовое сообщение."""
+
+    event: WsEvents = Field(..., alias="e")
+    resource_id: int = Field(..., alias="id")
+    resource: WsResources = Field(..., alias="r")
+    msg_type: WsTypes = Field(..., alias="t")
+    uniqueid: str
+
+
+class WsStateOpenClose(BaseModel):
+    """state для ZHAOpenClose."""
+
+    lastupdated: datetime
+    opened: bool = Field(..., alias="open")
+
+
+class WsMsgOpenClose(WsMsg):
+    """Сообщение 1."""
+
+    state: WsStateOpenClose
+
+
+class WsMsg2(WsMsg):
+    """Сообщение 2."""
+
+    attr: WsAttr

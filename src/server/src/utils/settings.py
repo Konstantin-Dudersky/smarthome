@@ -37,8 +37,8 @@ class Settings(BaseSettings):
         env_file = ENV_FILE
         env_file_encoding = ENCODING
 
-    deconz_ip: IPvAnyAddress = "192.168.100.5"
-    deconz_rest_port: int = 8080
+    deconz_ip: IPvAnyAddress = "192.168.101.10"
+    deconz_rest_port: int = 80
     deconz_api_key: str = "303E2AD17F"
     db_url: str = "sqlite:///db.sqlite3"
 

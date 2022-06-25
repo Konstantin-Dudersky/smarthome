@@ -8,7 +8,7 @@ from src.utils.logger import LoggerLevel, get_logger
 
 from . import api, deconz, models
 
-logger = get_logger(__name__, LoggerLevel.DEBUG)
+logger = get_logger(__name__, LoggerLevel.INFO)
 
 
 class CyclicRun:

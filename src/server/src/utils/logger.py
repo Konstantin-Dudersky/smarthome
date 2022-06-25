@@ -31,13 +31,25 @@ class CustomFormatter(logging.Formatter):
     BOLD_RED = "\x1b[31;1m"
     RESET = "\x1b[0m"
 
-    FORMATS = {
-        logging.DEBUG: GREY + FORMAT + RESET,
-        logging.INFO: GREEN + FORMAT + RESET,
-        logging.WARNING: YELLOW + FORMAT + RESET,
-        logging.ERROR: RED + FORMAT + RESET,
-        logging.CRITICAL: BOLD_RED + FORMAT + RESET,
-    }
+    def get_format(self: "CustomFormatter", text: str, levelno: int) -> str:
+        """Цвет сообщения.
+
+        :param text: текст, цвет которого нужно изменить
+        :param levelno: класс сообщения
+        :return: текст с измененным текстом
+        """
+        match levelno:
+            case logging.DEBUG:
+                return self.GREY + text + self.RESET
+            case logging.INFO:
+                return self.GREEN + text + self.RESET
+            case logging.DEBUG:
+                return self.YELLOW + text + self.RESET
+            case logging.ERROR:
+                return self.RED + text + self.RESET
+            case logging.CRITICAL:
+                return self.BOLD_RED + text + self.RESET
+        return text
 
     def format(self: "CustomFormatter", record: logging.LogRecord) -> str:
         """Format function.
@@ -45,9 +57,13 @@ class CustomFormatter(logging.Formatter):
         :param record: запись логгера
         :return: отформатированная запись логгера
         """
-        log_fmt = self.FORMATS.get(record.levelno)
+        log_fmt = self.get_format(FORMAT, record.levelno)
         formatter = logging.Formatter(log_fmt)
-        return formatter.format(record) + "\n" + "-" * 80
+        return (
+            formatter.format(record)
+            + "\n"
+            + self.get_format("-" * 80, record.levelno)
+        )
 
 
 # ------------------------------------------------------------------------------
@@ -108,5 +124,4 @@ def get_logger(
 
 
 _logger = get_logger(__name__)
-_logger.info("-" * 80)
 _logger.info("Start at host: %s", socket.gethostname())

@@ -152,7 +152,7 @@ class WsMsgOpenClose(WsMsg):
     state: WsStateOpenClose
 
 
-class WsMsg2(WsMsg):
+class WsMsgWithoutState(WsMsg):
     """Сообщение 2."""
 
     attr: WsAttr

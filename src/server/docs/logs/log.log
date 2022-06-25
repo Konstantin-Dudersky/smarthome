@@ -1,0 +1,4 @@
+INFO: 2022-06-25 10:11:43,816 | src.utils.logger:99 - <module> | --------------------------------------------------
+INFO: 2022-06-25 10:11:43,816 | src.utils.logger:100 - <module> | Start at host: es-home
+INFO: 2022-06-25 10:26:27,772 | src.utils.logger:99 - <module> | --------------------------------------------------
+INFO: 2022-06-25 10:26:27,772 | src.utils.logger:100 - <module> | Start at host: es-home

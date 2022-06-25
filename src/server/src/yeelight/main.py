@@ -1,5 +1,7 @@
 """Взаимодействие с лампами yeelight.
 
+Описание API - https://www.yeelight.com/en_US/developer
+
 Пример реализации - https://gitlab.com/stavros/python-yeelight
 """
 
@@ -183,10 +185,10 @@ class Bulb:
         await self.get_power(True)
 
     async def get_bright(self: "Bulb", update: bool = False) -> int | None:
-        """Ярость в процентах.
+        """Яркость в процентах.
 
         :param update: True - опрос лампы, False - из памяти
-        :return: Ярость в процентах (1 - 100%)
+        :return: Яркость в процентах (1 - 100%)
         """
         if update:
             msg = await self._get_prop(Properties.BRIGHT)

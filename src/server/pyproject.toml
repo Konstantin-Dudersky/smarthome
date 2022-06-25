@@ -31,11 +31,14 @@ flake8-return = "*"
 flake8-variables-names = "*"
 mypy = "*"
 pep8-naming = "*"
+pydata-sphinx-theme = "*"
 pylint = "*"
+sphinx = "*"
 
 [tool.poe.tasks]
 create_env = {script = "src.utils.settings:create_env"}
 main = {script = "src.main:main"}
+docs = { shell = "sphinx-apidoc --force -o docs src && cd docs && make html" } 
 
 [tool.pylint.BASIC]
 good-names = ['db', 'ws']

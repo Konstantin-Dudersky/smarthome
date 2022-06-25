@@ -35,8 +35,8 @@ class States(Enum):
 
 
 class Messages(NamedTuple):
-    open_close: dict[int, models.WsMsgOpenClose] = {}
-    general: dict[int, models.WsMsg2] = {}
+    zha_open_close: dict[int, models.WsMsgOpenClose] = {}
+    without_state: dict[int, models.WsMsgWithoutState] = {}
 
 
 class Websocket:
@@ -66,16 +66,20 @@ class Websocket:
     def get_msg_general(
         self: "Websocket",
         resource_id: int,
-    ) -> models.WsMsg2 | None:
+    ) -> models.WsMsgWithoutState | None:
         """Иногда deconz публикует сообщение без state."""
-        return self.__msg.general.pop(resource_id, None)
+        return self.__msg.without_state.pop(resource_id, None)
 
     def get_msg_open_close(
         self: "Websocket",
         resouce_id: int,
     ) -> models.WsMsgOpenClose | None:
-        """Возвращает сообщение из очереди."""
-        return self.__msg.open_close.pop(resouce_id, None)
+        """Возвращает сообщение из очереди для датчика ZHAOpenClose.
+
+        :param resouce_id: id датчика
+        :return: Сообщение из буфера или None
+        """
+        return self.__msg.zha_open_close.pop(resouce_id, None)
 
     async def _get_config(self: "Websocket") -> None:
         """Получить номер порта."""
@@ -102,15 +106,15 @@ class Websocket:
         # датчик открыт/закрыт
         try:
             msg1 = models.WsMsgOpenClose.parse_raw(data)
-            self.__msg.open_close[msg1.resource_id] = msg1
+            self.__msg.zha_open_close[msg1.resource_id] = msg1
             return
         except pydantic.ValidationError:
             pass
         # датчик присутствия
         # общее сообщение
         try:
-            msg2 = models.WsMsg2.parse_raw(data)
-            # self.__msg[msg2.resource_id] = msg2
+            msg2 = models.WsMsgWithoutState.parse_raw(data)
+            self.__msg.without_state[msg2.resource_id] = msg2
             return
         except pydantic.ValidationError:
             pass

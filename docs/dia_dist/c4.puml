@@ -2,39 +2,43 @@
 
 !include C4_Dynamic.puml
 !include <tupadr3/common>
-!include <tupadr3/devicons/sqllite>
-!include <tupadr3/font-awesome-5/sun>
-!include <tupadr3/devicons/angular>
-!include <tupadr3/font-awesome-5/thermometer>
+!include <tupadr3/font-awesome-5/lightbulb>
 !include <tupadr3/font-awesome-5/server>
 !include <tupadr3/devicons/postgresql>
 !include <tupadr3/devicons/python>
+!include <tupadr3/font-awesome-5/sun>
+!include <tupadr3/devicons/sqllite>
+!include <tupadr3/font-awesome-5/thermometer>
+!include <tupadr3/devicons/angular>
 title C4
 
-System_Boundary(140424949845728, $label="smarthome"){
-	Container(140424950952912, $label="web app", $techn="angular", $descr="", $sprite="angular")
-Container(140424949844528, $label="desktop app", $techn="angular, tauri", $descr="", $sprite="angular")
-Container_Ext(140424949844720, $label="Deconz", $techn="REST API, websockets", $descr="", $sprite="server")
-Container_Boundary(140424949845488, $label="Server"){
-	Component(140424949845008, $label="API", $techn="FastAPI", $descr="", $sprite="python")
-Component(140424949845152, $label="weather-service", $techn="Python", $descr="", $sprite="python")
-Component(140424949845296, $label="deconz-service", $techn="aiohttp", $descr="", $sprite="python")
-ComponentDb(140424949845440, $label="DB", $techn="SQLite", $descr="Для сохранения состояния и настроек", $sprite="sqllite")
+System_Boundary(140125347762032, $label="smarthome"){
+	Container(140125348835680, $label="web app", $techn="angular", $descr="", $sprite="angular")
+Container(140125347760544, $label="desktop app", $techn="angular, tauri", $descr="", $sprite="angular")
+Container_Ext(140125347760736, $label="Deconz", $techn="REST API, websockets", $descr="", $sprite="server")
+Container_Boundary(140125347761840, $label="Server"){
+	Component(140125347761168, $label="API", $techn="FastAPI", $descr="", $sprite="python")
+Component(140125347761312, $label="weather-service", $techn="Python", $descr="", $sprite="python")
+Component(140125347761456, $label="deconz-service", $techn="httpx, websockets", $descr="", $sprite="python")
+ComponentDb(140125347761744, $label="DB", $techn="SQLite", $descr="Для сохранения состояния и настроек", $sprite="sqllite")
+Component(140125347761600, $label="yeelight-service", $techn="httpx", $descr="", $sprite="python")
 
 }
-ContainerDb(140424949845632, $label="DB", $techn="PostgreSQL+TimescaleDB", $descr="Для архивов", $sprite="postgresql")
-Container_Ext(140424949844864, $label="Zigbee sensors", $techn="T, P, ...", $descr="", $sprite="thermometer")
+ContainerDb(140125347761984, $label="DB", $techn="PostgreSQL+TimescaleDB", $descr="Для архивов", $sprite="postgresql")
+Container_Ext(140125347760880, $label="Zigbee sensors", $techn="T, P, ...", $descr="", $sprite="thermometer")
+Container_Ext(140125347761024, $label="Yeelight bulbs", $techn="Yeelight", $descr="", $sprite="lightbulb")
 
 }
-System_Ext(140424949845872, $label="Weather", $descr="", $sprite="sun")
+System_Ext(140125347762176, $label="Weather", $descr="", $sprite="sun")
 
 
 
-Rel(140424950952912, 140424949845008, "Uses", "http", "")
-Rel(140424949844528, 140424949845008, "Uses", "http", "")
-Rel(140424949845152, 140424949845872, "Uses", "http", "")
-Rel(140424949845296, 140424949844720, "Uses", "http", "")
-Rel(140424949844720, 140424949844864, "Uses", "zigbee", "")
-Rel(140424949845488, 140424949845632, "R/W", "sqlalchemy+psycopg", "")
+Rel(140125348835680, 140125347761168, "Uses", "http", "")
+Rel(140125347760544, 140125347761168, "Uses", "http", "")
+Rel(140125347761312, 140125347762176, "Uses", "http", "")
+Rel(140125347761456, 140125347760736, "Uses", "http", "")
+Rel(140125347760736, 140125347760880, "Uses", "zigbee", "")
+Rel(140125347761840, 140125347761984, "R/W", "sqlalchemy+psycopg", "")
+Rel(140125347761600, 140125347761024, "R/W", "http,Wi-Fi", "")
 SHOW_LEGEND()
 @enduml

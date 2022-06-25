@@ -19,7 +19,6 @@ from dotenv import set_key
 from pydantic import BaseSettings
 
 if TYPE_CHECKING:
-    AnyUrl = str
     IPvAnyAddress = str
 else:
     from pydantic import IPvAnyAddress
@@ -41,6 +40,7 @@ class Settings(BaseSettings):
     deconz_rest_port: int = 80
     deconz_api_key: str = "303E2AD17F"
     db_url: str = "sqlite:///db.sqlite3"
+    yeelight_bathroom: IPvAnyAddress = "192.168.101.20"
 
 
 def create_env() -> None:

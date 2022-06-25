@@ -21,7 +21,12 @@ zigbee = container.ContainerExt(
     techn="T, P, ...",
     sprite=sprite.tupadr3.FontAwesome5(sprite.tupadr3.FontAwesome5Lib.THERMOMETER),
 )
-# core app
+yeelight = container.ContainerExt(
+    label="Yeelight bulbs",
+    techn="Yeelight",
+    sprite=sprite.tupadr3.FontAwesome5(sprite.tupadr3.FontAwesome5Lib.LIGHTBULB),
+)
+# server app
 api = component.Component(
     label="API",
     techn="FastAPI",
@@ -34,7 +39,12 @@ server_weather = component.Component(
 )
 server_deconz = component.Component(
     label="deconz-service",
-    techn="aiohttp",
+    techn="httpx, websockets",
+    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.PYTHON),
+)
+server_yeelight = component.Component(
+    label="yeelight-service",
+    techn="httpx",
     sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.PYTHON),
 )
 server_db = component.ComponentDb(
@@ -45,7 +55,7 @@ server_db = component.ComponentDb(
 )
 server = container.ContainerBoundary(
     label="Server",
-    links_component=[api, server_weather, server_deconz, server_db],
+    links_component=[api, server_weather, server_deconz, server_db, server_yeelight],
 )
 
 db = container.ContainerDb(
@@ -57,7 +67,7 @@ db = container.ContainerDb(
 
 smarthome = context.SystemBoundary(
     label="smarthome",
-    links_container=[web_app, desktop_app, deconz, server, db, zigbee],
+    links_container=[web_app, desktop_app, deconz, server, db, zigbee, yeelight],
 )
 weather = context.SystemExt(
     label="Weather",
@@ -75,5 +85,6 @@ dia = C4(
         rel.Rel(label="Uses", links=(server_deconz, deconz), techn="http"),
         rel.Rel(label="Uses", links=(deconz, zigbee), techn="zigbee"),
         rel.Rel(label="R/W", links=(server, db), techn="sqlalchemy+psycopg"),
+        rel.Rel(label="R/W", links=(server_yeelight, yeelight), techn="http,Wi-Fi"),
     ],
 )

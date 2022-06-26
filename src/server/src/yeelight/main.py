@@ -21,8 +21,7 @@ if __name__ == "__main__":
 else:
     from src.utils.logger import LoggerLevel, get_logger
 
-    logger = get_logger(__name__)
-    logger.setLevel(LoggerLevel.DEBUG)
+    logger = get_logger(__name__, LoggerLevel.INFO)
 
 
 def bool_to_onoff(value: bool) -> str:

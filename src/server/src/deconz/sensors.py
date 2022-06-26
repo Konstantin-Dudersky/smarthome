@@ -4,6 +4,7 @@ import asyncio
 from asyncio import sleep as asleep
 import time
 
+from src.base.types import Di, Qual
 from src.utils.logger import LoggerLevel, get_logger
 
 from . import api, deconz, models
@@ -61,11 +62,11 @@ class OpenClose:
         :param ws: Канал сообщений websocket
         """
         self.__id = sensor_id
-        self.__data: models.SensorOpenClose | None = None
+        self.__data_opened = Di(False, Qual.BAD)
         self.__ws = ws
-        self.__cyclic_run = CyclicRun(300.0)
+        self.__cyclic_run = CyclicRun(5.0)
 
-    async def opened(self: "OpenClose", update: bool = False) -> bool | None:
+    async def opened(self: "OpenClose", update: bool = False) -> Di:
         """Состояние - открыт или закрыт.
 
         :param update: True - опрос, False - из памяти
@@ -73,9 +74,7 @@ class OpenClose:
         """
         if update:
             await self._update()
-        if self.__data is None:
-            return await asleep(0)
-        return await asleep(0, self.__data.state.opened)
+        return await asleep(0.1, self.__data_opened)
 
     async def run(self: "OpenClose") -> None:
         """Run task."""
@@ -93,9 +92,7 @@ class OpenClose:
                 repr(self),
                 msg.state.opened,
             )
-            if self.__data is not None:
-                self.__data.state.opened = msg.state.opened
-                self.__data.state.lastupdated = msg.state.lastupdated
+            self.__data_opened.update(msg.state.opened, Qual.GOOD)
         msg2 = self.__ws.get_msg_general(self.__id)
         if msg2 is not None:
             logger.debug(
@@ -111,16 +108,18 @@ class OpenClose:
 
         :return: Возвращает полученные данные или None
         """
-        data = await api.get_sensor(self.__id)
-        if data is None:
+        msg = await api.get_sensor(self.__id)
+        if msg is None:
             logger.warning(
                 "%s, неудачная попытка обновить данные датчика",
                 repr(self),
             )
+            self.__data_opened.update(None, Qual.BAD)
             return await asleep(0)
-        logger.debug("%s, обновление данных: %s", repr(self), data.json())
-        self.__data = models.SensorOpenClose.parse_obj(data.json())
-        return await asleep(0, result=self.__data)
+        logger.debug("%s, обновление данных: %s", repr(self), msg.json())
+        data = models.SensorOpenClose.parse_obj(msg.json())
+        self.__data_opened.update(data.state.opened, Qual.GOOD)
+        return await asleep(0, result=data)
 
     def __repr__(self: "OpenClose") -> str:
         """Represent string.

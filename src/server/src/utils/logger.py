@@ -43,7 +43,7 @@ class CustomFormatter(logging.Formatter):
                 return self.GREY + text + self.RESET
             case logging.INFO:
                 return self.GREEN + text + self.RESET
-            case logging.DEBUG:
+            case logging.WARNING:
                 return self.YELLOW + text + self.RESET
             case logging.ERROR:
                 return self.RED + text + self.RESET

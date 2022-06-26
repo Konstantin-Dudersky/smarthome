@@ -1,3 +1,3 @@
 [flake8]
-ignore = I100,I101,W503
+ignore = I100,I101,W503,R504
 docstring_style=sphinx

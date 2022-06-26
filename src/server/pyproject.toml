@@ -12,6 +12,7 @@ poethepoet = "*"
 python = "3.10.*"
 python-dotenv = "0.20.0"
 sqlalchemy = "1.4.39"
+python-telegram-bot-raw = "20.0a1"
 uvicorn = "0.18.1"
 websockets = "10.3"
 

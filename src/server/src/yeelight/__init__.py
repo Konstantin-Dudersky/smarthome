@@ -4,3 +4,5 @@
 # pyright: reportUnusedImport=false
 
 from .main import Bulb
+
+__all__ = ["Bulb"]

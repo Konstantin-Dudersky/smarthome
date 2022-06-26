@@ -5,7 +5,8 @@
             "name": "FastAPI",
             "type": "python",
             "request": "launch",
-            "module": "src.main"
+            "module": "src.main",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

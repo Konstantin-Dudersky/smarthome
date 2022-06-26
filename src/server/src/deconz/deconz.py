@@ -34,7 +34,9 @@ class States(Enum):
     RECONNECT = auto()  # подключение пропало, переподключаемся
 
 
-class Messages(NamedTuple):
+class MessageBuffer(NamedTuple):
+    """Буфер сообщений websocket."""
+
     zha_open_close: dict[int, models.WsMsgOpenClose] = {}
     without_state: dict[int, models.WsMsgWithoutState] = {}
 
@@ -46,28 +48,22 @@ class Websocket:
         """Подключение через websocket."""
         self.__state = States.INIT
         self.__websocketport: int = 0
-        self.__msg: Messages = Messages()
+        self.__msg: MessageBuffer = MessageBuffer()
 
-    async def run(self: "Websocket") -> None:
+    async def task(self: "Websocket") -> None:
         """Основной цикл."""
         while True:
-            logger.info(self.__state.name)
-            match self.__state:
-                case States.INIT:
-                    await self._get_config()
-                case States.CONFIG_RCV:
-                    await self._connect()
-                case States.CONNECTED:
-                    await self._connect()
-                case States.RECONNECT:
-                    await self._connect()
-                    await asyncio.sleep(1)
+            await self.__task()
 
     def get_msg_general(
         self: "Websocket",
         resource_id: int,
     ) -> models.WsMsgWithoutState | None:
-        """Иногда deconz публикует сообщение без state."""
+        """Иногда deconz публикует сообщение без state.
+
+        :param resource_id: id датчика
+        :return: Сообщение из буфера или None
+        """
         return self.__msg.without_state.pop(resource_id, None)
 
     def get_msg_open_close(
@@ -89,6 +85,20 @@ class Websocket:
             return
         self.__websocketport = config.websocketport
         self.__state = States.CONFIG_RCV
+
+    async def __task(self: "Websocket") -> None:
+        """Основной цикл."""
+        logger.debug(self.__state.name)
+        match self.__state:
+            case States.INIT:
+                await self._get_config()
+            case States.CONFIG_RCV:
+                await self._connect()
+            case States.CONNECTED:
+                await self._connect()
+            case States.RECONNECT:
+                await self._connect()
+                await asyncio.sleep(1)
 
     async def _connect(self: "Websocket") -> None:
         """Получение данных по websocket."""
@@ -123,4 +133,4 @@ class Websocket:
 
 if __name__ == "__main__":
     ws = Websocket()
-    asyncio.run(ws.run())
+    asyncio.run(ws.task())

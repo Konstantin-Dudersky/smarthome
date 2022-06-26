@@ -2,43 +2,47 @@
 
 !include C4_Dynamic.puml
 !include <tupadr3/common>
-!include <tupadr3/font-awesome-5/lightbulb>
-!include <tupadr3/font-awesome-5/server>
-!include <tupadr3/devicons/postgresql>
-!include <tupadr3/devicons/python>
 !include <tupadr3/font-awesome-5/sun>
-!include <tupadr3/devicons/sqllite>
-!include <tupadr3/font-awesome-5/thermometer>
 !include <tupadr3/devicons/angular>
+!include <tupadr3/font-awesome-5/server>
+!include <tupadr3/font-awesome-5/telegram>
+!include <tupadr3/font-awesome-5/lightbulb>
+!include <tupadr3/font-awesome-5/thermometer>
+!include <tupadr3/devicons/python>
+!include <tupadr3/devicons/sqllite>
+!include <tupadr3/devicons/postgresql>
 title C4
 
-System_Boundary(140125347762032, $label="smarthome"){
-	Container(140125348835680, $label="web app", $techn="angular", $descr="", $sprite="angular")
-Container(140125347760544, $label="desktop app", $techn="angular, tauri", $descr="", $sprite="angular")
-Container_Ext(140125347760736, $label="Deconz", $techn="REST API, websockets", $descr="", $sprite="server")
-Container_Boundary(140125347761840, $label="Server"){
-	Component(140125347761168, $label="API", $techn="FastAPI", $descr="", $sprite="python")
-Component(140125347761312, $label="weather-service", $techn="Python", $descr="", $sprite="python")
-Component(140125347761456, $label="deconz-service", $techn="httpx, websockets", $descr="", $sprite="python")
-ComponentDb(140125347761744, $label="DB", $techn="SQLite", $descr="Для сохранения состояния и настроек", $sprite="sqllite")
-Component(140125347761600, $label="yeelight-service", $techn="httpx", $descr="", $sprite="python")
+System_Boundary(140685417631744, $label="smarthome"){
+	Container(140685418705248, $label="web app", $techn="angular", $descr="", $sprite="angular")
+Container(140685417630112, $label="desktop app", $techn="angular, tauri", $descr="", $sprite="angular")
+Container_Ext(140685417630304, $label="Deconz", $techn="REST API, websockets", $descr="", $sprite="server")
+Container_Boundary(140685417631552, $label="Server"){
+	Component(140685417630736, $label="API", $techn="FastAPI", $descr="", $sprite="python")
+Component(140685417630880, $label="weather-service", $techn="Python", $descr="", $sprite="python")
+Component(140685417631024, $label="deconz-service", $techn="httpx, websockets", $descr="", $sprite="python")
+ComponentDb(140685417631312, $label="DB", $techn="SQLite", $descr="Для сохранения состояния и настроек", $sprite="sqllite")
+Component(140685417631168, $label="yeelight-service", $techn="asyncio stream", $descr="", $sprite="python")
+Component(140685417631456, $label="telegram-service", $techn="telegram", $descr="", $sprite="python")
 
 }
-ContainerDb(140125347761984, $label="DB", $techn="PostgreSQL+TimescaleDB", $descr="Для архивов", $sprite="postgresql")
-Container_Ext(140125347760880, $label="Zigbee sensors", $techn="T, P, ...", $descr="", $sprite="thermometer")
-Container_Ext(140125347761024, $label="Yeelight bulbs", $techn="Yeelight", $descr="", $sprite="lightbulb")
+ContainerDb(140685417631696, $label="DB", $techn="PostgreSQL+TimescaleDB", $descr="Для архивов", $sprite="postgresql")
+Container_Ext(140685417630448, $label="Zigbee sensors", $techn="T, P, ...", $descr="", $sprite="thermometer")
+Container_Ext(140685417630592, $label="Yeelight bulbs", $techn="Yeelight", $descr="", $sprite="lightbulb")
 
 }
-System_Ext(140125347762176, $label="Weather", $descr="", $sprite="sun")
+System_Ext(140685417631888, $label="Weather", $descr="", $sprite="sun")
+System_Ext(140685417632032, $label="Telegram", $descr="", $sprite="telegram")
 
 
 
-Rel(140125348835680, 140125347761168, "Uses", "http", "")
-Rel(140125347760544, 140125347761168, "Uses", "http", "")
-Rel(140125347761312, 140125347762176, "Uses", "http", "")
-Rel(140125347761456, 140125347760736, "Uses", "http", "")
-Rel(140125347760736, 140125347760880, "Uses", "zigbee", "")
-Rel(140125347761840, 140125347761984, "R/W", "sqlalchemy+psycopg", "")
-Rel(140125347761600, 140125347761024, "R/W", "http,Wi-Fi", "")
+Rel(140685418705248, 140685417630736, "Uses", "http", "")
+Rel(140685417630112, 140685417630736, "Uses", "http", "")
+Rel_Back(140685417631888, 140685417630880, "Uses", "http", "")
+Rel(140685417631024, 140685417630304, "Uses", "http", "")
+Rel(140685417630304, 140685417630448, "Uses", "zigbee", "")
+Rel(140685417631552, 140685417631696, "R/W", "sqlalchemy+psycopg", "")
+Rel(140685417631168, 140685417630592, "R/W", "http,Wi-Fi", "")
+Rel_Back(140685417632032, 140685417631456, "send", "http", "")
 SHOW_LEGEND()
 @enduml

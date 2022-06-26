@@ -36,18 +36,19 @@ class Settings(BaseSettings):
         env_file = ENV_FILE
         env_file_encoding = ENCODING
 
+    debug: bool = False
     deconz_ip: IPvAnyAddress = "192.168.101.10"
     deconz_rest_port: int = 80
     deconz_api_key: str = "303E2AD17F"
     db_url: str = "sqlite:///db.sqlite3"
+    telegram_token: str = "5422079866:AAFarQ9FrwDRj08k73e5JB-e9eSag020iqQ"
+    telegram_chat_id: str = "-1001555100085"
     yeelight_bathroom: IPvAnyAddress = "192.168.101.20"
 
 
 def create_env() -> None:
     """Записывает файл с дефолтными значениями."""
     # создает файл или очищает, если уже был
-    with open(".env", "w", encoding=ENCODING) as file:
-        file.write("")
     for key, value in Settings().dict().items():
         set_key(
             dotenv_path=ENV_FILE,

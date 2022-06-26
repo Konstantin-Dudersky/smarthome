@@ -10,18 +10,21 @@ import logging
 import os
 import socket
 from enum import IntEnum
-from logging import handlers
+from logging import Handler, handlers
+
+from .settings import settings
+from .telegram import TelegramHandler, bot
 
 FORMAT = (
     "%(levelname)s: %(asctime)s | "
     "%(name)s:%(lineno)d - %(funcName)s | "
-    "\n⮡ %(message)s"
+    "\n-> %(message)s"
 )
 
 # ------------------------------------------------------------------------------
 
 
-class CustomFormatter(logging.Formatter):
+class StreamFormatter(logging.Formatter):
     """Custom formatter."""
 
     GREEN = "\x1b[32;20m"
@@ -31,7 +34,7 @@ class CustomFormatter(logging.Formatter):
     BOLD_RED = "\x1b[31;1m"
     RESET = "\x1b[0m"
 
-    def get_format(self: "CustomFormatter", text: str, levelno: int) -> str:
+    def get_format(self: "StreamFormatter", text: str, levelno: int) -> str:
         """Цвет сообщения.
 
         :param text: текст, цвет которого нужно изменить
@@ -51,7 +54,7 @@ class CustomFormatter(logging.Formatter):
                 return self.BOLD_RED + text + self.RESET
         return text
 
-    def format(self: "CustomFormatter", record: logging.LogRecord) -> str:
+    def format(self: "StreamFormatter", record: logging.LogRecord) -> str:
         """Format function.
 
         :param record: запись логгера
@@ -85,23 +88,32 @@ class LoggerLevel(IntEnum):
 
 os.makedirs("logs", exist_ok=True)
 
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(CustomFormatter())
+_handlers: list[Handler] = []
+# логгирование в файл
+_handlers.append(
+    handlers.RotatingFileHandler(
+        filename="logs/log.log",
+        mode="a",
+        maxBytes=5 * 1024 * 1024,
+        backupCount=2,
+        encoding=None,
+        delay=False,
+    ),
+)
+# логгирование в консоль
+if settings.debug:
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(StreamFormatter())
+    _handlers.append(stream_handler)
+# логгирование в telegram
+telegram_handler = TelegramHandler(bot)
+_handlers.append(telegram_handler)
+
 
 logging.basicConfig(
     format=FORMAT,
     level=logging.INFO,
-    handlers=[
-        handlers.RotatingFileHandler(
-            filename="logs/log.log",
-            mode="a",
-            maxBytes=5 * 1024 * 1024,
-            backupCount=2,
-            encoding=None,
-            delay=False,
-        ),
-        stream_handler,
-    ],
+    handlers=_handlers,
 )
 
 

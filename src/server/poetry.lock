@@ -730,6 +730,21 @@ python-versions = ">=3.5"
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-telegram-bot-raw"
+version = "20.0a1"
+description = "We have made you a wrapper you can't refuse"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+httpx = ">=0.23.0,<0.24.0"
+
+[package.extras]
+passport = ["cryptography (>=3.0,!=3.4,!=3.4.1,!=3.4.2,!=3.4.3)"]
+socks = ["httpx"]
+
+[[package]]
 name = "pytz"
 version = "2022.1"
 description = "World timezone definitions, modern and historical"
@@ -974,14 +989,6 @@ optional = false
 python-versions = ">=3.6,<4.0"
 
 [[package]]
-name = "toolz"
-version = "0.11.2"
-description = "List processing tools and functional utilities"
-category = "main"
-optional = false
-python-versions = ">=3.5"
-
-[[package]]
 name = "typing-extensions"
 version = "4.2.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1036,7 +1043,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.*"
-content-hash = "677bc193f081521ec36cafb40ca899e56cf9691c9f9bf46e1d5472d8f576b89d"
+content-hash = "9fca76a95fe844585c5a2751bef411762414cad623d5be3d2614a5dc31f945bd"
 
 [metadata.files]
 aiofiles = [
@@ -1556,6 +1563,10 @@ python-dotenv = [
     {file = "python-dotenv-0.20.0.tar.gz", hash = "sha256:b7e3b04a59693c42c36f9ab1cc2acc46fa5df8c78e178fc33a8d4cd05c8d498f"},
     {file = "python_dotenv-0.20.0-py3-none-any.whl", hash = "sha256:d92a187be61fe482e4fd675b6d52200e7be63a12b724abbf931a40ce4fa92938"},
 ]
+python-telegram-bot-raw = [
+    {file = "python-telegram-bot-raw-20.0a1.tar.gz", hash = "sha256:c18439f5bd99c51e7b67337f304504022a94cf7bb0bebf1d08c98d5b025899fc"},
+    {file = "python_telegram_bot_raw-20.0a1-py3-none-any.whl", hash = "sha256:e393fe7040e8ef576e5536115cd7cb5d84342618e8ccddccd7689527e0489f89"},
+]
 pytz = [
     {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
     {file = "pytz-2022.1.tar.gz", hash = "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7"},
@@ -1665,10 +1676,6 @@ tomli = [
 tomlkit = [
     {file = "tomlkit-0.11.0-py3-none-any.whl", hash = "sha256:0f4050db66fd445b885778900ce4dd9aea8c90c4721141fde0d6ade893820ef1"},
     {file = "tomlkit-0.11.0.tar.gz", hash = "sha256:71ceb10c0eefd8b8f11fe34e8a51ad07812cb1dc3de23247425fbc9ddc47b9dd"},
-]
-toolz = [
-    {file = "toolz-0.11.2-py3-none-any.whl", hash = "sha256:a5700ce83414c64514d82d60bcda8aabfde092d1c1a8663f9200c07fdcc6da8f"},
-    {file = "toolz-0.11.2.tar.gz", hash = "sha256:6b312d5e15138552f1bda8a4e66c30e236c831b612b2bf0005f8a1df10a4bc33"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.2.0-py3-none-any.whl", hash = "sha256:6657594ee297170d19f67d55c05852a874e7eb634f4f753dbd667855e07c1708"},

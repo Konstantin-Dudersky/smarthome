@@ -1,72 +1,101 @@
 """Sensors/switches in deconz."""
 
-import asyncio
 from asyncio import sleep as asleep
-import time
 
-from src.base.types import Di, Qual
+import httpx
+
+from src.base.logic import CyclicRun
+from src.base.types import SigBase, SigBool, Qual
 from src.utils.logger import LoggerLevel, get_logger
 
 from . import api, deconz, models
 
-logger = get_logger(__name__, LoggerLevel.INFO)
+log = get_logger(__name__, LoggerLevel.INFO)
 
 
-class CyclicRun:
-    """Циклическое выполнение."""
+class BaseSensor:
+    """Базовый класс для датчиков."""
 
-    def __init__(self: "CyclicRun", time_between: float = 1.0) -> None:
-        """Циклическое выполнение.
+    def __init__(
+        self: "BaseSensor",
+        resource_id: int,
+        ws: deconz.Websocket,
+    ) -> None:
+        """Базовый класс для датчиков.
 
-        :param time_between: Время между вызовами, [s]
+        :param resource_id: id сенсора
+        :param ws: Канал сообщений websocket
         """
-        self.__last_call = 0
-        self.__time_between = int(time_between * 1e9)
-        self.__started = False
+        self._id = resource_id
+        self._ws = ws
+        self._data: list[SigBase] = []
+        self.__cyclic_run = CyclicRun(5.0)
 
-    @property
-    def run(self: "CyclicRun") -> bool:
-        """Проверка, что время истекло.
+    async def task(self: "BaseSensor") -> None:
+        """Run task."""
+        while True:
+            await self._task()
 
-        Нужно циклически вызывать.
+    async def _task(self: "BaseSensor") -> None:
+        if self.__cyclic_run():
+            await self._update()
+        # проверка сообщений websocket
+        msg = self._ws.get_msg_general(self._id)
+        if msg is not None:
+            log.debug(
+                "%s: в очереди новое сообщение: %s",
+                repr(self),
+                msg.attr,
+            )
+            await self._update()
 
-        :return: True - время истекло
+    async def _update(self: "BaseSensor") -> None:
+        raise NotImplementedError("Метод не переопределен.")
+
+    async def _api_get_sensor(self: "BaseSensor") -> httpx.Response | None:
+        msg = await api.get_sensor(self._id)
+        if msg is None:
+            log.warning(
+                "%s, неудачная попытка обновить данные датчика",
+                repr(self),
+            )
+            for item in self._data:
+                item.qual = Qual.BAD
+            return await asleep(0)
+        log.debug("%s, обновление данных: %s", repr(self), msg.json())
+        return await asleep(0, msg)
+
+    def __repr__(self: "BaseSensor") -> str:
+        """Represent string.
+
+        :return: string representaion
         """
-        self.__started = True
-        now = time.perf_counter_ns()
-        if (now - self.__last_call) > self.__time_between:
-            self.__last_call = now
-            return True
-        return False
-
-    @property
-    def started(self: "CyclicRun") -> bool:
-        """Запускалась ли функция run хотя бы раз.
-
-        :return: True - функция run выполнялась
-        """
-        return self.__started
+        return f"Deconz sensor id={self._id}"
 
 
-class OpenClose:
+class OpenClose(BaseSensor):
     """ZHAOpenClose."""
 
     def __init__(
         self: "OpenClose",
-        sensor_id: int,
+        resource_id: int,
         ws: deconz.Websocket,
     ) -> None:
         """Create open/close sensor.
 
-        :param sensor_id: id сенсора TODO откуда
+        :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
         """
-        self.__id = sensor_id
-        self.__data_opened = Di(False, Qual.BAD)
-        self.__ws = ws
-        self.__cyclic_run = CyclicRun(5.0)
+        super().__init__(resource_id, ws)
+        self.__data_opened = SigBool(False, Qual.BAD)
+        # данные
+        self._data.extend(
+            [
+                self.__data_opened,
+            ],
+        )
 
-    async def opened(self: "OpenClose", update: bool = False) -> Di:
+    async def opened(self: "OpenClose", update: bool = False) -> SigBool:
         """Состояние - открыт или закрыт.
 
         :param update: True - опрос, False - из памяти
@@ -74,56 +103,29 @@ class OpenClose:
         """
         if update:
             await self._update()
-        return await asleep(0.1, self.__data_opened)
+        return await asleep(0, self.__data_opened)
 
-    async def run(self: "OpenClose") -> None:
-        """Run task."""
-        while True:
-            await self.__run()
-
-    async def __run(self: "OpenClose") -> None:
-        if self.__cyclic_run.run:
-            await self._update()
+    async def _task(self: "OpenClose") -> None:
+        await super()._task()
         # проверка сообщений websocket
-        msg = self.__ws.get_msg_open_close(self.__id)
+        msg = self._ws.get_msg_open_close(self._id)
         if msg is not None:
-            logger.debug(
+            log.debug(
                 "%s: в очереди новое сообщение: %s",
                 repr(self),
                 msg.state.opened,
             )
             self.__data_opened.update(msg.state.opened, Qual.GOOD)
-        msg2 = self.__ws.get_msg_general(self.__id)
-        if msg2 is not None:
-            logger.debug(
-                "%s: в очереди новое сообщение: %s",
-                repr(self),
-                msg2.attr,
-            )
-            await self._update()
-        return await asyncio.sleep(0)
+        return await asleep(0)
 
-    async def _update(self: "OpenClose") -> models.SensorOpenClose | None:
+    async def _update(self: "OpenClose") -> None:
         """Принудительно обновить данные.
 
-        :return: Возвращает полученные данные или None
+        :return: none
         """
-        msg = await api.get_sensor(self.__id)
+        msg = await self._api_get_sensor()
         if msg is None:
-            logger.warning(
-                "%s, неудачная попытка обновить данные датчика",
-                repr(self),
-            )
-            self.__data_opened.update(None, Qual.BAD)
             return await asleep(0)
-        logger.debug("%s, обновление данных: %s", repr(self), msg.json())
         data = models.SensorOpenClose.parse_obj(msg.json())
         self.__data_opened.update(data.state.opened, Qual.GOOD)
-        return await asleep(0, result=data)
-
-    def __repr__(self: "OpenClose") -> str:
-        """Represent string.
-
-        :return: string representaion
-        """
-        return f"Deconz sensor id={self.__id}"
+        return await asleep(0)

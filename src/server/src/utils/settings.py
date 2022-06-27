@@ -39,7 +39,7 @@ class Settings(BaseSettings):
     debug: bool = False
     deconz_ip: IPvAnyAddress = "192.168.101.10"
     deconz_rest_port: int = 80
-    deconz_api_key: str = "303E2AD17F"
+    deconz_api_key: str = "AB4DA90329"
     db_url: str = "sqlite:///db.sqlite3"
     telegram_token: str = "5422079866:AAFarQ9FrwDRj08k73e5JB-e9eSag020iqQ"
     telegram_chat_id: str = "-1001555100085"

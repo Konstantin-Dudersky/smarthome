@@ -14,8 +14,8 @@ from .yeelight import Bulb
 logger = get_logger(__name__, LoggerLevel.INFO)
 
 deconz_ws = Websocket()
-sensor1 = sensors.OpenClose(7, deconz_ws)
-sensor_presence = sensors.Presence(5, deconz_ws)
+sensor1 = sensors.OpenClose(2, deconz_ws)
+sensor_presence = sensors.Presence(3, deconz_ws)
 bulb = Bulb("192.168.101.20")
 
 
@@ -23,10 +23,10 @@ async def _run() -> None:
     pos_front = logic.PosFront()
     neg_front = logic.NegFront()
     while True:
-        opened = await sensor_presence.presence()
-        if pos_front(opened).value:
+        presence = await sensor_presence.presence()
+        if pos_front(presence).value:
             await bulb.set_power(True)
-        if neg_front(opened).value:
+        if neg_front(presence).value:
             await bulb.set_power(False)
         await asyncio.sleep(0)
 

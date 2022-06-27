@@ -6,7 +6,7 @@
     "global": true,
     "sortNum": -1,
     "created": "2022-06-22T06:00:02.554Z",
-    "modified": "2022-06-26T15:15:57.876Z",
+    "modified": "2022-06-27T14:58:39.961Z",
     "data": [
       {
         "name": "base_url",
@@ -14,7 +14,7 @@
       },
       {
         "name": "api_key",
-        "value": "303E2AD17F"
+        "value": "AB4DA90329"
       }
     ]
   }

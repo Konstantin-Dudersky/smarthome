@@ -6,11 +6,11 @@
     "global": true,
     "sortNum": -1,
     "created": "2022-06-22T06:00:02.554Z",
-    "modified": "2022-06-26T14:20:44.763Z",
+    "modified": "2022-06-26T15:15:57.876Z",
     "data": [
       {
         "name": "base_url",
-        "value": "http://192.168.101.10:80/api"
+        "value": "http://192.168.101.10:8080/api"
       },
       {
         "name": "api_key",

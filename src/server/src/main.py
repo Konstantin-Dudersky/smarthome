@@ -15,6 +15,7 @@ logger = get_logger(__name__, LoggerLevel.INFO)
 
 deconz_ws = Websocket()
 sensor1 = sensors.OpenClose(7, deconz_ws)
+sensor_presence = sensors.Presence(5, deconz_ws)
 bulb = Bulb("192.168.101.20")
 
 
@@ -22,7 +23,7 @@ async def _run() -> None:
     pos_front = logic.PosFront()
     neg_front = logic.NegFront()
     while True:
-        opened = await sensor1.opened()
+        opened = await sensor_presence.presence()
         if pos_front(opened).value:
             await bulb.set_power(True)
         if neg_front(opened).value:
@@ -37,6 +38,7 @@ async def run() -> None:
             asyncio.create_task(deconz_ws.task()),
             asyncio.create_task(bot.task()),
             asyncio.create_task(sensor1.task()),
+            asyncio.create_task(sensor_presence.task()),
             asyncio.create_task(bulb.run()),
             asyncio.create_task(_run()),
         ],

@@ -12,3 +12,7 @@ python = "^3.10"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poe.tasks]
+create_env = {script = "src.utils.settings:create_env"}
+main = {script = "src.main:main"}

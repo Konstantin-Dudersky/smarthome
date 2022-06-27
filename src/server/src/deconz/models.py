@@ -55,39 +55,6 @@ class ConfigModel(BaseModel):
     utc: datetime = Field(..., alias="UTC")
 
 
-class SensorConfig(BaseModel):
-    """Sensor config."""
-
-    battery: int
-    on: bool
-    reachable: bool
-    temperature: int
-
-
-class SensorOpenCloseState(BaseModel):
-    """Состояние датчика открытия/закрытия."""
-
-    lastupdated: datetime
-    opened: bool = Field(..., alias="open")
-
-
-class SensorOpenClose(BaseModel):
-    """Датчик открытия/закрытия."""
-
-    config: SensorConfig
-    ep: int
-    etag: str
-    lastannounced: datetime | None
-    lastseen: datetime
-    manufacturername: str
-    modelid: str
-    name: str
-    state: SensorOpenCloseState
-    swversion: str
-    type_sensor: str = Field(..., alias="type")
-    uniqueid: str
-
-
 # websocket -------------------------------------------------------------------
 
 
@@ -129,6 +96,13 @@ class WsAttr(BaseModel):
     uniqueid: str
 
 
+class WsStateOpenClose(BaseModel):
+    """state для ZHAOpenClose."""
+
+    lastupdated: datetime
+    opened: bool = Field(..., alias="open")
+
+
 class WsMsg(BaseModel):
     """Базовое сообщение."""
 
@@ -137,13 +111,6 @@ class WsMsg(BaseModel):
     resource: WsResources = Field(..., alias="r")
     msg_type: WsTypes = Field(..., alias="t")
     uniqueid: str
-
-
-class WsStateOpenClose(BaseModel):
-    """state для ZHAOpenClose."""
-
-    lastupdated: datetime
-    opened: bool = Field(..., alias="open")
 
 
 class WsMsgOpenClose(WsMsg):
@@ -156,3 +123,89 @@ class WsMsgWithoutState(WsMsg):
     """Сообщение 2."""
 
     attr: WsAttr
+
+
+# ZHAOpenClose ----------------------------------------------------------------
+
+
+class SensorOpenCloseConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    on: bool
+    reachable: bool
+    temperature: int
+
+
+class SensorOpenCloseState(BaseModel):
+    """Состояние датчика открытия/закрытия."""
+
+    lastupdated: datetime
+    opened: bool = Field(..., alias="open")
+
+
+class SensorOpenClose(BaseModel):
+    """Датчик открытия/закрытия."""
+
+    config: SensorOpenCloseConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: SensorOpenCloseState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str
+
+
+# ZHAPresence -----------------------------------------------------------------
+
+
+class ZHAPresenceConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    duration: int
+    on: bool
+    reachable: bool
+    temperature: int
+
+
+class ZHAPresenceState(BaseModel):
+    """Состояние датчика открытия/закрытия."""
+
+    lastupdated: datetime
+    presence: bool
+
+
+class ZHAPresence(BaseModel):
+    """Датчик присутствия."""
+
+    config: ZHAPresenceConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: ZHAPresenceState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str
+
+
+class WsStatePresence(BaseModel):
+    """state для ZHAOpenClose."""
+
+    lastupdated: datetime
+    presence: bool
+
+
+class WsMsgPresence(WsMsg):
+    """Сообщение 1."""
+
+    state: WsStatePresence

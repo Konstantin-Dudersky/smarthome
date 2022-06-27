@@ -129,3 +129,61 @@ class OpenClose(BaseSensor):
         data = models.SensorOpenClose.parse_obj(msg.json())
         self.__data_opened.update(data.state.opened, Qual.GOOD)
         return await asleep(0)
+
+
+class Presence(BaseSensor):
+    """ZHAPresence."""
+
+    def __init__(
+        self: "Presence",
+        resource_id: int,
+        ws: deconz.Websocket,
+    ) -> None:
+        """Create open/close sensor.
+
+        :param resource_id: id сенсора
+        :param ws: Канал сообщений websocket
+        """
+        super().__init__(resource_id, ws)
+        self.__data_presence = SigBool(False, Qual.BAD)
+        # данные
+        self._data.extend(
+            [
+                self.__data_presence,
+            ],
+        )
+
+    async def presence(self: "Presence", update: bool = False) -> SigBool:
+        """Состояние - есть движеиние.
+
+        :param update: True - опрос, False - из памяти
+        :return: состояние датчика
+        """
+        if update:
+            await self._update()
+        return await asleep(0, self.__data_presence)
+
+    async def _task(self: "Presence") -> None:
+        await super()._task()
+        # проверка сообщений websocket
+        msg = self._ws.get_msg_presence(self._id)
+        if msg is not None:
+            log.debug(
+                "%s: в очереди новое сообщение: %s",
+                repr(self),
+                msg.state.presence,
+            )
+            self.__data_presence.update(msg.state.presence, Qual.GOOD)
+        return await asleep(0)
+
+    async def _update(self: "Presence") -> None:
+        """Принудительно обновить данные.
+
+        :return: none
+        """
+        msg = await self._api_get_sensor()
+        if msg is None:
+            return await asleep(0)
+        data = models.ZHAPresence.parse_obj(msg.json())
+        self.__data_presence.update(data.state.presence, Qual.GOOD)
+        return await asleep(0)

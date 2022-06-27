@@ -38,6 +38,7 @@ class MessageBuffer(NamedTuple):
     """Буфер сообщений websocket."""
 
     zha_open_close: dict[int, models.WsMsgOpenClose] = {}
+    zha_presence: dict[int, models.WsMsgPresence] = {}
     without_state: dict[int, models.WsMsgWithoutState] = {}
 
 
@@ -76,6 +77,17 @@ class Websocket:
         :return: Сообщение из буфера или None
         """
         return self.__msg.zha_open_close.pop(resouce_id, None)
+
+    def get_msg_presence(
+        self: "Websocket",
+        resouce_id: int,
+    ) -> models.WsMsgPresence | None:
+        """Возвращает сообщение из очереди для датчика ZHAPresence.
+
+        :param resouce_id: id датчика
+        :return: Сообщение из буфера или None
+        """
+        return self.__msg.zha_presence.pop(resouce_id, None)
 
     async def _get_config(self: "Websocket") -> None:
         """Получить номер порта."""
@@ -121,10 +133,16 @@ class Websocket:
         except pydantic.ValidationError:
             pass
         # датчик присутствия
+        try:
+            msg2 = models.WsMsgPresence.parse_raw(data)
+            self.__msg.zha_presence[msg2.resource_id] = msg2
+            return
+        except pydantic.ValidationError:
+            pass
         # общее сообщение
         try:
-            msg2 = models.WsMsgWithoutState.parse_raw(data)
-            self.__msg.without_state[msg2.resource_id] = msg2
+            msg3 = models.WsMsgWithoutState.parse_raw(data)
+            self.__msg.without_state[msg3.resource_id] = msg3
             return
         except pydantic.ValidationError:
             pass

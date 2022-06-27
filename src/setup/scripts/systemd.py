@@ -3,12 +3,12 @@
 import getpass
 import os
 
-path = os.getcwd()
-
-POETRY_BIN = "/root/.local/bin/poetry"
-
-
-def run(service_name: str, description: str) -> None:
+def run(
+    service_name: str,
+    description: str,
+    work_dir: str,
+    poetry_bin: str = "/home/admin/.local/bin/poetry",
+) -> None:
     """Создать сервис."""
     service = f"""
 [Unit]
@@ -20,8 +20,8 @@ Type=simple
 User={getpass.getuser()}
 Group={getpass.getuser()}
 EnvironmentFile=/etc/environment
-WorkingDirectory={path}
-ExecStart={POETRY_BIN} run python start.py
+WorkingDirectory={work_dir}
+ExecStart={poetry_bin} run python start.py
 [Install]
 WantedBy=multi-user.target"""
     service_file = open(f"setup/{service_name}", "w")

@@ -60,7 +60,14 @@ server_telegram = component.Component(
 )
 server = container.ContainerBoundary(
     label="Server",
-    links_component=[api, server_weather, server_deconz, server_db, server_yeelight, server_telegram],
+    links_component=[
+        api,
+        server_weather,
+        server_deconz,
+        server_db,
+        server_yeelight,
+        server_telegram,
+    ],
 )
 
 db = container.ContainerDb(
@@ -91,7 +98,7 @@ dia = C4(
         rel.Rel(label="Uses", links=(web_app, api), techn="http"),
         rel.Rel(label="Uses", links=(desktop_app, api), techn="http"),
         rel.RelBack(label="Uses", links=(weather, server_weather), techn="http"),
-        rel.Rel(label="Uses", links=(server_deconz, deconz), techn="http"),
+        rel.BiRel(label="Uses", links=(server_deconz, deconz), techn="http"),
         rel.Rel(label="Uses", links=(deconz, zigbee), techn="zigbee"),
         rel.Rel(label="R/W", links=(server, db), techn="sqlalchemy+psycopg"),
         rel.Rel(label="R/W", links=(server_yeelight, yeelight), techn="http,Wi-Fi"),

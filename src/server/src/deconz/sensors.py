@@ -1,7 +1,6 @@
 """Sensors/switches in deconz."""
 
 from asyncio import sleep as asleep
-from asyncio.log import logger
 
 import httpx
 

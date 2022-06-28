@@ -5,6 +5,7 @@ name = "setup"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
+poethepoet = "*"
 python = "^3.10"
 
 [tool.poetry.dev-dependencies]
@@ -15,8 +16,7 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
 [tool.poe.tasks]
-systemd = {script = "setup.systemd:run(service_name='smarthome', description='smarthome', work_dir='/home/admin/smarthome/src/server')"}
-
+systemd = {script = "scripts.systemd:run(service_name='smarthome', description='smarthome', work_dir='/home/admin/smarthome/src/server')"}
 
 [tool.black]
 line-length = 79

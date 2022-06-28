@@ -10,6 +10,12 @@ class Qual(Enum):
     GOOD = auto()
 
 
+class Units(Enum):
+    """Единицы измерения."""
+
+    GR_C = "oC"
+
+
 class SigBase:
     """Базовый класс для сигналов."""
 
@@ -79,6 +85,72 @@ class SigBool(SigBase):
     def update(
         self: "SigBool",
         value: bool | None = None,
+        qual: Qual | None = None,
+    ) -> None:
+        """Обновить значение или качество.
+
+        :param value: значение
+        :param qual: качество
+        """
+        if value is not None:
+            self.__value = value
+        if qual is not None:
+            self.qual = qual
+
+
+class SigFloat(SigBase):
+    """Дискретный сигнал."""
+
+    def __init__(
+        self: "SigFloat",
+        value: float = 0.0,
+        unit: Units = Units.GR_C,
+        qual: Qual = Qual.GOOD,
+    ) -> None:
+        """Вещественное значение.
+
+        :param value: значение
+        :param unit: единица измерения
+        :param qual: качество
+        """
+        super().__init__(qual)
+        self.__value = value
+        self.__unit = unit
+
+    def __str__(self: "SigFloat") -> str:
+        """Строковое предстваление.
+
+        :return: строковое представление
+        """
+        return f"({self.__value}{self.__unit.value}, {self.qual.name})"
+
+    @property
+    def value(self: "SigFloat") -> float:
+        """Возвращает значение.
+
+        :return: значение
+        """
+        return self.__value
+
+    @value.setter
+    def value(self: "SigFloat", value: float) -> None:
+        """Устанавливает значение.
+
+        :param value: новое значение
+        """
+        self.__value = value
+
+    @property
+    def unit(self: "SigFloat") -> Units:
+        """Возвращает единицу измерения.
+
+        :return: единица измерения
+        """
+        return self.__unit
+
+    def update(
+        self: "SigFloat",
+        value: float | None = None,
         qual: Qual | None = None,
     ) -> None:
         """Обновить значение или качество.

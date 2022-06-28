@@ -2,3 +2,4 @@
 .trash
 .imdone/plugins
 .venv
+src/server/docs/_build

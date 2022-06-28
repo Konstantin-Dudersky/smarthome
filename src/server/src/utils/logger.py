@@ -90,16 +90,15 @@ os.makedirs("logs", exist_ok=True)
 
 _handlers: list[Handler] = []
 # логгирование в файл
-_handlers.append(
-    handlers.RotatingFileHandler(
-        filename="logs/log.log",
-        mode="a",
-        maxBytes=5 * 1024 * 1024,
-        backupCount=2,
-        encoding=None,
-        delay=False,
-    ),
+file_handler = handlers.RotatingFileHandler(
+    filename="logs/log.log",
+    mode="a",
+    maxBytes=5 * 1024 * 1024,
+    backupCount=2,
+    encoding=None,
+    delay=False,
 )
+_handlers.append(file_handler)
 # логгирование в консоль
 if settings.debug:
     stream_handler = logging.StreamHandler()

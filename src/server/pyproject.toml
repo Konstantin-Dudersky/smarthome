@@ -11,8 +11,8 @@ poethepoet = "*"
 python = "3.10.*"
 python-dotenv = "0.20.0"
 sqlalchemy = "1.4.39"
-python-telegram-bot-raw = "20.0a1"
-uvicorn = "0.18.1"
+python-telegram-bot-raw = "20.0a2"
+uvicorn = "0.18.2"
 websockets = "10.3"
 
 [tool.poetry.dev-dependencies]
@@ -34,6 +34,9 @@ pep8-naming = "*"
 pydata-sphinx-theme = "*"
 pylint = "*"
 sphinx = "*"
+
+[tool.black]
+line-length = 79
 
 [tool.poe.tasks]
 create_env = {script = "src.utils.settings:create_env"}

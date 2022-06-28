@@ -14,8 +14,9 @@ from .yeelight import Bulb
 logger = get_logger(__name__, LoggerLevel.INFO)
 
 deconz_ws = Websocket()
-sensor1 = sensors.OpenClose(2, deconz_ws)
-sensor_presence = sensors.Presence(3, deconz_ws)
+sensor_open_close = sensors.OpenClose(2, deconz_ws)
+sensor_presence = sensors.Presence(3, deconz_ws, 1)
+sensor_light_level = sensors.LightLevel(4, deconz_ws)
 bulb = Bulb("192.168.101.20")
 
 
@@ -25,9 +26,9 @@ async def _run() -> None:
     while True:
         presence = await sensor_presence.presence()
         if pos_front(presence).value:
-            await bulb.set_power(True)
+            await bulb.set_power(True, duration=1000)
         if neg_front(presence).value:
-            await bulb.set_power(False)
+            await bulb.set_power(False, duration=10000)
         await asyncio.sleep(0)
 
 
@@ -37,8 +38,9 @@ async def run() -> None:
         [
             asyncio.create_task(deconz_ws.task()),
             asyncio.create_task(bot.task()),
-            asyncio.create_task(sensor1.task()),
+            asyncio.create_task(sensor_open_close.task()),
             asyncio.create_task(sensor_presence.task()),
+            asyncio.create_task(sensor_light_level.task()),
             asyncio.create_task(bulb.run()),
             asyncio.create_task(_run()),
         ],

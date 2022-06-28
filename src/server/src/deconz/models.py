@@ -96,13 +96,6 @@ class WsAttr(BaseModel):
     uniqueid: str
 
 
-class WsStateOpenClose(BaseModel):
-    """state для ZHAOpenClose."""
-
-    lastupdated: datetime
-    opened: bool = Field(..., alias="open")
-
-
 class WsMsg(BaseModel):
     """Базовое сообщение."""
 
@@ -111,12 +104,6 @@ class WsMsg(BaseModel):
     resource: WsResources = Field(..., alias="r")
     msg_type: WsTypes = Field(..., alias="t")
     uniqueid: str
-
-
-class WsMsgOpenClose(WsMsg):
-    """Сообщение 1."""
-
-    state: WsStateOpenClose
 
 
 class WsMsgWithoutState(WsMsg):
@@ -128,7 +115,7 @@ class WsMsgWithoutState(WsMsg):
 # ZHAOpenClose ----------------------------------------------------------------
 
 
-class SensorOpenCloseConfig(BaseModel):
+class ZHAOpenCloseComfig(BaseModel):
     """Sensor config."""
 
     battery: int
@@ -137,17 +124,17 @@ class SensorOpenCloseConfig(BaseModel):
     temperature: int
 
 
-class SensorOpenCloseState(BaseModel):
+class ZHAOpenCloseState(BaseModel):
     """Состояние датчика открытия/закрытия."""
 
     lastupdated: datetime
     opened: bool = Field(..., alias="open")
 
 
-class SensorOpenClose(BaseModel):
+class ZHAOpenClose(BaseModel):
     """Датчик открытия/закрытия."""
 
-    config: SensorOpenCloseConfig
+    config: ZHAOpenCloseComfig
     ep: int
     etag: str
     lastannounced: datetime | None
@@ -155,10 +142,23 @@ class SensorOpenClose(BaseModel):
     manufacturername: str
     modelid: str
     name: str
-    state: SensorOpenCloseState
+    state: ZHAOpenCloseState
     swversion: str
     type_sensor: str = Field(..., alias="type")
     uniqueid: str
+
+
+class ZHAOpenCloseStateWs(BaseModel):
+    """state для ZHAOpenClose."""
+
+    lastupdated: datetime
+    opened: bool = Field(..., alias="open")
+
+
+class ZHAOpenCloseWs(WsMsg):
+    """Сообщение 1."""
+
+    state: ZHAOpenCloseStateWs
 
 
 # ZHAPresence -----------------------------------------------------------------
@@ -198,14 +198,68 @@ class ZHAPresence(BaseModel):
     uniqueid: str
 
 
-class WsStatePresence(BaseModel):
+class ZHAPresenceStateWs(BaseModel):
     """state для ZHAOpenClose."""
 
     lastupdated: datetime
     presence: bool
 
 
-class WsMsgPresence(WsMsg):
+class ZHAPresenceWs(WsMsg):
     """Сообщение 1."""
 
-    state: WsStatePresence
+    state: ZHAPresenceStateWs
+
+
+# ZHALightLevel ---------------------------------------------------------------
+
+
+class ZHALightLevelConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    on: bool
+    reachable: bool
+    temperature: int
+    tholddark: int
+    tholdoffset: int
+
+
+class ZHALightLevelState(BaseModel):
+    """Состояние датчика открытия/закрытия."""
+
+    dark: bool
+    daylight: bool
+    lastupdated: datetime
+    lightlevel: int
+    lux: int
+
+
+class ZHALightLevel(BaseModel):
+    """Датчик освещенности."""
+
+    config: ZHALightLevelConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: ZHALightLevelState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str
+
+
+class ZHALightLevelStateWs(BaseModel):
+    """state для ZHAOpenClose."""
+
+    lastupdated: datetime
+    presence: bool
+
+
+class ZHALightLevelWs(WsMsg):
+    """Сообщение 1."""
+
+    state: ZHALightLevelStateWs

@@ -1,11 +1,12 @@
 """Sensors/switches in deconz."""
 
 from asyncio import sleep as asleep
+from asyncio.log import logger
 
 import httpx
 
 from src.base.logic import CyclicRun
-from src.base.types import SigBase, SigBool, Qual
+from src.base.types import SigBase, SigBool, SigFloat, Qual, Units
 from src.utils.logger import LoggerLevel, get_logger
 
 from . import api, deconz, models
@@ -19,17 +20,19 @@ class BaseSensor:
     def __init__(
         self: "BaseSensor",
         resource_id: int,
+        update_rate: float,
         ws: deconz.Websocket,
     ) -> None:
         """Базовый класс для датчиков.
 
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
+        :param update_rate: период обновления датчика, [s]
         """
         self._id = resource_id
         self._ws = ws
         self._data: list[SigBase] = []
-        self.__cyclic_run = CyclicRun(5.0)
+        self.__cyclic_run = CyclicRun(update_rate)
 
     async def task(self: "BaseSensor") -> None:
         """Run task."""
@@ -80,13 +83,15 @@ class OpenClose(BaseSensor):
         self: "OpenClose",
         resource_id: int,
         ws: deconz.Websocket,
+        update_rate: float = 5.0,
     ) -> None:
         """Create open/close sensor.
 
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
+        :param update_rate: период обновления датчика, [s]
         """
-        super().__init__(resource_id, ws)
+        super().__init__(resource_id, ws=ws, update_rate=update_rate)
         self.__data_opened = SigBool(False, Qual.BAD)
         # данные
         self._data.extend(
@@ -126,7 +131,7 @@ class OpenClose(BaseSensor):
         msg = await self._api_get_sensor()
         if msg is None:
             return await asleep(0)
-        data = models.SensorOpenClose.parse_obj(msg.json())
+        data = models.ZHAOpenClose.parse_obj(msg.json())
         self.__data_opened.update(data.state.opened, Qual.GOOD)
         return await asleep(0)
 
@@ -138,13 +143,15 @@ class Presence(BaseSensor):
         self: "Presence",
         resource_id: int,
         ws: deconz.Websocket,
+        update_rate: float = 5.0,
     ) -> None:
         """Create open/close sensor.
 
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
+        :param update_rate: период обновления датчика, [s]
         """
-        super().__init__(resource_id, ws)
+        super().__init__(resource_id, ws=ws, update_rate=update_rate)
         self.__data_presence = SigBool(False, Qual.BAD)
         # данные
         self._data.extend(
@@ -186,4 +193,65 @@ class Presence(BaseSensor):
             return await asleep(0)
         data = models.ZHAPresence.parse_obj(msg.json())
         self.__data_presence.update(data.state.presence, Qual.GOOD)
+        return await asleep(0)
+
+
+class LightLevel(BaseSensor):
+    """ZHALightLevel."""
+
+    def __init__(
+        self: "LightLevel",
+        resource_id: int,
+        ws: deconz.Websocket,
+        update_rate: float = 5.0,
+    ) -> None:
+        """Датчик уровня освещенности.
+
+        :param resource_id: id сенсора
+        :param ws: Канал сообщений websocket
+        :param update_rate: период обновления датчика, [s]
+        """
+        super().__init__(resource_id, ws=ws, update_rate=update_rate)
+        self.__data_lux = SigFloat(0.0, Units.GR_C, Qual.BAD)
+        # данные
+        self._data.extend(
+            [
+                self.__data_lux,
+            ],
+        )
+
+    async def lux(self: "LightLevel", update: bool = False) -> SigFloat:
+        """Состояние - открыт или закрыт.
+
+        :param update: True - опрос, False - из памяти
+        :return: состояние датчика
+        """
+        if update:
+            await self._update()
+        return await asleep(0, self.__data_lux)
+
+    async def _task(self: "LightLevel") -> None:
+        await super()._task()
+        # проверка сообщений websocket
+        msg = self._ws.get_msg_light_level(self._id)
+        if msg is not None:
+            log.debug(
+                "%s: в очереди новое сообщение: %s",
+                repr(self),
+                msg,
+            )
+            # websocket не возвращает state !!! - возможно баг
+            # self.__data_lux.update(msg.state, Qual.GOOD)
+        return await asleep(0)
+
+    async def _update(self: "LightLevel") -> None:
+        """Принудительно обновить данные.
+
+        :return: none
+        """
+        msg = await self._api_get_sensor()
+        if msg is None:
+            return await asleep(0)
+        data = models.ZHALightLevel.parse_obj(msg.json())
+        self.__data_lux.update(data.state.lux, Qual.GOOD)
         return await asleep(0)

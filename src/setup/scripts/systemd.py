@@ -24,8 +24,8 @@ WorkingDirectory={work_dir}
 ExecStart={poetry_bin} run python start.py
 [Install]
 WantedBy=multi-user.target"""
-    service_file = open(f"setup/{service_name}", "w")
+    service_file = open(f"scripts/{service_name}", "w")
     service_file.write(service)
     service_file.close()
-    os.system(f"sudo mv setup/{service_name} /etc/systemd/system")
+    os.system(f"sudo mv scripts/{service_name} /etc/systemd/system")
     os.system("sudo systemctl daemon-reload")

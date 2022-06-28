@@ -15,10 +15,5 @@
     "python.linting.mypyEnabled": true,
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
-    "python.formatting.provider": "black",
-    "python.formatting.blackArgs": [
-        "--preview",
-        "--line-length",
-        "79"
-    ],
+    "python.formatting.provider": "black"
 }

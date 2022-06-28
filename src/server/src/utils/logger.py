@@ -21,11 +21,26 @@ FORMAT = (
     "\n-> %(message)s"
 )
 
+
 # ------------------------------------------------------------------------------
 
 
+class LoggerLevel(IntEnum):
+    """Logging levels."""
+
+    CRITICAL = logging.CRITICAL
+    ERROR = logging.ERROR
+    WARNING = logging.WARNING
+    INFO = logging.INFO
+    DEBUG = logging.DEBUG
+    NOTSET = logging.NOTSET
+
+
+# Formatters ------------------------------------------------------------------
+
+
 class StreamFormatter(logging.Formatter):
-    """Custom formatter."""
+    """Custom formatter for console output."""
 
     GREEN = "\x1b[32;20m"
     GREY = "\x1b[38;20m"
@@ -69,22 +84,20 @@ class StreamFormatter(logging.Formatter):
         )
 
 
-# ------------------------------------------------------------------------------
+class FileFormatter(logging.Formatter):
+    """Custom formatter for file output."""
+
+    def format(self: "FileFormatter", record: logging.LogRecord) -> str:
+        """Format function.
+
+        :param record: запись логгера
+        :return: отформатированная запись логгера
+        """
+        formatter = logging.Formatter(FORMAT)
+        return formatter.format(record) + "\n" + "-" * 80
 
 
-class LoggerLevel(IntEnum):
-    """Logging levels."""
-
-    CRITICAL = logging.CRITICAL
-    ERROR = logging.ERROR
-    WARNING = logging.WARNING
-    INFO = logging.INFO
-    DEBUG = logging.DEBUG
-    NOTSET = logging.NOTSET
-
-
-# ------------------------------------------------------------------------------
-
+# Loggers ---------------------------------------------------------------------
 
 os.makedirs("logs", exist_ok=True)
 
@@ -98,6 +111,7 @@ file_handler = handlers.RotatingFileHandler(
     encoding=None,
     delay=False,
 )
+file_handler.setFormatter(FileFormatter())
 _handlers.append(file_handler)
 # логгирование в консоль
 if settings.debug:
@@ -108,12 +122,13 @@ if settings.debug:
 telegram_handler = TelegramHandler(bot)
 _handlers.append(telegram_handler)
 
-
 logging.basicConfig(
     format=FORMAT,
     level=logging.INFO,
     handlers=_handlers,
 )
+
+# ------------------------------------------------------------------------------
 
 
 def get_logger(

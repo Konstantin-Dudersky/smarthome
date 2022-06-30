@@ -3,7 +3,7 @@
 in files:
 
 from src.utils.logger import LoggerLevel, get_logger
-logger = get_logger(__name__, LoggerLevel.INFO)
+log = get_logger(__name__, LoggerLevel.INFO)
 """
 
 import logging

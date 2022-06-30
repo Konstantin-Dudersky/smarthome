@@ -8,10 +8,11 @@
 import asyncio
 from asyncio import sleep as asleep
 from enum import Enum
-import time
 from typing import Any
 
 from pydantic import BaseModel, Field, ValidationError
+
+from src.base.logic import CyclicRun
 
 if __name__ == "__main__":
     import logging
@@ -49,42 +50,6 @@ def onoff_to_bool(value: str) -> bool:
         case _:
             raise ValueError(f"Невозможно преобразовать в bool: {value}")
     return False
-
-
-class CyclicRun:
-    """Циклическое выполнение."""
-
-    def __init__(self: "CyclicRun", time_between: float = 1.0) -> None:
-        """Циклическое выполнение.
-
-        :param time_between: Время между вызовами, [s]
-        """
-        self.__last_call = 0
-        self.__time_between = int(time_between * 1e9)
-        self.__started = False
-
-    @property
-    def run(self: "CyclicRun") -> bool:
-        """Проверка, что время истекло.
-
-        Нужно циклически вызывать.
-
-        :return: True - время истекло
-        """
-        self.__started = True
-        now = time.perf_counter_ns()
-        if (now - self.__last_call) > self.__time_between:
-            self.__last_call = now
-            return True
-        return False
-
-    @property
-    def started(self: "CyclicRun") -> bool:
-        """Запускалась ли функция run хотя бы раз.
-
-        :return: True - функция run выполнялась
-        """
-        return self.__started
 
 
 class Properties(Enum):
@@ -224,7 +189,7 @@ class Bulb:
 
     async def __task(self: "Bulb") -> None:
         """Задача для циклического выполнения."""
-        if self.__cyclic_update.run:
+        if self.__cyclic_update():
             await self.get_power(True)
             await self.get_bright(True)
         await asyncio.sleep(0)

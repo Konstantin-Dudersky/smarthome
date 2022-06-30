@@ -59,5 +59,33 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "51a12533-f77e-4221-b91e-9baf17e2ba04",
+    "colId": "731bcce6-b535-4ccf-9200-d0ceb76df3fc",
+    "containerId": "",
+    "name": "http://localhost:8000/",
+    "url": "{{api_url}}",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-06-30T17:54:07.275Z",
+    "modified": "2022-06-30T17:54:18.324Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "ec97f120-345b-4134-8f17-449eb1a0d991",
+    "colId": "731bcce6-b535-4ccf-9200-d0ceb76df3fc",
+    "containerId": "26e8b29c-944b-496b-a41c-cc6c5d98ce48",
+    "name": "yeelight",
+    "url": "{{api_url}}/devices/yeelight/qwe",
+    "method": "GET",
+    "sortNum": 20000,
+    "created": "2022-06-30T18:45:57.277Z",
+    "modified": "2022-06-30T18:47:07.009Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]

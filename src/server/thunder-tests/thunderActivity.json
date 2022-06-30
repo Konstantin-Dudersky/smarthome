@@ -4,11 +4,11 @@
     "colId": "history",
     "containerId": "",
     "name": "http://localhost:8000/",
-    "url": "http://localhost:8000/",
+    "url": "http://192.168.101.10:8000/",
     "method": "GET",
     "sortNum": 0,
     "created": "2022-06-30T16:30:16.983Z",
-    "modified": "2022-06-30T16:42:21.235Z",
+    "modified": "2022-06-30T17:53:57.535Z",
     "headers": [],
     "params": [],
     "tests": []

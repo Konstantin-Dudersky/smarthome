@@ -6,7 +6,7 @@
     "global": true,
     "sortNum": -1,
     "created": "2022-06-22T06:00:02.554Z",
-    "modified": "2022-06-27T14:58:39.961Z",
+    "modified": "2022-06-30T18:48:57.799Z",
     "data": [
       {
         "name": "base_url",
@@ -15,6 +15,10 @@
       {
         "name": "api_key",
         "value": "AB4DA90329"
+      },
+      {
+        "name": "api_url",
+        "value": "http://localhost:8000/api"
       }
     ]
   }

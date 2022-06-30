@@ -6,6 +6,7 @@
 """
 
 import asyncio
+from asyncio import sleep as asleep
 from enum import Enum
 import time
 from typing import Any
@@ -16,7 +17,7 @@ if __name__ == "__main__":
     import logging
 
     logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     logger.addHandler(logging.StreamHandler())
 else:
     from src.utils.logger import LoggerLevel, get_logger
@@ -249,18 +250,19 @@ class Bulb:
                 repr(self),
             )
         logger.debug("Send command buld: %r", self)
+        fut = asyncio.open_connection(self.__ip, self.__port)
         try:
-            reader, writer = await asyncio.open_connection(
-                self.__ip,
-                self.__port,
-            )
+            reader, writer = await asyncio.wait_for(fut, timeout=3)
+        except asyncio.TimeoutError:
+            logger.exception("%s: timeout", repr(self))
+            return await asleep(0)
         except OSError:
-            logger.exception("%s, невозможно подлючиться", repr(self))
-            return None
+            logger.exception("%s: невозможно подлючиться", repr(self))
+            return await asleep(0)
         logger.debug("Send: %r", msg)
         writer.write(msg.encode())
         await writer.drain()
-        result = (await reader.read(100)).decode()
+        result = (await reader.readuntil(b"\r\n")).decode()
         logger.debug("Received: %r", result)
         writer.close()
         await writer.wait_closed()
@@ -284,7 +286,7 @@ class Bulb:
 
         :return: string representaion
         """
-        return f"Bulb: {self.__ip}"
+        return f"Yeelight bulb: {self.__ip}"
 
 
 if __name__ == "__main__":

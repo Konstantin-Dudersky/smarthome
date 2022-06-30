@@ -1,5 +1,2 @@
-.obsidian
-.trash
-.imdone/plugins
-.venv
-src/server/docs/_build
+src/*
+!src/server/src

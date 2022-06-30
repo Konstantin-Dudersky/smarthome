@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "_id": "9902b781-5cc9-47d8-8c06-0175cf863b32",
+    "colId": "history",
+    "containerId": "",
+    "name": "http://localhost:8000/",
+    "url": "http://localhost:8000/",
+    "method": "GET",
+    "sortNum": 0,
+    "created": "2022-06-30T16:30:16.983Z",
+    "modified": "2022-06-30T16:42:21.235Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  }
+]

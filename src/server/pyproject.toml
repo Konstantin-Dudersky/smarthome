@@ -10,8 +10,8 @@ httpx = "0.23.0"
 poethepoet = "*"
 python = "3.10.*"
 python-dotenv = "0.20.0"
-sqlalchemy = "1.4.39"
 python-telegram-bot-raw = "20.0a2"
+sqlalchemy = "1.4.39"
 uvicorn = "0.18.2"
 websockets = "10.3"
 
@@ -40,8 +40,8 @@ line-length = 79
 
 [tool.poe.tasks]
 create_env = {script = "src.utils.settings:create_env"}
+docs = {shell = "sphinx-apidoc --force -o docs src && cd docs && make html"}
 main = {script = "src.main:main"}
-docs = { shell = "sphinx-apidoc --force -o docs src && cd docs && make html" } 
 
 [tool.pylint.BASIC]
 good-names = ['db', 'ws']

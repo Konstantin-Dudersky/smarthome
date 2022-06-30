@@ -32,6 +32,15 @@ lists:
     hidden: false
     id: 1
     name: Recently Completed
+  - name: HACK
+    hidden: false
+    ignore: false
+  - name: XXX
+    hidden: false
+    ignore: false
+  - name: FIXME
+    hidden: false
+    ignore: false
 settings:
   openIn: default
   customOpenIn: ''

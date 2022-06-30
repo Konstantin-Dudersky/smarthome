@@ -217,7 +217,12 @@ class Bulb:
         await self._send_command(str(msg))
         await self.get_bright(True)
 
-    async def run(self: "Bulb") -> None:
+    async def task(self: "Bulb") -> None:
+        """Задача для циклического выполнения."""
+        while True:
+            await self.__task()
+
+    async def __task(self: "Bulb") -> None:
         """Задача для циклического выполнения."""
         if self.__cyclic_update.run:
             await self.get_power(True)
@@ -300,7 +305,7 @@ if __name__ == "__main__":
             value += 5
             if value > 100:
                 value = 1
-            await bulb.run()
+            await bulb.task()
             await bulb.set_bright(value)
             await asyncio.sleep(0.5)
 

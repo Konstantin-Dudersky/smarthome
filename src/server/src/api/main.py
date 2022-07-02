@@ -29,12 +29,6 @@ app.add_middleware(
 app.include_router(devices_router)
 
 
-@app.get("/")
-async def index1() -> str:
-    """Сообщения."""
-    return "123123123"
-
-
 @app.exception_handler(
     RequestValidationError,
 )  # pyright: reportUntypedFunctionDecorator=false
@@ -65,7 +59,10 @@ async def validation_exception_handler(
 
 @app.get("/")
 def index() -> HTMLResponse:
-    """Веб-приложение."""
+    """Веб-приложение.
+
+    :return: index.html
+    """
     with open("static/index.html", "r", encoding="utf-8") as file_index:
         html_content = file_index.read()
     return HTMLResponse(html_content, status_code=200)
@@ -80,6 +77,6 @@ async def api_task() -> None:
     """Задача для запуска сервера api."""
     config = uvicorn.Config(app, port=8000, log_level="info")
     server: Server = uvicorn.Server(
-        config
+        config,
     )  # pyright: reportUnknownMemberType=false
     await server.serve()

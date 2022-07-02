@@ -13,6 +13,13 @@ from typing import Any
 from pydantic import BaseModel, Field, ValidationError
 
 from src.base.logic import CyclicRun
+from src.base.types import (
+    Qual,
+    SigBool,
+    SigBoolSchema,
+    SigFloat,
+    SigFloatSchema,
+)
 
 if __name__ == "__main__":
     import logging
@@ -95,6 +102,13 @@ class ResultMessageError(BaseModel):
     error: dict[str, Any]
 
 
+class BulbSchema(BaseModel):
+    """Данные лампы."""
+
+    power: SigBoolSchema
+    bright: SigFloatSchema
+
+
 class Bulb:
     """Лампа."""
 
@@ -111,56 +125,40 @@ class Bulb:
         self.__ip = ip_address
         self.__port = port
         # properties
-        self.__power: bool | None = None
-        self.__bright: int | None = None
-
+        self.__data_power = SigBool()
+        self.__data_bright = SigFloat()
+        self.__reachable = True
         self.__cyclic_update = CyclicRun(10.0)  # циклическое обновление
 
-    async def get_power(self: "Bulb", update: bool = False) -> bool | None:
-        """Включена ли лампа.
+    async def get_all_data(self: "Bulb", update: bool = False) -> BulbSchema:
+        """Получить все данные.
 
         :param update: True - опрос лампы, False - из памяти
-        :return: Включена ли лампа
+        :return: данные
         """
         if update:
-            msg = await self._get_prop(Properties.POWER)
-            if msg is None:
-                return self.__power
-            self.__power = onoff_to_bool(msg.result[0])
-        return self.__power
-
-    async def set_power(
-        self: "Bulb",
-        power: bool,
-        effect: Effects = Effects.SMOOTH,
-        duration: int = 200,
-    ) -> None:
-        """Включить или выключить лампу.
-
-        :param power: Включить или выключить
-        :param effect: Эффект перехода
-        :param duration: Время перехода, [мс]
-        """
-        msg = CommandMessage(
-            id=1,
-            method="set_power",
-            params=[bool_to_onoff(power), effect.value, duration],
+            await self.__update()
+        return await asleep(
+            0,
+            BulbSchema(
+                power=self.__data_power.schema,
+                bright=self.__data_bright.schema,
+            ),
         )
-        await self._send_command(str(msg))
-        await self.get_power(True)
 
-    async def get_bright(self: "Bulb", update: bool = False) -> int | None:
+    async def get_bright(self: "Bulb", update: bool = False) -> SigFloat:
         """Яркость в процентах.
 
         :param update: True - опрос лампы, False - из памяти
         :return: Яркость в процентах (1 - 100%)
         """
         if update:
-            msg = await self._get_prop(Properties.BRIGHT)
+            msg = await self.__get_prop(Properties.BRIGHT)
             if msg is None:
-                return self.__bright
-            self.__bright = int(msg.result[0])
-        return self.__bright
+                self.__data_bright.qual = Qual.BAD
+                return self.__data_bright
+            self.__data_bright.update(float(msg.result[0]), Qual.GOOD)
+        return self.__data_bright
 
     async def set_bright(
         self: "Bulb",
@@ -179,8 +177,42 @@ class Bulb:
             method="set_bright",
             params=[brightness, effect.value, duration],
         )
-        await self._send_command(str(msg))
+        await self.__send_command(str(msg))
         await self.get_bright(True)
+
+    async def get_power(self: "Bulb", update: bool = False) -> SigBool:
+        """Включена ли лампа.
+
+        :param update: True - опрос лампы, False - из памяти
+        :return: Включена ли лампа
+        """
+        if update:
+            msg = await self.__get_prop(Properties.POWER)
+            if msg is None:
+                self.__data_power.qual = Qual.BAD
+                return self.__data_power
+            self.__data_power.update(onoff_to_bool(msg.result[0]), Qual.GOOD)
+        return self.__data_power
+
+    async def set_power(
+        self: "Bulb",
+        power: bool,
+        effect: Effects = Effects.SMOOTH,
+        duration: int = 200,
+    ) -> None:
+        """Включить или выключить лампу.
+
+        :param power: Включить или выключить
+        :param effect: Эффект перехода
+        :param duration: Время перехода, [мс]
+        """
+        msg = CommandMessage(
+            id=1,
+            method="set_power",
+            params=[bool_to_onoff(power), effect.value, duration],
+        )
+        await self.__send_command(str(msg))
+        await self.get_power(True)
 
     async def task(self: "Bulb") -> None:
         """Задача для циклического выполнения."""
@@ -190,11 +222,14 @@ class Bulb:
     async def __task(self: "Bulb") -> None:
         """Задача для циклического выполнения."""
         if self.__cyclic_update():
-            await self.get_power(True)
-            await self.get_bright(True)
+            await self.__update()
         await asyncio.sleep(0)
 
-    async def _get_prop(
+    async def __update(self: "Bulb") -> None:
+        await self.get_power(True)
+        await self.get_bright(True)
+
+    async def __get_prop(
         self: "Bulb",
         prop: Properties,
     ) -> ResultMessageGood | None:
@@ -208,9 +243,9 @@ class Bulb:
             method="get_prop",
             params=[prop.value],
         )
-        return await self._send_command(str(msg))
+        return await self.__send_command(str(msg))
 
-    async def _send_command(
+    async def __send_command(
         self: "Bulb",
         msg: str,
     ) -> ResultMessageGood | None:
@@ -223,11 +258,16 @@ class Bulb:
         fut = asyncio.open_connection(self.__ip, self.__port)
         try:
             reader, writer = await asyncio.wait_for(fut, timeout=3)
+            self.__reachable = True
         except asyncio.TimeoutError:
-            logger.exception("%s: timeout", repr(self))
+            if self.__reachable:
+                logger.exception("%s: timeout", repr(self))
+                self.__reachable = False
             return await asleep(0)
         except OSError:
-            logger.exception("%s: невозможно подлючиться", repr(self))
+            if self.__reachable:
+                self.__reachable = False
+                logger.exception("%s: невозможно подлючиться", repr(self))
             return await asleep(0)
         logger.debug("Send: %r", msg)
         writer.write(msg.encode())

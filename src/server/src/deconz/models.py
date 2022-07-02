@@ -171,7 +171,6 @@ class ZHAPresenceConfig(BaseModel):
     duration: int
     on: bool
     reachable: bool
-    temperature: int
 
 
 class ZHAPresenceState(BaseModel):
@@ -220,7 +219,6 @@ class ZHALightLevelConfig(BaseModel):
     battery: int
     on: bool
     reachable: bool
-    temperature: int
     tholddark: int
     tholdoffset: int
 

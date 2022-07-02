@@ -13,25 +13,30 @@ code:
     - IDEA
     - NOTE
     - REVIEW
+    - TEST
 lists:
-  - filter: 'dueDate < "${tomorrow at 6AM}" AND list != DONE +dueDate +order'
+  - name: What's Due?
     hidden: true
-    id: 0
-    name: What's Due?
-  - hidden: false
     ignore: false
-    name: NOTE
-  - hidden: false
-    name: TODO
-  - hidden: false
-    name: DOING
-  - hidden: false
-    ignore: true
-    name: DONE
-  - filter: 'completedDate > "${14 days ago}" -completed'
+    filter: 'dueDate < "${tomorrow at 6AM}" AND list != DONE +dueDate +order'
+    id: 0
+  - name: TODO
     hidden: false
+    ignore: false
+  - name: DOING
+    hidden: false
+    ignore: false
+  - name: TEST
+    hidden: false
+    ignore: false
+  - name: DONE
+    hidden: false
+    ignore: true
+  - name: Recently Completed
+    hidden: false
+    ignore: false
+    filter: 'completedDate > "${14 days ago}" -completed'
     id: 1
-    name: Recently Completed
   - name: HACK
     hidden: false
     ignore: false

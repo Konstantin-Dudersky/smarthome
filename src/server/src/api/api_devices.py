@@ -3,6 +3,7 @@
 from fastapi import APIRouter
 
 from src.devices.main import bulb
+from src.yeelight import BulbSchema
 
 router = APIRouter(
     prefix="/api/devices",
@@ -16,8 +17,13 @@ async def get() -> None:
     return
 
 
-@router.get("/yeelight/{device_id}")
+@router.get("/yeelight/{device_id}", response_model=BulbSchema)
 async def get_yeelight(
     device_id: str,
-):
-    return await bulb.get_power()
+) -> BulbSchema:
+    """Возвращает инфо о лампе Yeelight.
+
+    :param device_id: id лампы
+    :return: инфо
+    """
+    return await bulb.get_all_data()

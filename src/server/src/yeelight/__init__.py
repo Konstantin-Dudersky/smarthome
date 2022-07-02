@@ -3,6 +3,6 @@
 # flake8: noqa
 # pyright: reportUnusedImport=false
 
-from .main import Bulb
+from .main import Bulb, BulbSchema
 
-__all__ = ["Bulb"]
+__all__ = ["Bulb", "BulbSchema"]

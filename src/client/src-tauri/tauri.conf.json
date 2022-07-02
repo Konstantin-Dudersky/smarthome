@@ -4,7 +4,7 @@
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
     "devPath": "http://localhost:4200",
-    "distDir": "../dist"
+    "distDir": "../dist/client"
   },
   "package": {
     "productName": "client",
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "client",
+        "title": "smarthome",
         "width": 800
       }
     ]

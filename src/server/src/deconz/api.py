@@ -18,7 +18,11 @@ DECONZ_REST_URL = (
 
 
 async def _base_query(endpoint: str) -> httpx.Response | None:
-    """Базовый запрос."""
+    """Базовый запрос.
+
+    :param endpoint: endpoint
+    :return: ответ
+    """
     async with httpx.AsyncClient() as http:
         try:
             return await http.get(f"{DECONZ_REST_URL}{endpoint}")
@@ -31,7 +35,10 @@ async def _base_query(endpoint: str) -> httpx.Response | None:
 
 
 async def get_config() -> ConfigModel | None:
-    """Return the current gateway configuration."""
+    """Return the current gateway configuration.
+
+    :return: конфигурация сервера
+    """
     config = await _base_query("/config")
     if config is None:
         return None
@@ -42,5 +49,9 @@ async def get_config() -> ConfigModel | None:
 
 
 async def get_sensor(sensor_id: int) -> httpx.Response | None:
-    """Return the sensor with the specified id."""
+    """Return the sensor with the specified id.
+
+    :param sensor_id: id датчика
+    :return: инфо о всех датчиках
+    """
     return await _base_query(f"/sensors/{sensor_id}")

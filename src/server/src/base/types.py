@@ -2,6 +2,8 @@
 
 from enum import Enum, auto
 
+from pydantic import BaseModel
+
 
 class Qual(Enum):
     """Коды качества сигнала."""
@@ -14,6 +16,15 @@ class Units(Enum):
     """Единицы измерения."""
 
     GR_C = "oC"
+
+
+# SigBase ---------------------------------------------------------------------
+
+
+class SigBaseSchema(BaseModel):
+    """Схема для API."""
+
+    qual: Qual
 
 
 class SigBase:
@@ -43,13 +54,22 @@ class SigBase:
         self._qual = value
 
 
+# SigBool ---------------------------------------------------------------------
+
+
+class SigBoolSchema(SigBaseSchema):
+    """Схема для API."""
+
+    value: bool
+
+
 class SigBool(SigBase):
     """Дискретный сигнал."""
 
     def __init__(
         self: "SigBool",
         value: bool = False,
-        qual: Qual = Qual.GOOD,
+        qual: Qual = Qual.BAD,
     ) -> None:
         """Дискретное значение.
 
@@ -82,6 +102,19 @@ class SigBool(SigBase):
         """
         self.__value = value
 
+    @property
+    def schema(
+        self: "SigBool",
+    ) -> SigBoolSchema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return SigBoolSchema(
+            value=self.value,
+            qual=self.qual,
+        )
+
     def update(
         self: "SigBool",
         value: bool | None = None,
@@ -96,6 +129,16 @@ class SigBool(SigBase):
             self.__value = value
         if qual is not None:
             self.qual = qual
+
+
+# SigFloat --------------------------------------------------------------------
+
+
+class SigFloatSchema(SigBaseSchema):
+    """Схема для API."""
+
+    value: float
+    unit: Units
 
 
 class SigFloat(SigBase):
@@ -147,6 +190,20 @@ class SigFloat(SigBase):
         :return: единица измерения
         """
         return self.__unit
+
+    @property
+    def schema(
+        self: "SigFloat",
+    ) -> SigFloatSchema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return SigFloatSchema(
+            value=self.value,
+            unit=self.unit,
+            qual=self.qual,
+        )
 
     def update(
         self: "SigFloat",

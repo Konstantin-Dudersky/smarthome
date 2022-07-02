@@ -17,3 +17,9 @@ created:2022-06-28T17:43:32.542Z
 
 deconz websoket - встроенный датчик
 </card>
+# [<!--](#TEST:-10)
+<card>
+created:2022-07-02T11:44:19.101Z -->
+
+api для лампы
+</card>

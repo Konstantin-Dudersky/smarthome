@@ -1,8 +1,8 @@
 [tool.poetry]
 authors = ["Konstantin-Dudersky <Konstantin.Dudersky@gmail.com>"]
-description = ""
-name = "setup"
-version = "0.1.0"
+description = "Скрипты установки"
+name = "konstantin_setup"
+version = "0.0.2"
 
 [tool.poetry.dependencies]
 poethepoet = "*"
@@ -10,13 +10,55 @@ python = "^3.10"
 
 [tool.poetry.dev-dependencies]
 black = "*"
+darglint = "*"
+flake8 = "*"
+flake8-annotations = "*"
+flake8-broken-line = "*"
+flake8-class-attributes-order = "*"
+flake8-commas = "*"
+flake8-docstrings = "*"
+flake8-import-order = "*"
+flake8-multiline-containers = "*"
+flake8-print = "*"
+flake8-return = "*"
+flake8-variables-names = "*"
+mypy = "*"
+pep8-naming = "*"
+pylint = "*"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=1.0.0"]
 
-[tool.poe.tasks]
-systemd = {script = "scripts.systemd:run(service_name='smarthome', description='smarthome', work_dir='/home/admin/smarthome/src/server')"}
-
 [tool.black]
 line-length = 79
+
+[tool.poe.tasks]
+ng_build = {script = "src.ng_build:main(work_dir_relative='../client', project='client')"}
+systemd = {script = "src.systemd:main(service_name='smarthome', description='Smarthome', work_dir_rel='../server')"}
+tauri_build = {script = "src.tauri_build:main(work_dir_relative='../client', project='client')"}
+
+[tool.pylint.BASIC]
+good-names = 'db'
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"
+
+# настройки mypy с сайта pydantic
+[tool.mypy]
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_untyped_defs = true
+follow_imports = "silent"
+no_implicit_reexport = true
+plugins = [
+  "pydantic.mypy",
+]
+warn_redundant_casts = true
+warn_unused_ignores = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true

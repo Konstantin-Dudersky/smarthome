@@ -1,3 +1,8 @@
 [flake8]
-ignore = I100,I101,W503,R504
+ignore = 
+    I100,
+    I101,
+    W503,
+    R504,
+    CCE001 # should be after, баг с порядком свойств (getter / setter)
 docstring_style=sphinx

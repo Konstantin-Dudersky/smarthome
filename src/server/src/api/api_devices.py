@@ -27,3 +27,11 @@ async def get_yeelight(
     :return: инфо
     """
     return await bulb.get_all_data()
+
+
+@router.get("/yeelight/{device_id}/set-power")
+async def set_power(
+    device_id: str,
+    power: bool,
+):
+    await bulb.set_power(power)

@@ -1,0 +1,21 @@
+<p>yeelight works!</p>
+
+<app-sig-bool
+  [signal]="data.power"
+  [label]="'Включен'"
+  (onClick)="this.dialogPower = true"
+></app-sig-bool>
+<app-sig-float [label]="'Яркость'"></app-sig-float>
+
+<p-dialog [(visible)]="this.dialogPower" header="Title">
+  <p-button
+    [icon]="'fa-solid fa-lightbulb'"
+    [label]="'Включить'"
+    (onClick)="setPower(true)"
+  ></p-button>
+  <p-button
+    [icon]="'fa-solid fa-power-off'"
+    [label]="'Отключить'"
+    (onClick)="setPower(false)"
+  ></p-button>
+</p-dialog>

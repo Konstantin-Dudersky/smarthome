@@ -1,6 +1,6 @@
 """Типы данных."""
 
-from enum import Enum, auto
+from enum import Enum
 
 from pydantic import BaseModel
 
@@ -8,8 +8,8 @@ from pydantic import BaseModel
 class Qual(Enum):
     """Коды качества сигнала."""
 
-    BAD = auto()
-    GOOD = auto()
+    BAD = 0
+    GOOD = 80
 
 
 class Units(Enum):

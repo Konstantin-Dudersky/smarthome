@@ -27,7 +27,7 @@ async def _run() -> None:
         if neg_front(presence).value:
             await bulb.set_power(False, duration=10000)
         await asyncio.sleep(0)
-
+    
 
 tasks = [
     deconz_ws.task(),

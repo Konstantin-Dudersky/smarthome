@@ -1,18 +1,46 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppRoutingModule } from "./app-routing.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserModule } from "@angular/platform-browser";
+import { HttpClientModule } from "@angular/common/http";
+import { NgModule } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+// components ------------------------------------------------------------------
+import { AppComponent } from "./app.component";
+import { QualComponent } from "./components/qual/qual.component";
+import { SigBoolComponent } from "./components/sig-bool/sig-bool.component";
+import { SigFloatComponent } from "./components/sig-float/sig-float.component";
+import { YeelightComponent } from "./components/yeelight/yeelight.component";
+// primeng ---------------------------------------------------------------------
+import { AvatarModule } from "primeng/avatar";
+import { ButtonModule } from "primeng/button";
+import { DialogModule } from "primeng/dialog";
+import { InputSwitchModule } from "primeng/inputswitch";
+import { SkeletonModule } from "primeng/skeleton";
+import { TagModule } from "primeng/tag";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        YeelightComponent,
+        SigBoolComponent,
+        QualComponent,
+        SigFloatComponent,
+    ],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        // primeng -------------------------------------------------------------
+        AvatarModule,
+        ButtonModule,
+        DialogModule,
+        InputSwitchModule,
+        SkeletonModule,
+        TagModule,
+    ],
+    providers: [],
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -35,6 +35,7 @@ line-length = 79
 
 [tool.poe.tasks]
 ng_build = {script = "src.ng_build:main(work_dir_relative='../client', project='client')"}
+ng_dist = {script = "src.ng_dist:main(source_dir_rel='../client', target_dir_rel='../server/static/', project='client')"}
 systemd = {script = "src.systemd:main(service_name='smarthome', description='Smarthome', work_dir_rel='../server')"}
 tauri_build = {script = "src.tauri_build:main(work_dir_relative='../client', project='client')"}
 

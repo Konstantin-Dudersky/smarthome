@@ -49,6 +49,8 @@ ng_build = {script = "src.ng_build:main(work_dir_relative='../client', project='
 poetry run poe ng_build
 ```
 
+### разворачивание проекта
+
 
 
 ## tauri

@@ -30,8 +30,13 @@ poetry run poe systemd
 
 Перенаправление портов, поскольку на linux нельзя запусить сервис с портом <= 1024
 
+```toml
+[tool.poe.tasks]
+port_redirect = {script = "src.port_redirect:main(from_port=80, to_port=8000)"}
+```
+
 ```sh
-# TODO
+poetry run poe port_redirect
 ```
 
 

@@ -75,7 +75,7 @@ app.mount("/", StaticFiles(directory="static"), name="static")
 
 async def api_task() -> None:
     """Задача для запуска сервера api."""
-    config = uvicorn.Config(app, port=8000, log_level="info")
+    config = uvicorn.Config(app, host='0.0.0.0', port=8000, log_level="info")
     server: Server = uvicorn.Server(
         config,
     )  # pyright: reportUnknownMemberType=false

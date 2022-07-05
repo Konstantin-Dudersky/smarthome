@@ -9,8 +9,8 @@ SERVICE = """
 Description={description}
 
 [Service]
-Restart=on-failure
-RestartSec=10s
+Restart=always
+RestartSec=30s
 Type=simple
 User={user}
 Group={user}
@@ -26,7 +26,7 @@ def main(
     service_name: str,
     description: str,
     work_dir_relative: str,
-    start_file: str = "setup.py",
+    start_file: str = "start.py",
 ) -> None:
     """Создать сервис.
 
@@ -54,8 +54,8 @@ def main(
     with open(filename, "w", encoding="utf-8") as file:
         file.write(service)
     print(f"-> File {filename} created")
-    # os.system(f"sudo mv {filename} /etc/systemd/system")
-    # os.system("sudo systemctl daemon-reload")
+    os.system(f"sudo mv {filename} /etc/systemd/system")
+    os.system("sudo systemctl daemon-reload")
 
 
 if __name__ == "__main__":

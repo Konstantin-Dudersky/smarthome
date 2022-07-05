@@ -3,7 +3,7 @@
 import os
 
 
-def run(from_port: int = 80, to_port: int = 8000) -> None:
+def main(from_port: int = 80, to_port: int = 8000) -> None:
     """Перенаправление портов."""
     os.system(
         (
@@ -12,4 +12,4 @@ def run(from_port: int = 80, to_port: int = 8000) -> None:
         ),
     )
     os.system('sudo sh -c "iptables-save > /etc/iptables.rules"')
-    os.system("sudo apt-get install iptables-persistent")
+    os.system("sudo apt install -y iptables-persistent")

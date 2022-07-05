@@ -261,3 +261,39 @@ class ZHALightLevelWs(WsMsg):
     """Сообщение 1."""
 
     state: ZHALightLevelStateWs
+
+
+# ZHAHumidity -----------------------------------------------------------------
+
+
+class ZHAHumidityConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    offset: int
+    on: bool
+    reachable: bool
+
+
+class ZHAHumidityState(BaseModel):
+    """Состояние датчика влажности."""
+
+    humidity: int
+    lastupdated: datetime
+
+
+class ZHAHumidity(BaseModel):
+    """Датчик влажности."""
+
+    config: ZHAHumidityConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: ZHAHumidityState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str

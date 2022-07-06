@@ -40,7 +40,7 @@ line-length = 79
 [tool.poe.tasks]
 create_env = {script = "src.utils.settings:create_env"}
 docs = {shell = "sphinx-apidoc --force -o docs src && cd docs && make html"}
-lint = ["lint_flake8", "lint_pyright"]
+lint = ["lint_pyright", "lint_flake8"]
 lint_flake8 = {shell = 'flake8 src/'}
 lint_pyright = {shell = 'pyright src/'}# npm install --global pyright
 main = {script = "src.main:main"}

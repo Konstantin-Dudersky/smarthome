@@ -37,11 +37,11 @@
     "colId": "bb464746-3209-4dab-9126-bdc8edd566bb",
     "containerId": "",
     "name": "Get sensor",
-    "url": "{{base_url}}/{{api_key}}/sensors/4",
+    "url": "{{base_url}}/{{api_key}}/sensors/16",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-06-22T06:55:59.146Z",
-    "modified": "2022-07-02T13:42:33.647Z",
+    "modified": "2022-07-06T16:17:34.123Z",
     "headers": [],
     "params": [],
     "tests": []

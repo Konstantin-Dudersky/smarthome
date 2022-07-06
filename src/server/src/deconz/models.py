@@ -297,3 +297,65 @@ class ZHAHumidity(BaseModel):
     swversion: str
     type_sensor: str = Field(..., alias="type")
     uniqueid: str
+
+
+class ZHAHumidityStateWs(BaseModel):
+    """state для ZHAHumidity."""
+
+    humidity: int
+    lastupdated: datetime
+
+
+class ZHAHumidityWs(WsMsg):
+    """Сообщение."""
+
+    state: ZHAHumidityStateWs
+
+
+# ZHAPressure -----------------------------------------------------------------
+
+
+class ZHAPressureConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    offset: int
+    on: bool
+    reachable: bool
+
+
+class ZHAPressureState(BaseModel):
+    """Состояние датчика давления."""
+
+    pressure: int
+    lastupdated: datetime
+
+
+class ZHAPressure(BaseModel):
+    """Датчик давления."""
+
+    config: ZHAPressureConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: ZHAPressureState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str
+
+
+class ZHAPressureStateWs(BaseModel):
+    """state для ZHAPressure."""
+
+    pressure: int
+    lastupdated: datetime
+
+
+class ZHAPressureWs(WsMsg):
+    """Сообщение."""
+
+    state: ZHAPressureStateWs

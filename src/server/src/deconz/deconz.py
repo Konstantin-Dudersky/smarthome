@@ -40,7 +40,8 @@ class MessageBuffer(NamedTuple):
     zha_open_close: dict[int, models.ZHAOpenCloseWs] = {}
     zha_presence: dict[int, models.ZHAPresenceWs] = {}
     zha_light_level: dict[int, models.ZHALightLevelWs] = {}
-    without_state: dict[int, models.WsMsgWithoutState] = {}
+    zha_humidity: dict[int, models.ZHAHumidityWs] = {}
+    without_state: dict[int, models.WsMsg] = {}
 
 
 class Websocket:
@@ -60,7 +61,7 @@ class Websocket:
     def get_msg_general(
         self: "Websocket",
         resource_id: int,
-    ) -> models.WsMsgWithoutState | None:
+    ) -> models.WsMsg | None:
         """Иногда deconz публикует сообщение без state.
 
         :param resource_id: id датчика
@@ -100,6 +101,17 @@ class Websocket:
         :return: Сообщение из буфера или None
         """
         return self.__msg.zha_presence.pop(resouce_id, None)
+
+    def get_msg_humidity(
+        self: "Websocket",
+        resouce_id: int,
+    ) -> models.ZHAHumidityWs | None:
+        """Возвращает сообщение из очереди для датчика ZHAHumidity.
+
+        :param resouce_id: id датчика
+        :return: Сообщение из буфера или None
+        """
+        return self.__msg.zha_humidity.pop(resouce_id, None)
 
     async def _get_config(self: "Websocket") -> None:
         """Получить номер порта."""
@@ -158,14 +170,23 @@ class Websocket:
             return
         except pydantic.ValidationError:
             pass
-        # общее сообщение
+        # датчик влажности
         try:
-            msg4 = models.WsMsgWithoutState.parse_raw(data)
-            self.__msg.without_state[msg4.resource_id] = msg4
+            msg4 = models.ZHAHumidityWs.parse_raw(data)
+            self.__msg.zha_humidity[msg4.resource_id] = msg4
             return
         except pydantic.ValidationError:
             pass
-        raise ValueError(f"Неизвестный формат сообщения websocket:\n{data}")
+        # общее сообщение
+        try:
+            msg100 = models.WsMsg.parse_raw(data)
+            self.__msg.without_state[msg100.resource_id] = msg100
+            return
+        except pydantic.ValidationError as exc:
+            logger.exception("Неизвестный формат сообщения websocket")
+            raise ValueError(
+                f"Неизвестный формат сообщения websocket:\n{data}",
+            ) from exc
 
 
 if __name__ == "__main__":

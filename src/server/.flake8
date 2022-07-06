@@ -6,3 +6,5 @@ ignore =
     R504,
     CCE001 # should be after, баг с порядком свойств (getter / setter)
 docstring_style=sphinx
+per-file-ignores =
+    src/utils/telegram.py: T201

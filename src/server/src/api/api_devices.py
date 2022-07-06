@@ -33,5 +33,10 @@ async def get_yeelight(
 async def set_power(
     device_id: str,
     power: bool,
-):
+) -> None:
+    """Включить/выключить.
+
+    :param device_id: id устройства
+    :param power: включить или отключить
+    """
     await bulb.set_power(power)

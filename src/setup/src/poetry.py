@@ -2,14 +2,19 @@
 """Установка poetry."""
 
 import os
+from typing import Callable
 
 
-def main() -> None:
+def main() -> Callable[[], None]:
     """Entry point."""
-    os.system("sudo apt update")
-    os.system("sudo apt install -y python3-venv")
-    os.system("curl -sSL https://install.python-poetry.org | python3 -")
-    os.system(". ~/.profile && poetry config virtualenvs.in-project true")
+
+    def _main() -> None:
+        os.system("sudo apt update")
+        os.system("sudo apt install -y python3-venv")
+        os.system("curl -sSL https://install.python-poetry.org | python3 -")
+        os.system(". ~/.profile && poetry config virtualenvs.in-project true")
+
+    return _main
 
 
 if __name__ == "__main__":

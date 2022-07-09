@@ -40,3 +40,16 @@ async def set_power(
     :param power: включить или отключить
     """
     await bulb.set_power(power)
+
+
+@router.get("/yeelight/{device_id}/set-bright")
+async def set_bright(
+    device_id: str,
+    bright: int,
+) -> None:
+    """Изменить яркость лампы.
+
+    :param device_id: id устройства
+    :param bright: яркость лампы в процентах
+    """
+    await bulb.set_bright(bright)

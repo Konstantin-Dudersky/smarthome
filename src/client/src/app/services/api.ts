@@ -23,4 +23,11 @@ export class ApiService {
             { params: new HttpParams().set("power", power) }
         );
     }
+
+    setBright(device_id: string, bright: number): Observable<null> {
+        return this.http.get<null>(
+            `${this.IP}/devices/yeelight/${device_id}/set-bright`,
+            { params: new HttpParams().set("bright", bright) }
+        );
+    }
 }

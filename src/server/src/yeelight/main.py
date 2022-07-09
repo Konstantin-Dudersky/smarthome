@@ -8,7 +8,7 @@
 import asyncio
 from asyncio import sleep as asleep
 from enum import Enum
-from typing import Any
+from typing import Any, Coroutine
 
 from pydantic import BaseModel, Field, ValidationError
 
@@ -19,6 +19,7 @@ from src.base.types import (
     SigBoolSchema,
     SigFloat,
     SigFloatSchema,
+    Units,
 )
 
 if __name__ == "__main__":
@@ -115,20 +116,23 @@ class Bulb:
     def __init__(
         self: "Bulb",
         ip_address: str,
+        atasks: list[Coroutine[Any, Any, None]],
         port: int = 55443,
     ) -> None:
         """Лампа.
 
         :param ip_address: ip-адрес лампы
         :param port: tcp-порт
+        :param atasks: ссылка на список асинхронных задач
         """
         self.__ip = ip_address
         self.__port = port
         # properties
         self.__data_power = SigBool()
-        self.__data_bright = SigFloat()
+        self.__data_bright = SigFloat(unit=Units.PERCENT)
         self.__reachable = True
         self.__cyclic_update = CyclicRun(10.0)  # циклическое обновление
+        atasks.append(self.__task())
 
     async def get_all_data(self: "Bulb", update: bool = False) -> BulbSchema:
         """Получить все данные.
@@ -214,16 +218,12 @@ class Bulb:
         await self.__send_command(str(msg))
         await self.get_power(True)
 
-    async def task(self: "Bulb") -> None:
-        """Задача для циклического выполнения."""
-        while True:
-            await self.__task()
-
     async def __task(self: "Bulb") -> None:
         """Задача для циклического выполнения."""
-        if self.__cyclic_update():
-            await self.__update()
-        await asyncio.sleep(0)
+        while True:
+            if self.__cyclic_update():
+                await self.__update()
+            await asyncio.sleep(0)
 
     async def __update(self: "Bulb") -> None:
         await self.get_power(True)
@@ -300,7 +300,8 @@ class Bulb:
 
 
 if __name__ == "__main__":
-    bulb = Bulb("192.168.101.20")
+    tasks = []
+    bulb = Bulb("192.168.101.20", atasks=tasks)
 
     async def run() -> None:
         """Task."""
@@ -310,7 +311,6 @@ if __name__ == "__main__":
             value += 5
             if value > 100:
                 value = 1
-            await bulb.task()
             await bulb.set_bright(value)
             await asyncio.sleep(0.5)
 

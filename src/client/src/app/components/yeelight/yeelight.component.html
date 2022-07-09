@@ -1,13 +1,8 @@
 <p>yeelight works!</p>
 
-<app-sig-bool
-  [signal]="data.power"
-  [label]="'Включен'"
-  (onClick)="this.dialogPower = true"
-></app-sig-bool>
-<app-sig-float [label]="'Яркость'"></app-sig-float>
+<app-sig-bool #power [label]="'Включен'" [signal]="data.power"></app-sig-bool>
 
-<p-dialog [(visible)]="this.dialogPower" header="Title">
+<p-dialog [(visible)]="power.popupVisible" header="Title">
   <p-button
     [icon]="'fa-solid fa-lightbulb'"
     [label]="'Включить'"
@@ -19,3 +14,15 @@
     (onClick)="setPower(false)"
   ></p-button>
 </p-dialog>
+
+<app-sig-float
+  [label]="'Яркость'"
+  [signal]="data.bright"
+  (popup)="brightPopup.open()"
+></app-sig-float>
+
+<app-oa-analog
+  #brightPopup
+  [signal]="data.bright"
+  (newValue)="setBright($event)"
+></app-oa-analog>

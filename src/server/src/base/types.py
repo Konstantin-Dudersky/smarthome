@@ -15,7 +15,9 @@ class Qual(Enum):
 class Units(Enum):
     """Единицы измерения."""
 
-    GR_C = "oC"
+    DEG_CELSIUS = 1001
+    LUX = 1314
+    PERCENT = 1342
 
 
 # SigBase ---------------------------------------------------------------------
@@ -147,7 +149,7 @@ class SigFloat(SigBase):
     def __init__(
         self: "SigFloat",
         value: float = 0.0,
-        unit: Units = Units.GR_C,
+        unit: Units = Units.DEG_CELSIUS,
         qual: Qual = Qual.GOOD,
     ) -> None:
         """Вещественное значение.

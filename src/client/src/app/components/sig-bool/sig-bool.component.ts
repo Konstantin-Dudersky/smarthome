@@ -20,8 +20,7 @@ export class SigBoolComponent implements OnInit, OnChanges {
     label: string = "Label";
     @Input()
     signal: SigBool | undefined;
-    @Output()
-    onClick: EventEmitter<null> = new EventEmitter();
+    popupVisible = false; // всплывающий диалог
 
     protected cst = Cst;
 
@@ -36,9 +35,5 @@ export class SigBoolComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (!this.signal) return;
         this.form.controls.value.setValue(this.signal.value);
-    }
-
-    protected click(): void {
-        this.onClick.emit();
     }
 }

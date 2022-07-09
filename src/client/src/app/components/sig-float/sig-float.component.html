@@ -1,1 +1,21 @@
-<p>sig-float works!</p>
+<ng-container *ngIf="signal"
+  ><div class="flex align-items-center">
+    <div class="flex-grow-1">
+      {{ label }}
+    </div>
+    <app-qual [qual]="signal.qual"></app-qual>
+    <div class="mr-2">
+      <p-inputNumber
+        [formControl]="form.controls.value"
+        [readonly]="true"
+        [suffix]="units[signal.unit]"
+      ></p-inputNumber>
+    </div>
+    <div class="mr-2">
+      <p-button
+        [icon]="'fa-solid fa-ellipsis'"
+        (onClick)="popup.emit()"
+      ></p-button>
+    </div>
+  </div>
+</ng-container>

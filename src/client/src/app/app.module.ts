@@ -14,9 +14,11 @@ import { YeelightComponent } from "./components/yeelight/yeelight.component";
 import { AvatarModule } from "primeng/avatar";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
+import { InputNumberModule } from "primeng/inputnumber";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { SkeletonModule } from "primeng/skeleton";
 import { TagModule } from "primeng/tag";
+import { OaAnalogComponent } from './components/oa/oa-analog/oa-analog.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +27,7 @@ import { TagModule } from "primeng/tag";
         SigBoolComponent,
         QualComponent,
         SigFloatComponent,
+        OaAnalogComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -36,6 +39,7 @@ import { TagModule } from "primeng/tag";
         AvatarModule,
         ButtonModule,
         DialogModule,
+        InputNumberModule,
         InputSwitchModule,
         SkeletonModule,
         TagModule,

@@ -7,8 +7,9 @@ import {
     Output,
     SimpleChanges,
 } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Cst } from "src/app/cst";
-import { SigFloat } from "src/app/shemas/siganals";
+import { SigFloat, Units } from "src/app/shemas/siganals";
 
 @Component({
     selector: "app-sig-float",
@@ -20,15 +21,20 @@ export class SigFloatComponent implements OnInit, OnChanges {
     @Input()
     signal: SigFloat | undefined;
     @Output()
-    onClick: EventEmitter<null> = new EventEmitter();
+    popup = new EventEmitter<null>();
 
+    protected units = Units;
     protected cst = Cst;
+    protected form = new FormGroup({
+        value: new FormControl<number>(0),
+    });
 
     constructor() {}
 
     ngOnInit(): void {}
 
     ngOnChanges(changes: SimpleChanges): void {
-        throw new Error("Method not implemented.");
+        if (!this.signal) return;
+        this.form.controls.value.setValue(this.signal.value);
     }
 }

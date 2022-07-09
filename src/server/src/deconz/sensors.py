@@ -220,7 +220,7 @@ class LightLevel(BaseSensor):
         :param update_rate: период обновления датчика, [s]
         """
         super().__init__(resource_id, ws=ws, update_rate=update_rate)
-        self.__data_lux = SigFloat(0.0, Units.GR_C, Qual.BAD)
+        self.__data_lux = SigFloat(0.0, Units.DEG_CELSIUS, Qual.BAD)
         # данные
         self._data.extend(
             [
@@ -284,7 +284,7 @@ class Humidity(BaseSensor):
         :param atasks: ссылка на список с задачами asyncio
         """
         super().__init__(resource_id, ws=ws, update_rate=update_rate)
-        self.__data_hum = SigFloat(0.0, Units.GR_C, Qual.BAD)
+        self.__data_hum = SigFloat(0.0, Units.DEG_CELSIUS, Qual.BAD)
         # данные
         self._data.extend(
             [

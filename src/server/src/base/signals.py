@@ -24,6 +24,33 @@ class Units(Enum):
     PERCENT = 1342
 
 
+class Scale:
+    """Диапазон измерения сигнала."""
+
+    class Schema(BaseModel):
+        """Схема для API."""
+
+        low: float
+        high: float
+
+    def __init__(self: "Scale", low: float = 0, high: float = 100.0) -> None:
+        """Диапазон измерения сигнала.
+
+        :param low: нижний предел
+        :param high: верхний предел
+        """
+        self.__low = low
+        self.__high = high
+
+    @property
+    def schema(self: "Scale") -> Schema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return self.Schema(low=self.__low, high=self.__high)
+
+
 # SigBase ---------------------------------------------------------------------
 
 
@@ -169,6 +196,7 @@ class SigFloatSchema(SigBaseSchema):
 
     value: float
     unit: Units
+    scale: Scale.Schema
 
 
 class SigFloat(SigBase):
@@ -179,16 +207,19 @@ class SigFloat(SigBase):
         value: float = 0.0,
         unit: Units = Units.DEG_CELSIUS,
         qual: Qual = Qual.BAD,
+        scale: Scale = Scale(0, 100.0),
     ) -> None:
         """Вещественное значение.
 
         :param value: значение
         :param unit: единица измерения
         :param qual: качество
+        :param scale: диапазон сигнала
         """
         super().__init__(qual)
         self.__value = value
         self.__unit = unit
+        self.__scale = scale
 
     def __str__(self: "SigFloat") -> str:
         """Строковое предстваление.
@@ -233,6 +264,7 @@ class SigFloat(SigBase):
             value=self.value,
             unit=self.unit,
             qual=self.qual,
+            scale=self.__scale.schema,
         )
 
     def update(

@@ -13,10 +13,13 @@ server_poetry_install = src.poetry()
 server_port_redirect = src.port_redirect(from_port=80, to_port=8000)
 """
 
+import os
 import sys
 
 import src
 
+
+SYSTEMD_SERVICE = 'smarthome'
 
 client_ng_build = src.ng_build(work_dir_relative="../client", project="client")
 client_ng_dist = src.ng_dist(
@@ -41,7 +44,7 @@ server_poetry_update = src.cmd_in_dir(
 server_port_redirect = src.port_redirect(from_port=80, to_port=8000)
 server_python = src.python("3.10.5")
 server_systemd = src.systemd(
-    service_name="smarthome",
+    service_name=SYSTEMD_SERVICE,
     description="Smarthome",
     work_dir_relative="../server",
 )
@@ -55,9 +58,11 @@ def build() -> None:
 
 def update() -> None:
     """Обновление проекта."""
+    os.system(f"sudo systemctl stop {SYSTEMD_SERVICE}")
     server_poetry_update()
     server_git_sync()
     client_ng_dist()
+    os.system(f"sudo systemctl start {SYSTEMD_SERVICE}")
 
 
 def install() -> None:

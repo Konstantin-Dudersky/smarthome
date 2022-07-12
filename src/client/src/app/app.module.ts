@@ -17,8 +17,9 @@ import { DialogModule } from "primeng/dialog";
 import { InputNumberModule } from "primeng/inputnumber";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { SkeletonModule } from "primeng/skeleton";
+import { SliderModule } from "primeng/slider";
 import { TagModule } from "primeng/tag";
-import { OaAnalogComponent } from './components/oa/oa-analog/oa-analog.component';
+import { OaAnalogComponent } from "./components/oa/oa-analog/oa-analog.component";
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import { OaAnalogComponent } from './components/oa/oa-analog/oa-analog.component
         InputNumberModule,
         InputSwitchModule,
         SkeletonModule,
+        SliderModule,
         TagModule,
     ],
     providers: [],

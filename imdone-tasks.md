@@ -35,3 +35,10 @@ created:2022-07-09T05:15:56.858Z completed:2022-07-12T15:55:26.791Z -->
 
 sigfloat component
 </card>
+# [<!--](#DOING:0)
+<card>
+created:2022-07-12T17:07:09.290Z
+-->
+
+scale для сигналов
+</card>

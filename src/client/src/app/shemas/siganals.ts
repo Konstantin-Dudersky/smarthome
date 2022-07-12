@@ -14,8 +14,14 @@ export interface SigBool {
     qual: Qual;
 }
 
+export interface Scale {
+    low: number;
+    high: number;
+}
+
 export interface SigFloat {
     value: number;
     unit: Units;
     qual: Qual;
+    scale: Scale;
 }

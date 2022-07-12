@@ -1,17 +1,28 @@
-<p-dialog [(visible)]="visible" header="Title" (onHide)="onHide()">
-  <p-inputNumber [formControl]="form.controls.value"></p-inputNumber>
-  <ng-template pTemplate="footer">
-    <p-button
-      [icon]="'fa-solid fa-check'"
-      [label]="'OK'"
-      [styleClass]="cst.button.outlined"
-      (onClick)="ok()"
-    ></p-button>
-    <p-button
-      [icon]="'fa-solid fa-xmark'"
-      [label]="'Отмена'"
-      [styleClass]="cst.button.outlined"
-      (onClick)="cancel()"
-    ></p-button>
-  </ng-template>
-</p-dialog>
+<ng-container *ngIf="signal">
+  <p-dialog [(visible)]="visible" header="Title" (onHide)="onHide()">
+    <p-inputNumber
+      [formControl]="form.controls.value"
+      [min]="signal.scale.low"
+      [max]="signal.scale.high"
+    ></p-inputNumber>
+    <p-slider
+      [formControl]="form.controls.value"
+      [min]="signal.scale.low"
+      [max]="signal.scale.high"
+    ></p-slider>
+    <ng-template pTemplate="footer">
+      <p-button
+        [icon]="'fa-solid fa-check'"
+        [label]="'OK'"
+        [styleClass]="cst.button.outlined"
+        (onClick)="ok()"
+      ></p-button>
+      <p-button
+        [icon]="'fa-solid fa-xmark'"
+        [label]="'Отмена'"
+        [styleClass]="cst.button.outlined"
+        (onClick)="cancel()"
+      ></p-button>
+    </ng-template>
+  </p-dialog>
+</ng-container>

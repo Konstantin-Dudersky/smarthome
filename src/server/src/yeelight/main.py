@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field, ValidationError
 from src.base.logic import CyclicRun
 from src.base.signals import (
     Qual,
+    Scale,
     SigBool,
     SigBoolSchema,
     SigFloat,
@@ -159,7 +160,7 @@ class _SigCt(SigFloat):
 
         :param comm_class: ссылка на класс коммуникации
         """
-        super().__init__(unit=Units.LUX)
+        super().__init__(unit=Units.KELVIN, scale=Scale(1700, 6500))
         self.__comm_class = comm_class
 
     def read(self: "_SigCt") -> None:

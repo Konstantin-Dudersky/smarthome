@@ -34,6 +34,10 @@ pydata-sphinx-theme = "*"
 pylint = "*"
 sphinx = "*"
 
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
 [tool.black]
 line-length = 79
 
@@ -42,7 +46,7 @@ create_env = {script = "src.utils.settings:create_env"}
 docs = {shell = "sphinx-apidoc --force -o docs src && cd docs && make html"}
 lint = ["lint_pyright", "lint_flake8"]
 lint_flake8 = {shell = 'flake8 src/'}
-lint_pyright = {shell = 'pyright src/'}# npm install --global pyright
+lint_pyright = {shell = 'pyright'}# npm install --global pyright
 main = {script = "src.main:main"}
 
 [tool.pylint.BASIC]
@@ -51,6 +55,8 @@ good-names = ['db', 'ws']
 [tool.pylint.'MESSAGES CONTROL']
 extension-pkg-whitelist = "pydantic"
 
-[build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.0.0"]
+[tool.pyright]
+include = ["src"]
+pythonPlatform = "Linux"
+pythonVersion = "3.10"
+typeCheckingMode = "strict"

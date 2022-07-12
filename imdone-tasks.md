@@ -17,23 +17,21 @@ created:2022-06-28T17:43:32.542Z
 
 deconz websoket - встроенный датчик
 </card>
-# [<!--](#TEST:-10)
+# [<!--](#DONE:-10)
 <card>
-created:2022-07-02T11:44:19.101Z -->
+created:2022-07-02T11:44:19.101Z completed:2022-07-12T15:53:56.104Z -->
 
 api для лампы
 </card>
-# [<!--](#DOING:0)
+# [<!--](#DONE:-20)
 <card>
-created:2022-07-09T04:48:41.213Z
--->
+created:2022-07-09T04:48:41.213Z completed:2022-07-12T15:55:22.963Z -->
 
 sigfloat units
 </card>
-# [<!--](#DOING:-10)
+# [<!--](#DONE:-30)
 <card>
-created:2022-07-09T05:15:56.858Z
--->
+created:2022-07-09T05:15:56.858Z completed:2022-07-12T15:55:26.791Z -->
 
 sigfloat component
 </card>

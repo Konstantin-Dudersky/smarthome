@@ -3,7 +3,7 @@
 from copy import copy
 import time
 
-from .types import SigBool, Qual
+from .signals import SigBool, Qual
 
 
 class CyclicRun:
@@ -46,7 +46,7 @@ class PosFront:
 
     def __init__(self: "PosFront") -> None:
         """Положительный фронт."""
-        self.__prev = SigBool(False, Qual.BAD)
+        self.__prev = SigBool()
 
     def __call__(self: "PosFront", pv_in: SigBool) -> SigBool:
         """Проверка изменения сигнала.
@@ -56,7 +56,7 @@ class PosFront:
         """
         res = SigBool()
         if pv_in.qual != Qual.GOOD or self.__prev.qual != Qual.GOOD:
-            res = SigBool(False, Qual.BAD)
+            res = SigBool()
         if pv_in.value and not self.__prev.value:
             res = SigBool(True, Qual.GOOD)
         self.__prev = copy(pv_in)
@@ -68,7 +68,7 @@ class NegFront:
 
     def __init__(self: "NegFront") -> None:
         """Отрицательный фронт."""
-        self.__prev = SigBool(False, Qual.BAD)
+        self.__prev = SigBool()
 
     def __call__(self: "NegFront", pv_in: SigBool) -> SigBool:
         """Проверка изменения сигнала.
@@ -78,7 +78,7 @@ class NegFront:
         """
         res = SigBool()
         if pv_in.qual != Qual.GOOD or self.__prev.qual != Qual.GOOD:
-            res = SigBool(False, Qual.BAD)
+            res = SigBool()
         if not pv_in.value and self.__prev.value:
             res = SigBool(True, Qual.GOOD)
         self.__prev = copy(pv_in)

@@ -4,6 +4,7 @@ export enum Qual {
 }
 
 export enum Units {
+    "K" = 1000,
     "℃" = 1001,
     "%" = 1342,
 }

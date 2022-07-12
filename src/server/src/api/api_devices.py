@@ -1,6 +1,6 @@
 """API для доступа к устройствам."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
 from src.devices.main import bulb
 from src.yeelight import BulbSchema
@@ -39,7 +39,7 @@ async def set_power(
     :param device_id: id устройства
     :param power: включить или отключить
     """
-    await bulb.set_power(power)
+    bulb.data.power.write(power)
 
 
 @router.get("/yeelight/{device_id}/set-bright")
@@ -52,4 +52,31 @@ async def set_bright(
     :param device_id: id устройства
     :param bright: яркость лампы в процентах
     """
-    await bulb.set_bright(bright)
+    # await bulb.set_bright(bright)
+    bulb.data.bright.write(bright)
+
+
+@router.get("/yeelight/{device_id}/set-ct")
+async def set_ct(
+    device_id: str,
+    ct_value: int = Query(..., alias="ctValue"),
+) -> None:
+    """Изменить цветовую температуру.
+
+    :param device_id: id устройства
+    :param ct_value: цветовая температура (1700-6500K)
+    """
+    bulb.data.ct.write(ct_value)
+
+
+@router.get("/yeelight/{device_id}/set-rgb")
+async def set_rgb(
+    device_id: str,
+    rgb_value: int = Query(..., alias="rgbValue"),
+) -> None:
+    """Изменить цветовую температуру.
+
+    :param device_id: id устройства
+    :param rgb_value: цвет RGB (0-16777215)
+    """
+    bulb.data.rgb.write(rgb_value)

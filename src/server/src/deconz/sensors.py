@@ -6,7 +6,7 @@ from typing import Any, Coroutine
 import httpx
 
 from src.base.logic import CyclicRun
-from src.base.types import SigBase, SigBool, SigFloat, Qual, Units
+from src.base.signals import SigBase, SigBool, SigFloat, Qual, Units
 from src.utils.logger import LoggerLevel, get_logger
 
 from . import api, deconz, models
@@ -94,7 +94,7 @@ class OpenClose(BaseSensor):
         :param update_rate: период обновления датчика, [s]
         """
         super().__init__(resource_id, ws=ws, update_rate=update_rate)
-        self.__data_opened = SigBool(False, Qual.BAD)
+        self.__data_opened = SigBool()
         # данные
         self._data.extend(
             [
@@ -157,7 +157,7 @@ class Presence(BaseSensor):
         :param update_rate: период обновления датчика, [s]
         """
         super().__init__(resource_id, ws=ws, update_rate=update_rate)
-        self.__data_presence = SigBool(False, Qual.BAD)
+        self.__data_presence = SigBool()
         # данные
         self._data.extend(
             [
@@ -220,7 +220,7 @@ class LightLevel(BaseSensor):
         :param update_rate: период обновления датчика, [s]
         """
         super().__init__(resource_id, ws=ws, update_rate=update_rate)
-        self.__data_lux = SigFloat(0.0, Units.DEG_CELSIUS, Qual.BAD)
+        self.__data_lux = SigFloat(unit=Units.DEG_CELSIUS)
         # данные
         self._data.extend(
             [
@@ -284,7 +284,7 @@ class Humidity(BaseSensor):
         :param atasks: ссылка на список с задачами asyncio
         """
         super().__init__(resource_id, ws=ws, update_rate=update_rate)
-        self.__data_hum = SigFloat(0.0, Units.DEG_CELSIUS, Qual.BAD)
+        self.__data_hum = SigFloat(unit=Units.DEG_CELSIUS)
         # данные
         self._data.extend(
             [

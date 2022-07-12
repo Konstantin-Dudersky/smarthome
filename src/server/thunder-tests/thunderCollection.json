@@ -34,5 +34,12 @@
         "sortNum": 10000
       }
     ]
+  },
+  {
+    "_id": "74099718-080d-4cfb-8bd1-1944c77bf86f",
+    "colName": "yeelight",
+    "created": "2022-07-09T14:31:01.971Z",
+    "sortNum": 50000,
+    "folders": []
   }
 ]

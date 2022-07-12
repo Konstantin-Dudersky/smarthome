@@ -27,9 +27,9 @@ async def _run() -> None:
     while True:
         presence = await sensor_presence.presence()
         if pos_front(presence).value:
-            await bulb.set_power(True, duration=1000)
+            bulb.data.power.write(True, duration=1000)
         if neg_front(presence).value:
-            await bulb.set_power(False, duration=10000)
+            bulb.data.power.write(True, duration=10000)
         await asyncio.sleep(0)
 
 

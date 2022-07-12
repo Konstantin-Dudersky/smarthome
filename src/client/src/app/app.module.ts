@@ -9,7 +9,7 @@ import { AppComponent } from "./app.component";
 import { QualComponent } from "./components/qual/qual.component";
 import { SigBoolComponent } from "./components/sig-bool/sig-bool.component";
 import { SigFloatComponent } from "./components/sig-float/sig-float.component";
-import { YeelightComponent } from "./components/yeelight/yeelight.component";
+import { YeelightComponent } from "./yeelight/component/yeelight.component";
 // primeng ---------------------------------------------------------------------
 import { AvatarModule } from "primeng/avatar";
 import { ButtonModule } from "primeng/button";

@@ -20,9 +20,32 @@
   [signal]="data.bright"
   (popup)="brightPopup.open()"
 ></app-sig-float>
-
 <app-oa-analog
   #brightPopup
   [signal]="data.bright"
   (newValue)="setBright($event)"
+></app-oa-analog>
+
+<app-sig-float
+  [label]="'Цветовая температура'"
+  [signal]="data.ct"
+  (popup)="ctPopup.open()"
+>
+</app-sig-float>
+<app-oa-analog
+  #ctPopup
+  [signal]="data.ct"
+  (newValue)="setCt($event)"
+></app-oa-analog>
+
+<app-sig-float
+  [label]="'Цвет RGB'"
+  [signal]="data.rgb"
+  (popup)="rgbPopup.open()"
+>
+</app-sig-float>
+<app-oa-analog
+  #rgbPopup
+  [signal]="data.rgb"
+  (newValue)="setRgb($event)"
 ></app-oa-analog>

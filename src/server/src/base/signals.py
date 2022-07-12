@@ -1,6 +1,8 @@
 """Типы данных."""
 
+from asyncio import sleep as asleep
 from enum import Enum
+from typing import Any, Coroutine
 
 from pydantic import BaseModel
 
@@ -15,6 +17,8 @@ class Qual(Enum):
 class Units(Enum):
     """Единицы измерения."""
 
+    NOUNIT = 0
+    KELVIN = 1000
     DEG_CELSIUS = 1001
     LUX = 1314
     PERCENT = 1342
@@ -32,12 +36,36 @@ class SigBaseSchema(BaseModel):
 class SigBase:
     """Базовый класс для сигналов."""
 
-    def __init__(self: "SigBase", qual: Qual = Qual.GOOD) -> None:
+    def __init__(self: "SigBase", qual: Qual) -> None:
         """Базовый класс для сигналов.
 
         :param qual: качество
         """
         self._qual = qual
+        self._coro_read: Coroutine[Any, Any, None] | None = None
+        self._coro_write: Coroutine[Any, Any, None] | None = None
+
+    async def read_exec(self: "SigBase") -> None:
+        """Выполнить чтение данных.
+
+        :return: None
+        """
+        if self._coro_read is None:
+            return await asleep(0)
+        await self._coro_read
+        self._coro_read = None
+        return await asleep(0)
+
+    async def write_exec(self: "SigBase") -> None:
+        """Выполнить запись данных.
+
+        :return: None
+        """
+        if self._coro_write is None:
+            return await asleep(0)
+        await self._coro_write
+        self._coro_write = None
+        return await asleep(0)
 
     @property
     def qual(self: "SigBase") -> Qual:
@@ -75,7 +103,7 @@ class SigBool(SigBase):
     ) -> None:
         """Дискретное значение.
 
-        :param value: значение
+        :param value: начальное значение
         :param qual: качество
         """
         super().__init__(qual)
@@ -150,7 +178,7 @@ class SigFloat(SigBase):
         self: "SigFloat",
         value: float = 0.0,
         unit: Units = Units.DEG_CELSIUS,
-        qual: Qual = Qual.GOOD,
+        qual: Qual = Qual.BAD,
     ) -> None:
         """Вещественное значение.
 

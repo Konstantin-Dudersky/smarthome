@@ -7,8 +7,8 @@ import {
     SimpleChanges,
 } from "@angular/core";
 import { Subscription } from "rxjs";
-import { ApiService } from "src/app/services/api";
-import { Yeelight } from "src/app/shemas/yeelight";
+import { YeelightService } from "../services";
+import { Yeelight } from "../shemas";
 
 @Component({
     selector: "app-yeelight",
@@ -18,17 +18,21 @@ export class YeelightComponent implements OnInit, OnDestroy, OnChanges {
     @Input()
     device_id: string = "";
 
-    private data$: Subscription = new Subscription();
+    private data$ = new Subscription();
     protected data: Yeelight = <Yeelight>{};
-    protected dialogPower: boolean = false;
-    private setPower$: Subscription = new Subscription();
-    private setBright$: Subscription = new Subscription();
+    protected dialogPower = false;
+    private setPower$ = new Subscription();
+    private setBright$ = new Subscription();
+    private setCt$ = new Subscription();
+    private setRgb$ = new Subscription();
     private subs: Subscription[] = [
         this.data$,
         this.setPower$,
         this.setBright$,
+        this.setCt$,
+        this.setRgb$,
     ];
-    constructor(private api: ApiService) {}
+    constructor(private api: YeelightService) {}
 
     ngOnInit(): void {}
 
@@ -50,6 +54,18 @@ export class YeelightComponent implements OnInit, OnDestroy, OnChanges {
 
     protected setBright(bright: number): void {
         this.setBright$ = this.api.setBright(this.device_id, bright).subscribe({
+            error: (error) => console.error(error),
+        });
+    }
+
+    protected setCt(ctValue: number): void {
+        this.setCt$ = this.api.setCt(this.device_id, ctValue).subscribe({
+            error: (error) => console.error(error),
+        });
+    }
+
+    protected setRgb(rgbValue: number): void {
+        this.setRgb$ = this.api.setRgb(this.device_id, rgbValue).subscribe({
             error: (error) => console.error(error),
         });
     }

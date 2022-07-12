@@ -1,5 +1,7 @@
 """Чтение данных REST API."""
 
+# pyright: reportUnknownMemberType=false
+
 import httpx
 
 from src.utils.logger import get_logger, LoggerLevel

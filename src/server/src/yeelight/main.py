@@ -17,9 +17,7 @@ from src.base.signals import (
     Qual,
     Scale,
     SigBool,
-    SigBoolSchema,
     SigFloat,
-    SigFloatSchema,
     Units,
 )
 
@@ -336,11 +334,11 @@ class _SigRgb(SigFloat):
 class BulbSchema(BaseModel):
     """Данные лампы."""
 
-    power: SigBoolSchema
-    bright: SigFloatSchema
-    color_mode: SigFloatSchema
-    ct: SigFloatSchema
-    rgb: SigFloatSchema
+    power: _SigPower.Schema
+    bright: _SigBright.Schema
+    color_mode: _SigColorMode.Schema
+    ct: _SigCt.Schema
+    rgb: _SigRgb.Schema
 
 
 class Bulb:

@@ -10,6 +10,8 @@ import { QualComponent } from "./components/qual/qual.component";
 import { SigBoolComponent } from "./components/sig-bool/sig-bool.component";
 import { SigFloatComponent } from "./components/sig-float/sig-float.component";
 import { YeelightComponent } from "./yeelight/component/yeelight.component";
+import { OaAnalogComponent } from "./components/oa/oa-analog/oa-analog.component";
+import { ZhaOpenCloseComponent } from "./components/deconz/zha-open-close/zha-open-close.component";
 // primeng ---------------------------------------------------------------------
 import { AvatarModule } from "primeng/avatar";
 import { ButtonModule } from "primeng/button";
@@ -19,7 +21,8 @@ import { InputSwitchModule } from "primeng/inputswitch";
 import { SkeletonModule } from "primeng/skeleton";
 import { SliderModule } from "primeng/slider";
 import { TagModule } from "primeng/tag";
-import { OaAnalogComponent } from "./components/oa/oa-analog/oa-analog.component";
+import { ToastModule } from "primeng/toast";
+import { MessageService } from "primeng/api";
 
 @NgModule({
     declarations: [
@@ -29,6 +32,7 @@ import { OaAnalogComponent } from "./components/oa/oa-analog/oa-analog.component
         QualComponent,
         SigFloatComponent,
         OaAnalogComponent,
+        ZhaOpenCloseComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -45,8 +49,9 @@ import { OaAnalogComponent } from "./components/oa/oa-analog/oa-analog.component
         SkeletonModule,
         SliderModule,
         TagModule,
+        ToastModule,
     ],
-    providers: [],
+    providers: [MessageService],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,5 @@
+<ng-container *ngIf="data">
+    <h4>{{ data.title }}</h4>
+
+  <app-sig-bool [label]="'Открыт'" [signal]="data.opened"></app-sig-bool>
+</ng-container>

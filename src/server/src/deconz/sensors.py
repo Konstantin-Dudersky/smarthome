@@ -5,11 +5,13 @@ from typing import Any, Coroutine
 
 import httpx
 
+from pydantic import BaseModel
+
 from src.base.logic import CyclicRun
 from src.base.signals import SigBase, SigBool, SigFloat, Qual, Units
 from src.utils.logger import LoggerLevel, get_logger
 
-from . import api, deconz, models
+from . import api, deconz, schemas
 
 log = get_logger(__name__, LoggerLevel.INFO)
 
@@ -17,14 +19,21 @@ log = get_logger(__name__, LoggerLevel.INFO)
 class BaseSensor:
     """Базовый класс для датчиков."""
 
+    class Schema(BaseModel):
+        """Схема для API."""
+
+        title: str
+
     def __init__(
         self: "BaseSensor",
+        title: str,
         resource_id: int,
         update_rate: float,
         ws: deconz.Websocket,
     ) -> None:
         """Базовый класс для датчиков.
 
+        :param title: название датчика
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
         :param update_rate: период обновления датчика, [s]
@@ -33,6 +42,7 @@ class BaseSensor:
         self._ws = ws
         self._data: list[SigBase] = []
         self.__cyclic_run = CyclicRun(update_rate)
+        self._title = title
 
     async def task(self: "BaseSensor") -> None:
         """Run task."""
@@ -79,8 +89,14 @@ class BaseSensor:
 class OpenClose(BaseSensor):
     """ZHAOpenClose."""
 
+    class Schema(BaseSensor.Schema):
+        """Схема для API."""
+
+        opened: SigBool.Schema
+
     def __init__(
         self: "OpenClose",
+        title: str,
         resource_id: int,
         ws: deconz.Websocket,
         atasks: list[Coroutine[Any, Any, None]],
@@ -88,12 +104,18 @@ class OpenClose(BaseSensor):
     ) -> None:
         """Create open/close sensor.
 
+        :param title: название датчика
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
         :param atasks: Ссылка на список асинхронных задач
         :param update_rate: период обновления датчика, [s]
         """
-        super().__init__(resource_id, ws=ws, update_rate=update_rate)
+        super().__init__(
+            title=title,
+            resource_id=resource_id,
+            ws=ws,
+            update_rate=update_rate,
+        )
         self.__data_opened = SigBool()
         # данные
         self._data.extend(
@@ -102,6 +124,17 @@ class OpenClose(BaseSensor):
             ],
         )
         atasks.append(self.task())
+
+    @property
+    def schema(self: "OpenClose") -> Schema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return self.Schema(
+            title=self._title,
+            opened=self.__data_opened.schema,
+        )
 
     async def opened(self: "OpenClose", update: bool = False) -> SigBool:
         """Состояние - открыт или закрыт.
@@ -134,7 +167,7 @@ class OpenClose(BaseSensor):
         msg = await self._api_get_sensor()
         if msg is None:
             return await asleep(0)
-        data = models.ZHAOpenClose.parse_obj(msg.json())
+        data = schemas.ZHAOpenClose.parse_obj(msg.json())
         self.__data_opened.update(data.state.opened, Qual.GOOD)
         return await asleep(0)
 
@@ -144,6 +177,7 @@ class Presence(BaseSensor):
 
     def __init__(
         self: "Presence",
+        title: str,
         resource_id: int,
         ws: deconz.Websocket,
         atasks: list[Coroutine[Any, Any, None]],
@@ -151,12 +185,18 @@ class Presence(BaseSensor):
     ) -> None:
         """Create open/close sensor.
 
+        :param title: название датчика
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
         :param atasks: Ссылка на список асинхронных задач
         :param update_rate: период обновления датчика, [s]
         """
-        super().__init__(resource_id, ws=ws, update_rate=update_rate)
+        super().__init__(
+            title=title,
+            resource_id=resource_id,
+            ws=ws,
+            update_rate=update_rate,
+        )
         self.__data_presence = SigBool()
         # данные
         self._data.extend(
@@ -197,7 +237,7 @@ class Presence(BaseSensor):
         msg = await self._api_get_sensor()
         if msg is None:
             return await asleep(0)
-        data = models.ZHAPresence.parse_obj(msg.json())
+        data = schemas.ZHAPresence.parse_obj(msg.json())
         self.__data_presence.update(data.state.presence, Qual.GOOD)
         return await asleep(0)
 
@@ -207,6 +247,7 @@ class LightLevel(BaseSensor):
 
     def __init__(
         self: "LightLevel",
+        title: str,
         resource_id: int,
         ws: deconz.Websocket,
         atasks: list[Coroutine[Any, Any, None]],
@@ -214,12 +255,18 @@ class LightLevel(BaseSensor):
     ) -> None:
         """Датчик уровня освещенности.
 
+        :param title: название датчика
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
         :param atasks: Ссылка на список асинхронных задач
         :param update_rate: период обновления датчика, [s]
         """
-        super().__init__(resource_id, ws=ws, update_rate=update_rate)
+        super().__init__(
+            title=title,
+            resource_id=resource_id,
+            ws=ws,
+            update_rate=update_rate,
+        )
         self.__data_lux = SigFloat(unit=Units.DEG_CELSIUS)
         # данные
         self._data.extend(
@@ -261,7 +308,7 @@ class LightLevel(BaseSensor):
         msg = await self._api_get_sensor()
         if msg is None:
             return await asleep(0)
-        data = models.ZHALightLevel.parse_obj(msg.json())
+        data = schemas.ZHALightLevel.parse_obj(msg.json())
         self.__data_lux.update(data.state.lux, Qual.GOOD)
         return await asleep(0)
 
@@ -271,6 +318,7 @@ class Humidity(BaseSensor):
 
     def __init__(
         self: "Humidity",
+        title: str,
         resource_id: int,
         ws: deconz.Websocket,
         atasks: list[Coroutine[Any, Any, None]],
@@ -278,12 +326,18 @@ class Humidity(BaseSensor):
     ) -> None:
         """Датчик влажности.
 
+        :param title: название датчика
         :param resource_id: id сенсора
         :param ws: Канал сообщений websocket
         :param update_rate: период обновления датчика, [s]
         :param atasks: ссылка на список с задачами asyncio
         """
-        super().__init__(resource_id, ws=ws, update_rate=update_rate)
+        super().__init__(
+            title=title,
+            resource_id=resource_id,
+            ws=ws,
+            update_rate=update_rate,
+        )
         self.__data_hum = SigFloat(unit=Units.DEG_CELSIUS)
         # данные
         self._data.extend(
@@ -324,6 +378,6 @@ class Humidity(BaseSensor):
         msg = await self._api_get_sensor()
         if msg is None:
             return await asleep(0)
-        data = models.ZHAHumidity.parse_obj(msg.json())
+        data = schemas.ZHAHumidity.parse_obj(msg.json())
         self.__data_hum.update(data.state.humidity / 100, Qual.GOOD)
         return await asleep(0)

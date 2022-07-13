@@ -2,7 +2,9 @@
 
 from fastapi import APIRouter, Query
 
+from src.deconz.sensors import OpenClose
 from src.devices.main import bulb
+from src.devices.main import sensor_open_close
 from src.yeelight import BulbSchema
 
 router = APIRouter(
@@ -15,6 +17,9 @@ router = APIRouter(
 async def get() -> None:
     """Получить информацию от сканера."""
     return
+
+
+# yeelight ---------------------------------------------------------------------
 
 
 @router.get("/yeelight/{device_id}", response_model=BulbSchema)
@@ -80,3 +85,21 @@ async def set_rgb(
     :param rgb_value: цвет RGB (0-16777215)
     """
     bulb.data.rgb.write(rgb_value)
+
+
+# deconz -----------------------------------------------------------------------
+
+
+@router.get(
+    "/deconz/zhaopenclose/{device_id}",
+    response_model=OpenClose.Schema,
+)
+async def deconz_zhaopenclose(
+    device_id: str,
+) -> OpenClose.Schema:
+    """Данные датчика ZHAOpenClose.
+
+    :param device_id: id устройства
+    :return: данные датчика
+    """
+    return sensor_open_close.schema

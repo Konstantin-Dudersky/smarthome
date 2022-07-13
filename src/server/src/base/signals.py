@@ -54,14 +54,13 @@ class Scale:
 # SigBase ---------------------------------------------------------------------
 
 
-class SigBaseSchema(BaseModel):
-    """Схема для API."""
-
-    qual: Qual
-
-
 class SigBase:
     """Базовый класс для сигналов."""
+
+    class Schema(BaseModel):
+        """Схема для API."""
+
+        qual: Qual
 
     def __init__(self: "SigBase", qual: Qual) -> None:
         """Базовый класс для сигналов.
@@ -114,14 +113,13 @@ class SigBase:
 # SigBool ---------------------------------------------------------------------
 
 
-class SigBoolSchema(SigBaseSchema):
-    """Схема для API."""
-
-    value: bool
-
-
 class SigBool(SigBase):
     """Дискретный сигнал."""
+
+    class Schema(SigBase.Schema):
+        """Схема для API."""
+
+        value: bool
 
     def __init__(
         self: "SigBool",
@@ -162,12 +160,12 @@ class SigBool(SigBase):
     @property
     def schema(
         self: "SigBool",
-    ) -> SigBoolSchema:
+    ) -> Schema:
         """Схема для API.
 
         :return: схема для API
         """
-        return SigBoolSchema(
+        return self.Schema(
             value=self.value,
             qual=self.qual,
         )
@@ -191,16 +189,15 @@ class SigBool(SigBase):
 # SigFloat --------------------------------------------------------------------
 
 
-class SigFloatSchema(SigBaseSchema):
-    """Схема для API."""
-
-    value: float
-    unit: Units
-    scale: Scale.Schema
-
-
 class SigFloat(SigBase):
     """Дискретный сигнал."""
+
+    class Schema(SigBase.Schema):
+        """Схема для API."""
+
+        value: float
+        unit: Units
+        scale: Scale.Schema
 
     def __init__(
         self: "SigFloat",
@@ -255,12 +252,12 @@ class SigFloat(SigBase):
     @property
     def schema(
         self: "SigFloat",
-    ) -> SigFloatSchema:
+    ) -> Schema:
         """Схема для API.
 
         :return: схема для API
         """
-        return SigFloatSchema(
+        return self.Schema(
             value=self.value,
             unit=self.unit,
             qual=self.qual,

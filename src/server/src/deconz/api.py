@@ -7,7 +7,7 @@ import httpx
 from src.utils.logger import get_logger, LoggerLevel
 from src.utils.settings import settings
 
-from .models import ConfigModel
+from .schemas import ConfigModel
 
 
 logger = get_logger(__name__)

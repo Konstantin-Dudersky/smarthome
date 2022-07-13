@@ -14,7 +14,7 @@ from src.utils.logger import get_logger, LoggerLevel
 from src.utils.settings import settings
 
 from .api import get_config
-from . import models
+from . import schemas
 
 logger = get_logger(__name__)
 logger.setLevel(LoggerLevel.INFO)
@@ -37,11 +37,11 @@ class States(Enum):
 class MessageBuffer(NamedTuple):
     """Буфер сообщений websocket."""
 
-    zha_open_close: dict[int, models.ZHAOpenCloseWs] = {}
-    zha_presence: dict[int, models.ZHAPresenceWs] = {}
-    zha_light_level: dict[int, models.ZHALightLevelWs] = {}
-    zha_humidity: dict[int, models.ZHAHumidityWs] = {}
-    without_state: dict[int, models.WsMsg] = {}
+    zha_open_close: dict[int, schemas.ZHAOpenCloseWs] = {}
+    zha_presence: dict[int, schemas.ZHAPresenceWs] = {}
+    zha_light_level: dict[int, schemas.ZHALightLevelWs] = {}
+    zha_humidity: dict[int, schemas.ZHAHumidityWs] = {}
+    without_state: dict[int, schemas.WsMsg] = {}
 
 
 class Websocket:
@@ -61,7 +61,7 @@ class Websocket:
     def get_msg_general(
         self: "Websocket",
         resource_id: int,
-    ) -> models.WsMsg | None:
+    ) -> schemas.WsMsg | None:
         """Иногда deconz публикует сообщение без state.
 
         :param resource_id: id датчика
@@ -72,7 +72,7 @@ class Websocket:
     def get_msg_open_close(
         self: "Websocket",
         resouce_id: int,
-    ) -> models.ZHAOpenCloseWs | None:
+    ) -> schemas.ZHAOpenCloseWs | None:
         """Возвращает сообщение из очереди для датчика ZHAOpenClose.
 
         :param resouce_id: id датчика
@@ -83,7 +83,7 @@ class Websocket:
     def get_msg_light_level(
         self: "Websocket",
         resouce_id: int,
-    ) -> models.ZHALightLevelWs | None:
+    ) -> schemas.ZHALightLevelWs | None:
         """Возвращает сообщение из очереди для датчика ZHALightLevel.
 
         :param resouce_id: id датчика
@@ -94,7 +94,7 @@ class Websocket:
     def get_msg_presence(
         self: "Websocket",
         resouce_id: int,
-    ) -> models.ZHAPresenceWs | None:
+    ) -> schemas.ZHAPresenceWs | None:
         """Возвращает сообщение из очереди для датчика ZHAPresence.
 
         :param resouce_id: id датчика
@@ -105,7 +105,7 @@ class Websocket:
     def get_msg_humidity(
         self: "Websocket",
         resouce_id: int,
-    ) -> models.ZHAHumidityWs | None:
+    ) -> schemas.ZHAHumidityWs | None:
         """Возвращает сообщение из очереди для датчика ZHAHumidity.
 
         :param resouce_id: id датчика
@@ -151,35 +151,35 @@ class Websocket:
     def _parse_msg(self: "Websocket", data: str) -> None:
         # датчик открыт/закрыт
         try:
-            msg1 = models.ZHAOpenCloseWs.parse_raw(data)
+            msg1 = schemas.ZHAOpenCloseWs.parse_raw(data)
             self.__msg.zha_open_close[msg1.resource_id] = msg1
             return
         except pydantic.ValidationError:
             pass
         # датчик присутствия
         try:
-            msg2 = models.ZHAPresenceWs.parse_raw(data)
+            msg2 = schemas.ZHAPresenceWs.parse_raw(data)
             self.__msg.zha_presence[msg2.resource_id] = msg2
             return
         except pydantic.ValidationError:
             pass
         # датчик освещенности
         try:
-            msg3 = models.ZHALightLevelWs.parse_raw(data)
+            msg3 = schemas.ZHALightLevelWs.parse_raw(data)
             self.__msg.zha_light_level[msg3.resource_id] = msg3
             return
         except pydantic.ValidationError:
             pass
         # датчик влажности
         try:
-            msg4 = models.ZHAHumidityWs.parse_raw(data)
+            msg4 = schemas.ZHAHumidityWs.parse_raw(data)
             self.__msg.zha_humidity[msg4.resource_id] = msg4
             return
         except pydantic.ValidationError:
             pass
         # общее сообщение
         try:
-            msg100 = models.WsMsg.parse_raw(data)
+            msg100 = schemas.WsMsg.parse_raw(data)
             self.__msg.without_state[msg100.resource_id] = msg100
             return
         except pydantic.ValidationError as exc:

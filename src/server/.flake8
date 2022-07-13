@@ -8,3 +8,4 @@ ignore =
 docstring_style=sphinx
 per-file-ignores =
     src/utils/telegram.py: T201
+max-line-length = 80

@@ -23,6 +23,7 @@ import { SkeletonModule } from "primeng/skeleton";
 import { SliderModule } from "primeng/slider";
 import { TagModule } from "primeng/tag";
 import { ToastModule } from "primeng/toast";
+import { ZhaHumidityComponent } from './components/deconz/zha-humidity/zha-humidity.component';
 
 @NgModule({
     declarations: [
@@ -33,6 +34,7 @@ import { ToastModule } from "primeng/toast";
         SigFloatComponent,
         OaAnalogComponent,
         ZhaOpenCloseComponent,
+        ZhaHumidityComponent,
     ],
     imports: [
         AppRoutingModule,

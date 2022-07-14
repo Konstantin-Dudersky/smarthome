@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Скрипты установки."""
 
-import os
 from typing import NamedTuple
 import sys
 

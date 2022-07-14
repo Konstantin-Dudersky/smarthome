@@ -1,0 +1,5 @@
+<h4>Датчик влажности</h4>
+
+<ng-container *ngIf="data">
+  <app-sig-float [label]="'Влажность'" [signal]="data.humidity"></app-sig-float>
+</ng-container>

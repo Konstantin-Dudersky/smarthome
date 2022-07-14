@@ -34,7 +34,12 @@ sensor_light_level = sensors.LightLevel(
     atasks=tasks1,
 )
 bulb = Bulb("192.168.101.20", atasks=tasks1)
-humidity = sensors.Humidity("Датчик влажности", 11, deconz_ws, atasks=tasks1)
+sensor_humidity = sensors.Humidity(
+    "Датчик влажности",
+    11,
+    deconz_ws,
+    atasks=tasks1,
+)
 
 
 async def _run() -> None:

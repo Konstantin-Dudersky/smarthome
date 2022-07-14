@@ -316,6 +316,11 @@ class LightLevel(BaseSensor):
 class Humidity(BaseSensor):
     """ZHAHumidity."""
 
+    class Schema(BaseSensor.Schema):
+        """Схема для API."""
+
+        humidity: SigFloat.Schema
+
     def __init__(
         self: "Humidity",
         title: str,
@@ -338,7 +343,7 @@ class Humidity(BaseSensor):
             ws=ws,
             update_rate=update_rate,
         )
-        self.__data_hum = SigFloat(unit=Units.DEG_CELSIUS)
+        self.__data_hum = SigFloat(unit=Units.PERCENT)
         # данные
         self._data.extend(
             [
@@ -346,6 +351,17 @@ class Humidity(BaseSensor):
             ],
         )
         atasks.append(self.task())
+
+    @property
+    def schema(self: "Humidity") -> Schema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return self.Schema(
+            title=self._title,
+            humidity=self.__data_hum.schema,
+        )
 
     async def humidity(self: "Humidity", update: bool = False) -> SigFloat:
         """Состояние - открыт или закрыт.

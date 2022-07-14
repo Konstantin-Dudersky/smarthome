@@ -48,3 +48,10 @@ created:2022-07-13T16:49:57.310Z
 
 openclose sensor component
 </card>
+# [<!--](#DOING:-10)
+<card>
+created:2022-07-13T19:16:31.112Z
+-->
+
+датчик открытия не отображается на raspberry
+</card>

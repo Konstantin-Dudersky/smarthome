@@ -83,7 +83,21 @@
     "method": "GET",
     "sortNum": 20000,
     "created": "2022-06-30T18:45:57.277Z",
-    "modified": "2022-06-30T18:47:07.009Z",
+    "modified": "2022-07-14T16:15:41.390Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "ed9a18c6-f783-4eeb-aa5a-83ee49ac8d34",
+    "colId": "731bcce6-b535-4ccf-9200-d0ceb76df3fc",
+    "containerId": "d5a68d39-9e7e-4cb4-824e-dc6cc817c91c",
+    "name": "zhaopenclose",
+    "url": "{{raspberry_api_url}}/devices/deconz/zhaopenclose/sdfsf",
+    "method": "GET",
+    "sortNum": 10000,
+    "created": "2022-07-13T18:53:17.374Z",
+    "modified": "2022-07-13T18:58:09.548Z",
     "headers": [],
     "params": [],
     "tests": []

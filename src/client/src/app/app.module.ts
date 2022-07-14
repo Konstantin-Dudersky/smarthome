@@ -18,11 +18,11 @@ import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
 import { InputNumberModule } from "primeng/inputnumber";
 import { InputSwitchModule } from "primeng/inputswitch";
+import { MessageService } from "primeng/api";
 import { SkeletonModule } from "primeng/skeleton";
 import { SliderModule } from "primeng/slider";
 import { TagModule } from "primeng/tag";
 import { ToastModule } from "primeng/toast";
-import { MessageService } from "primeng/api";
 
 @NgModule({
     declarations: [

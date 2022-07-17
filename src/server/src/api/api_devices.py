@@ -2,9 +2,14 @@
 
 from fastapi import APIRouter, Query
 
-from src.deconz.sensors import Humidity, OpenClose
-from src.devices.main import bulb
-from src.devices.main import sensor_humidity, sensor_open_close
+from src.deconz.sensors import Humidity, OpenClose, ZHAPressure, ZHATemperature
+from src.devices.main import (
+    bulb,
+    sensor_humidity,
+    sensor_open_close,
+    sensor_temperature,
+    sensor_pressure,
+)
 from src.yeelight import BulbSchema
 
 router = APIRouter(
@@ -118,3 +123,33 @@ async def deconz_zhahumidity(
     :return: данные датчика
     """
     return sensor_humidity.schema
+
+
+@router.get(
+    "/deconz/zhatemperature/{device_id}",
+    response_model=ZHATemperature.Schema,
+)
+async def deconz_zhatemperature(
+    device_id: str,
+) -> ZHATemperature.Schema:
+    """Данные датчика ZHATemperature.
+
+    :param device_id: id устройства
+    :return: данные датчика
+    """
+    return sensor_temperature.schema
+
+
+@router.get(
+    "/deconz/zhapressure/{device_id}",
+    response_model=ZHAPressure.Schema,
+)
+async def deconz_zhapressure(
+    device_id: str,
+) -> ZHAPressure.Schema:
+    """Данные датчика ZHAPressure.
+
+    :param device_id: id устройства
+    :return: данные датчика
+    """
+    return sensor_pressure.schema

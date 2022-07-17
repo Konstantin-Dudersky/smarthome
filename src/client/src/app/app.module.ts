@@ -12,6 +12,9 @@ import { SigFloatComponent } from "./components/sig-float/sig-float.component";
 import { YeelightComponent } from "./yeelight/component/yeelight.component";
 import { OaAnalogComponent } from "./components/oa/oa-analog/oa-analog.component";
 import { ZhaOpenCloseComponent } from "./components/deconz/zha-open-close/zha-open-close.component";
+import { ZhaHumidityComponent } from "./components/deconz/zha-humidity/zha-humidity.component";
+import { ZhaTemperatureComponent } from "./components/deconz/zha-temperature/zha-temperature.component";
+import { ZhaPressureComponent } from "./components/deconz/zha-pressure/zha-pressure.component";
 // primeng ---------------------------------------------------------------------
 import { AvatarModule } from "primeng/avatar";
 import { ButtonModule } from "primeng/button";
@@ -19,11 +22,11 @@ import { DialogModule } from "primeng/dialog";
 import { InputNumberModule } from "primeng/inputnumber";
 import { InputSwitchModule } from "primeng/inputswitch";
 import { MessageService } from "primeng/api";
+import { PanelModule } from "primeng/panel";
 import { SkeletonModule } from "primeng/skeleton";
 import { SliderModule } from "primeng/slider";
 import { TagModule } from "primeng/tag";
 import { ToastModule } from "primeng/toast";
-import { ZhaHumidityComponent } from './components/deconz/zha-humidity/zha-humidity.component';
 
 @NgModule({
     declarations: [
@@ -35,6 +38,8 @@ import { ZhaHumidityComponent } from './components/deconz/zha-humidity/zha-humid
         OaAnalogComponent,
         ZhaOpenCloseComponent,
         ZhaHumidityComponent,
+        ZhaTemperatureComponent,
+        ZhaPressureComponent,
     ],
     imports: [
         AppRoutingModule,
@@ -48,6 +53,7 @@ import { ZhaHumidityComponent } from './components/deconz/zha-humidity/zha-humid
         DialogModule,
         InputNumberModule,
         InputSwitchModule,
+        PanelModule,
         SkeletonModule,
         SliderModule,
         TagModule,

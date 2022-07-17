@@ -5,7 +5,7 @@ name = "smarthome"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-fastapi = "0.78.0"
+fastapi = "0.79.0"
 httpx = "0.23.0"
 poethepoet = "*"
 python = "3.10.*"

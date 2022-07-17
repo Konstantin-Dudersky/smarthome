@@ -1,5 +1,3 @@
-<ng-container *ngIf="data">
-  <h4>{{ data.title }}</h4>
-
+<p-panel header="Датчик открытия" *ngIf="data">
   <app-sig-bool [label]="'Открыт'" [signal]="data.opened"></app-sig-bool>
-</ng-container>
+</p-panel>

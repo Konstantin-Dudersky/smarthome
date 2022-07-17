@@ -1,0 +1,6 @@
+<p-panel header="Датчик давления" *ngIf="data">
+  <app-sig-float
+    [label]="'Температура'"
+    [signal]="data.pressure"
+  ></app-sig-float>
+</p-panel>

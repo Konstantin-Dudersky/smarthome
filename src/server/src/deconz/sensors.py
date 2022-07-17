@@ -3,6 +3,8 @@
 from asyncio import sleep as asleep
 from typing import Any, Coroutine
 
+from typing_extensions import Self
+
 import httpx
 
 from pydantic import BaseModel
@@ -396,4 +398,176 @@ class Humidity(BaseSensor):
             return await asleep(0)
         data = schemas.ZHAHumidity.parse_obj(msg.json())
         self.__data_hum.update(data.state.humidity / 100, Qual.GOOD)
+        return await asleep(0)
+
+
+class ZHATemperature(BaseSensor):
+    """ZHATemperature."""
+
+    class Schema(BaseSensor.Schema):
+        """Схема для API."""
+
+        temperature: SigFloat.Schema
+
+    def __init__(
+        self: Self,
+        title: str,
+        resource_id: int,
+        ws: deconz.Websocket,
+        atasks: list[Coroutine[Any, Any, None]],
+        update_rate: float = 10.0,
+    ) -> None:
+        """Датчик температуры.
+
+        :param title: название датчика
+        :param resource_id: id сенсора
+        :param ws: Канал сообщений websocket
+        :param update_rate: период обновления датчика, [s]
+        :param atasks: ссылка на список с задачами asyncio
+        """
+        super().__init__(
+            title=title,
+            resource_id=resource_id,
+            ws=ws,
+            update_rate=update_rate,
+        )
+        self.__data_temp = SigFloat(unit=Units.DEG_CELSIUS)
+        # данные
+        self._data.extend(
+            [
+                self.__data_temp,
+            ],
+        )
+        atasks.append(self.task())
+
+    @property
+    def schema(self: Self) -> Schema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return self.Schema(
+            title=self._title,
+            temperature=self.__data_temp.schema,
+        )
+
+    async def temperature(self: Self, update: bool = False) -> SigFloat:
+        """Значение температуры.
+
+        :param update: True - опрос, False - из памяти
+        :return: состояние датчика
+        """
+        if update:
+            await self._update()
+        return await asleep(0, self.__data_temp)
+
+    async def _task(self: Self) -> None:
+        await super()._task()
+        # проверка сообщений websocket
+        msg = self._ws.get_msg_temperature(self._id)
+        if msg is not None:
+            log.debug(
+                "%s: в очереди новое сообщение: %s",
+                repr(self),
+                msg,
+            )
+            self.__data_temp.update(msg.state.temperature / 100, Qual.GOOD)
+        return await asleep(0)
+
+    async def _update(self: Self) -> None:
+        """Принудительно обновить данные.
+
+        :return: none
+        """
+        msg = await self._api_get_sensor()
+        if msg is None:
+            return await asleep(0)
+        data = schemas.ZHATemperature.parse_obj(msg.json())
+        self.__data_temp.update(data.state.temperature / 100, Qual.GOOD)
+        return await asleep(0)
+
+
+class ZHAPressure(BaseSensor):
+    """ZHAPressure."""
+
+    class Schema(BaseSensor.Schema):
+        """Схема для API."""
+
+        pressure: SigFloat.Schema
+
+    def __init__(
+        self: Self,
+        title: str,
+        resource_id: int,
+        ws: deconz.Websocket,
+        atasks: list[Coroutine[Any, Any, None]],
+        update_rate: float = 10.0,
+    ) -> None:
+        """Датчик температуры.
+
+        :param title: название датчика
+        :param resource_id: id сенсора
+        :param ws: Канал сообщений websocket
+        :param update_rate: период обновления датчика, [s]
+        :param atasks: ссылка на список с задачами asyncio
+        """
+        super().__init__(
+            title=title,
+            resource_id=resource_id,
+            ws=ws,
+            update_rate=update_rate,
+        )
+        self.__data_pressure = SigFloat(unit=Units.DEG_CELSIUS)
+        # данные
+        self._data.extend(
+            [
+                self.__data_pressure,
+            ],
+        )
+        atasks.append(self.task())
+
+    @property
+    def schema(self: Self) -> Schema:
+        """Схема для API.
+
+        :return: схема для API
+        """
+        return self.Schema(
+            title=self._title,
+            pressure=self.__data_pressure.schema,
+        )
+
+    async def pressure(self: Self, update: bool = False) -> SigFloat:
+        """Значение давления.
+
+        :param update: True - опрос, False - из памяти
+        :return: состояние датчика
+        """
+        if update:
+            await self._update()
+        return await asleep(0, self.__data_pressure)
+
+    async def _task(self: Self) -> None:
+        await super()._task()
+        # проверка сообщений websocket
+        msg: schemas.ZHAPressureWs | None = self._ws.get_msg_pressure(self._id)
+        if msg is not None:
+            log.debug(
+                "%s: в очереди новое сообщение: %s",
+                repr(self),
+                msg,
+            )
+            self.__data_pressure.update(msg.state.pressure, Qual.GOOD)
+        return await asleep(0)
+
+    async def _update(self: Self) -> None:
+        """Принудительно обновить данные.
+
+        :return: none
+        """
+        msg = await self._api_get_sensor()
+        if msg is None:
+            return await asleep(0)
+        data = schemas.ZHAPressure.parse_obj(msg.json())
+        self.__data_pressure.update(data.state.pressure, Qual.GOOD)
         return await asleep(0)

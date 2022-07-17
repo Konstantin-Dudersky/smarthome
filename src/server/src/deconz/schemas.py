@@ -359,3 +359,52 @@ class ZHAPressureWs(WsMsg):
     """Сообщение."""
 
     state: ZHAPressureStateWs
+
+
+# ZHATemperature ---------------------------------------------------------------
+
+
+class ZHATemperatureConfig(BaseModel):
+    """Sensor config."""
+
+    battery: int
+    offset: int
+    on: bool
+    reachable: bool
+
+
+class ZHATemperatureState(BaseModel):
+    """Состояние датчика давления."""
+
+    temperature: int
+    lastupdated: datetime
+
+
+class ZHATemperature(BaseModel):
+    """Датчик давления."""
+
+    config: ZHATemperatureConfig
+    ep: int
+    etag: str
+    lastannounced: datetime | None
+    lastseen: datetime
+    manufacturername: str
+    modelid: str
+    name: str
+    state: ZHATemperatureState
+    swversion: str
+    type_sensor: str = Field(..., alias="type")
+    uniqueid: str
+
+
+class ZHATemperatureStateWs(BaseModel):
+    """state для ZHAPressure."""
+
+    temperature: int
+    lastupdated: datetime
+
+
+class ZHATemperatureWs(WsMsg):
+    """Сообщение."""
+
+    state: ZHATemperatureStateWs

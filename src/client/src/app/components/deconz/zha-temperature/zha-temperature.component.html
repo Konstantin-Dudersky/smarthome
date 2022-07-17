@@ -1,0 +1,6 @@
+<p-panel header="Датчик температуры" *ngIf="data">
+  <app-sig-float
+    [label]="'Температура'"
+    [signal]="data.temperature"
+  ></app-sig-float>
+</p-panel>

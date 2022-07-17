@@ -41,6 +41,8 @@ class MessageBuffer(NamedTuple):
     zha_presence: dict[int, schemas.ZHAPresenceWs] = {}
     zha_light_level: dict[int, schemas.ZHALightLevelWs] = {}
     zha_humidity: dict[int, schemas.ZHAHumidityWs] = {}
+    zha_temperature: dict[int, schemas.ZHATemperatureWs] = {}
+    zha_pressure: dict[int, schemas.ZHAPressureWs] = {}
     without_state: dict[int, schemas.WsMsg] = {}
 
 
@@ -113,6 +115,28 @@ class Websocket:
         """
         return self.__msg.zha_humidity.pop(resouce_id, None)
 
+    def get_msg_pressure(
+        self: "Websocket",
+        resouce_id: int,
+    ) -> schemas.ZHAPressureWs | None:
+        """Возвращает сообщение из очереди для датчика ZHAPressure.
+
+        :param resouce_id: id датчика
+        :return: Сообщение из буфера или None
+        """
+        return self.__msg.zha_pressure.pop(resouce_id, None)
+
+    def get_msg_temperature(
+        self: "Websocket",
+        resouce_id: int,
+    ) -> schemas.ZHATemperatureWs | None:
+        """Возвращает сообщение из очереди для датчика ZHATemperature.
+
+        :param resouce_id: id датчика
+        :return: Сообщение из буфера или None
+        """
+        return self.__msg.zha_temperature.pop(resouce_id, None)
+
     async def _get_config(self: "Websocket") -> None:
         """Получить номер порта."""
         config = await get_config()
@@ -174,6 +198,20 @@ class Websocket:
         try:
             msg4 = schemas.ZHAHumidityWs.parse_raw(data)
             self.__msg.zha_humidity[msg4.resource_id] = msg4
+            return
+        except pydantic.ValidationError:
+            pass
+        # датчик давления
+        try:
+            msg5 = schemas.ZHAPressureWs.parse_raw(data)
+            self.__msg.zha_pressure[msg5.resource_id] = msg5
+            return
+        except pydantic.ValidationError:
+            pass
+        # датчик температуры
+        try:
+            msg6 = schemas.ZHATemperatureWs.parse_raw(data)
+            self.__msg.zha_temperature[msg6.resource_id] = msg6
             return
         except pydantic.ValidationError:
             pass

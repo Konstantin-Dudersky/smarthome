@@ -40,6 +40,18 @@ sensor_humidity = sensors.Humidity(
     deconz_ws,
     atasks=tasks1,
 )
+sensor_temperature = sensors.ZHATemperature(
+    "Датчик температуры",
+    12,
+    deconz_ws,
+    atasks=tasks1,
+)
+sensor_pressure = sensors.ZHAPressure(
+    "Датчик давления",
+    13,
+    deconz_ws,
+    atasks=tasks1,
+)
 
 
 async def _run() -> None:

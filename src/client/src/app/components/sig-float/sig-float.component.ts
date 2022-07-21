@@ -19,7 +19,7 @@ export class SigFloatComponent implements OnInit, OnChanges {
     @Input()
     label: string = "Label";
     @Input()
-    signal: SigFloat | undefined;
+    signal!: SigFloat;
     @Output()
     popup = new EventEmitter<null>();
 

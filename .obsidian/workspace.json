@@ -13,8 +13,20 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/setup/README.md",
+                "file": "README.md",
                 "mode": "preview",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "aced2286cb13ecd6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "src/setup/README.md",
+                "mode": "source",
                 "source": true
               }
             }
@@ -31,8 +43,7 @@
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "src/setup/README.md",
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +126,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "src/setup/README.md",
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +149,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "src/setup/README.md"
+                "file": "README.md"
               }
             }
           }
@@ -152,10 +163,10 @@
   "ribbon": {
     "mostRecentAction": ""
   },
-  "active": "8bbcb70259e6b794",
+  "active": "4a322c212d8d7dcd",
   "lastOpenFiles": [
-    "README.md",
     "src/setup/README.md",
+    "README.md",
     "docs/Установка.md",
     "docs/Описание.md",
     "src/deconz_hub/README.md",

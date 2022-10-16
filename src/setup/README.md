@@ -1,11 +1,23 @@
 Скрипты для установки/обновления.
 
+## Установка
+
+Подключаемся к pi
+
 ```sh
 ssh __user__@__host
-sudo apt update && sudo apt install -y git
-git clone https://github.com/Konstantin-Dudersky/smarthome.git
-
 ```
+
+После подключения
+
+```sh
+sudo apt update \
+	&& sudo apt install -y git \
+	&& git clone https://github.com/Konstantin-Dudersky/smarthome.git
+	&& cd ~/smarthome/src/setup/
+```
+
+
 
 
 ## systemd

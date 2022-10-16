@@ -5,7 +5,7 @@
 
 import logging
 import os
-from typing import Callable, Literal
+from typing import Callable, Literal, Optional
 
 from ._shared import dir_rel_to_abs, get_logger
 
@@ -15,13 +15,7 @@ log = get_logger(__name__, logging.DEBUG)
 platforms = Literal["linux/amd64"]
 
 
-def install(
-    work_path_rel: str = "../server",
-    dockerfile: str = "Dockerfile",
-    name: str = "inosat/image",
-    tag: str = "latest",
-    platform: platforms = "linux/amd64",
-) -> Callable[[], None]:
+def install_ubuntu() -> Callable[[], None]:
     """Собрать образ."""
 
     def _task() -> None:
@@ -44,6 +38,27 @@ def install(
         log.info("Проверим, что docker установился корректно")
         os.system("sudo service docker start")
         os.system("sudo docker run --name hello-world hello-world")
+
+    return _task
+
+
+def install_raspbian() -> Callable[[], None]:
+    """Установить на Debian.
+
+    Returns:
+    --------
+    Задача для выполнения
+    """
+
+    def _task() -> None:
+
+        log.info("Устанавливаем Docker на Raspbian")
+        os.system("curl -fsSL https://get.docker.com -o get-docker.sh")
+        os.system("sudo sh get-docker.sh")
+        log.info("Проверим, что docker установился корректно")
+        os.system("sudo docker run --name hello-world hello-world")
+        os.system("sudo groupadd docker")
+        os.system("sudo usermod -aG docker $USER")
 
     return _task
 
@@ -151,7 +166,7 @@ TEMPL: str = "docker run --rm --pull always {mount} {image} {command}"
 def run_exec_remove(
     work_dir_rel: str = "../server",
     image: str = "image",
-    mount: str | None = "type=bind,src=`pwd`,dst=/home/projects/coca/code",
+    mount: Optional[str] = "type=bind,src=`pwd`,dst=/home/projects/coca/code",
     command: str = "ls -la",
 ) -> Callable[[], None]:
     def _task() -> None:

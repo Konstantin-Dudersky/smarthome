@@ -23,7 +23,7 @@ portainer/portainer-ce:latest
 def install() -> Callable[[], None]:
     def _task() -> None:
         log.info("Создание радела для хранения данных")
-        os.system("docker volume create portainer_data")
+        os.system("sudo docker volume create portainer_data")
         log.info("Установка образа")
         os.system(DOCKER_RUN)
         log.info("portainer установлен, адрес: https://IP:9443")

@@ -1,3 +1,5 @@
 {
-  "accentColor": "#ab9df2"
+  "accentColor": "#ab9df2",
+  "baseFontSize": 16,
+  "monospaceFontFamily": "Fira Code"
 }

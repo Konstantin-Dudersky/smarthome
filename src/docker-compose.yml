@@ -42,7 +42,7 @@ services:
       - POSTGRES_USER=${db_user}
       - POSTGRES_PASSWORD=${db_password}
     ports:
-      - "${service_db_port}:5432"
+      - "${db_port}:5432"
     profiles:
       - pi
     volumes:
@@ -55,8 +55,12 @@ services:
     build:
       context: .
       dockerfile: setup/Dockerfile
-      network: 'host'
+      # network: 'host'
       target: sh_setup
+      x-bake:
+        platforms:
+          - "linux/amd64"
+          - "linux/arm/v7"
     profiles:
       - setup
     volumes:
@@ -78,19 +82,19 @@ services:
         #     - ${ssl_certfile}:/root/certs/server.crt
         #     - ${ssl_keyfile}:/root/certs/server.key
         #     - ./webapp/dist/webapp:/usr/share/nginx/html
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    hostname: pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${pgadmin_email}
-      - PGADMIN_DEFAULT_PASSWORD=${pgadmin_password}
-    ports:
-      - "${pgadmin_port}:80"
-    profiles:
-      - pi
-    volumes:
-      - sh_pgadmin_volume:/var/lib/pgadmin
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   container_name: pgadmin
+  #   hostname: pgadmin
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=${pgadmin_email}
+  #     - PGADMIN_DEFAULT_PASSWORD=${pgadmin_password}
+  #   ports:
+  #     - "${pgadmin_port}:80"
+  #   profiles:
+  #     - pi
+  #   volumes:
+  #     - sh_pgadmin_volume:/var/lib/pgadmin
 volumes:
   sh_db_volume:
     name: sh_db_volume

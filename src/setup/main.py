@@ -65,7 +65,7 @@ class Tasks(NamedTuple):
     )
     docker_install: src.Task = src.Task(
         desc="Установка docker",
-        task=src.docker_tasks.install(),
+        task=src.docker_tasks.install_raspbian(),
     )
     pi_create_env: src.Task = src.Task(
         desc="Создать файл .env с настройками",
@@ -73,7 +73,7 @@ class Tasks(NamedTuple):
             work_dir_rel=PARENT_FOLDER,
             image=IMAGE_SETUP,
             mount=BIND_SRC_FOLDER,
-            command="poetry run python main.py pi_create_env_env",
+            command="poetry run python main.py venv_pi_create_env",
         ),
     )
     portainer_install: src.Task = src.Task(
@@ -156,7 +156,7 @@ if is_venv():
         Могут выполняться только в установленном виртуальном окружении.
         """
 
-        pi_create_env_env: src.Task = src.Task(
+        venv_pi_create_env_env: src.Task = src.Task(
             desc="Создать файл .env с настройками",
             task=src.call_func.call_func(
                 work_dir_rel="../.",

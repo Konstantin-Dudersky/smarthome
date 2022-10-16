@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Callable
+from typing import Callable, Optional
 
 from .cmd_in_dir import main
 from .docker_tasks import run_exec_remove
@@ -16,7 +16,7 @@ log.setLevel(logging.DEBUG)
 def create(
     work_dir_rel: str = "../server",
     image: str = "image",
-    mount: str | None = None,
+    mount: Optional[str] = None,
     command: str = "poetry run poe create_env",
 ) -> Callable[[], None]:
     """Создать файл с настройками.

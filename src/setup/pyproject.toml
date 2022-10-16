@@ -1,15 +1,31 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+
+[tool.black]
+line-length = 80
+
+
 [tool.poetry]
-authors = ["Konstantin-Dudersky <Konstantin.Dudersky@gmail.com>"]
+authors = ["konstantin-dudersky <konstantin.dudersky@gmail.com>"]
 description = ""
 name = "setup"
-version = "0.1.0"
+version = "0.0.1"
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
-[tool.poetry.dev-dependencies]
-black = "*"
+shared = { path = "../shared", develop = true }
 
-[build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.0.0"]
+[tool.poetry.group.dev.dependencies]
+black = "*"
+wemake-python-styleguide = "0.17.0"
+
+
+[tool.pyright]
+pythonPlatform = "Linux"
+pythonVersion = "3.10"
+stubPath = '.venv/typings'
+typeCheckingMode = "strict"

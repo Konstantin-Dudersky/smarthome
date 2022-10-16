@@ -1,13 +1,12 @@
-# setup
-
-Скрипты установки
+Скрипты для установки/обновления.
 
 ```sh
-sudo chmod +x src/python.py && ./src/python.py 3.10.5 # установка нужной версии python
-sudo chmod +x src/poetry.py && ./src/poetry.py # установка poetry
-poetry install --no-dev
-poetry run poe port_redirect # проброс портов с 8000 на 80
+ssh __user__@__host
+sudo apt update && sudo apt install -y git
+git clone https://github.com/Konstantin-Dudersky/smarthome.git
+
 ```
+
 
 ## systemd
 

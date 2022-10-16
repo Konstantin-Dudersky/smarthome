@@ -1,0 +1,30 @@
+[flake8]
+ignore =
+    D301, # Use r""" if any backslashes in a docstring
+    E131,
+    E203, # whitespace before ':'
+    I001, # isort found an import in the wrong position
+    I005, # isort found an unexpected missing import
+    S104, # Possible binding to all interfaces.
+    W503,
+    WPS112,#  Found private name pattern
+    WPS114, # Found underscored number name pattern
+    WPS300, # Found local folder import
+    WPS348, # Found a line that starts with a dot
+    WPS410, # Found wrong metadata variable: __all__
+    WPS412, # Found `__init__.py` module with logic
+docstring_style=numpy
+exclude =
+    tests/,
+    */migrations/,
+    .venv/,
+    env/
+per-file-ignores =
+    */settings.py:E501,
+    src/driver_ascue/db/models.py:CCE001
+max-complexity = 10
+max-line-length=80
+inline-quotes = double
+max-arguments = 10
+nested-classes-whitelist = Config
+multi-line-output-modes=3

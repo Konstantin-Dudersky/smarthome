@@ -1,7 +1,12 @@
 """Выполнить команду в указанной папке."""
 
+import logging
 import os
+import subprocess
 from typing import Callable
+
+log: logging.Logger = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 
 def main(work_dir: str, command: str) -> Callable[[], None]:
@@ -16,9 +21,10 @@ def main(work_dir: str, command: str) -> Callable[[], None]:
         curr_dir = os.getcwd()
         work_dir_abs_full = os.path.join(curr_dir, work_dir)
         work_dir_abs = os.path.abspath(work_dir_abs_full)
-        print(f"-> Рабочая папка: {work_dir_abs}")
+        log.info(f"Рабочая папка: {work_dir_abs}")
         os.chdir(work_dir_abs)
-        print(f"-> Выполняем команду: {command}")
-        os.system(command)
+        log.info(f"Выполняем команду: {command}")
+        subprocess.run(command.split(" "))
+        os.chdir(curr_dir)
 
     return _main

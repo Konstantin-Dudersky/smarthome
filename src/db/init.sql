@@ -1,0 +1,5 @@
+CREATE DATABASE db_conf;
+CREATE DATABASE db_data;
+
+\c db_data
+CREATE EXTENSION IF NOT EXISTS timescaledb;

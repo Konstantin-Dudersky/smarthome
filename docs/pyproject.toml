@@ -1,20 +1,41 @@
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+
+
+[tool.black]
+line-length = 80
+
+
+[tool.poe.tasks]
+docs = { script = "konstantin_docs.main:generate_images('docs/dia_src', 'docs/dia_dist')" }
+
+[tool.poe.tasks.update_stubs]
+shell = """rm -rf .venv/typings/konstantin_docs \
+    && pyright --createstub konstantin_docs
+"""
+
+
 [tool.poetry]
-authors = ["Konstantin-Dudersky <Konstantin.Dudersky@gmail.com>"]
+authors = ["konstantin-dudersky <konstantin.dudersky@gmail.com>"]
 description = ""
 name = "smarthome-docs"
 version = "0.1.0"
+
 
 [tool.poetry.dependencies]
 konstantin-docs = "*"
 poethepoet = "*"
 python = "^3.10"
 
+
 [tool.poetry.dev-dependencies]
 black = "*"
 
-[tool.poe.tasks]
-docs = {script = "konstantin_docs.main:generate_images('dia_src', 'dia_dist')"}
 
-[build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.0.0"]
+[tool.pyright]
+pythonPlatform = "Linux"
+pythonVersion = "3.10"
+stubPath = '.venv/typings'
+typeCheckingMode = "strict"

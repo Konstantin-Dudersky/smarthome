@@ -1,0 +1,25 @@
+{
+  "folders": [
+    {
+      "path": "api"
+    },
+    {
+      "path": "db"
+    },
+    {
+      "path": "deconz_hub"
+    },
+    {
+      "path": "driver_deconz"
+    },
+    {
+      "path": "setup"
+    },
+    {
+      "path": "shared"
+    },
+    {
+      "path": "webapp"
+    }
+  ]
+}

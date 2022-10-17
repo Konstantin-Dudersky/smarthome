@@ -27,4 +27,5 @@ python-dotenv = "0.21.0"
 [tool.poetry.group.dev.dependencies]
 black = "*"
 pandas-stubs = "*"
+sphinx = "*"
 wemake-python-styleguide = "0.17.0"

@@ -1,3 +1,6 @@
+# Запуск контейнеров:
+# docker compose --profile pi up -d
+
 version: '3.8'
 name: smarthome
 services:
@@ -5,15 +8,8 @@ services:
     image: konstantindudersky/sh_deconz_hub
     container_name: sh_deconz_hub
     hostname: sh_deconz_hub
-    build:
-      args:
-        - VERSION=2.18.02
-      context: .
-      dockerfile: deconz_hub/Dockerfile
-      network: 'host'
-      target: sh_deconz_hub
-    devices:
-      - /dev/ttyACM0
+    # devices:
+    #   - /dev/ttyACM0
     environment:
       - DECONZ_VNC_MODE=1
     ports:
@@ -29,14 +25,6 @@ services:
     image: konstantindudersky/sh_db
     container_name: sh_db
     hostname: sh_db
-    build:
-      args:
-        - POSTGRE_VER=14.5
-        - TIMESCALEDB_VER=2.8.1
-      context: .
-      dockerfile: db/Dockerfile
-      network: 'host'
-      target: sh_db
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     environment:
       - POSTGRES_USER=${db_user}
@@ -52,15 +40,6 @@ services:
     image: konstantindudersky/sh_setup
     container_name: sh_setup
     hostname: sh_setup
-    build:
-      context: .
-      dockerfile: setup/Dockerfile
-      # network: 'host'
-      target: sh_setup
-      x-bake:
-        platforms:
-          - "linux/amd64"
-          - "linux/arm/v7"
     profiles:
       - setup
     volumes:
@@ -82,19 +61,19 @@ services:
         #     - ${ssl_certfile}:/root/certs/server.crt
         #     - ${ssl_keyfile}:/root/certs/server.key
         #     - ./webapp/dist/webapp:/usr/share/nginx/html
-  # pgadmin:
-  #   image: dpage/pgadmin4:latest
-  #   container_name: pgadmin
-  #   hostname: pgadmin
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=${pgadmin_email}
-  #     - PGADMIN_DEFAULT_PASSWORD=${pgadmin_password}
-  #   ports:
-  #     - "${pgadmin_port}:80"
-  #   profiles:
-  #     - pi
-  #   volumes:
-  #     - sh_pgadmin_volume:/var/lib/pgadmin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    hostname: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${pgadmin_email}
+      - PGADMIN_DEFAULT_PASSWORD=${pgadmin_password}
+    ports:
+      - "${pgadmin_port}:80"
+    profiles:
+      - pi
+    volumes:
+      - sh_pgadmin_volume:/var/lib/pgadmin
 volumes:
   sh_db_volume:
     name: sh_db_volume

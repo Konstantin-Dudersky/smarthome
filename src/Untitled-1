@@ -1,5 +1,6 @@
-docker buildx create --platform linux/amd64,linux/arm64 --name --builder pi_builder
+docker buildx create --platform linux/amd64,linux/arm64 --name pi_builder
 
 docker buildx build --builder pi_builder --tag sh_base_image --load .
 
 docker buildx bake --builder pi_builder -f docker-bake.hcl --load sh_base_image
+docker buildx bake --builder pi_builder -f docker-bake.hcl --load --progress plain sh_base_image

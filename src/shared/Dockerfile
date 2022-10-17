@@ -8,12 +8,6 @@ ARG POETRY_VER
 
 WORKDIR /root/code/
 
-# ошибки при установке arm64
-RUN ln -s /usr/bin/dpkg-split /usr/sbin/dpkg-split
-RUN ln -s /usr/bin/dpkg-deb /usr/sbin/dpkg-deb
-RUN ln -s /bin/tar /usr/sbin/tar
-RUN ln -s /bin/rm /usr/sbin/rm
-
 RUN apt-get -y update \
     && apt-get upgrade -y \
     # system tools
@@ -25,7 +19,7 @@ RUN apt-get -y update \
     # poetry depends
     python3-venv curl python3-dev build-essential
 
-RUN curl -sSL https://install.python-poetry.org | python3 - --version $POETRY_VER -y
+RUN curl -sSL https://install.python-poetry.org | python3 - --version $POETRY_VER
 RUN poetry config virtualenvs.in-project false
 
 CMD ["tail", "-f", "/dev/null"]

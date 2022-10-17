@@ -21,14 +21,17 @@ shell = """rm -rf .venv/typings/konstantin_docs \
 authors = ["konstantin-dudersky <konstantin.dudersky@gmail.com>"]
 description = ""
 name = "smarthome-docs"
-version = "0.1.0"
+version = "0.0.1"
 
 
 [tool.poetry.dependencies]
-konstantin-docs = "*"
-poethepoet = "*"
 python = "^3.10"
 
+konstantin-docs = "*"
+poethepoet = "*"
+sphinx = "*"
+
+shared = { path = "../shared", develop = true }
 
 [tool.poetry.dev-dependencies]
 black = "*"

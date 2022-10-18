@@ -1,4 +1,6 @@
 {
   "livePreview": false,
-  "newLinkFormat": "relative"
+  "newLinkFormat": "relative",
+  "useMarkdownLinks": true,
+  "showUnsupportedFiles": false
 }

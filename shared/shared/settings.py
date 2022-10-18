@@ -34,7 +34,7 @@ from typing_extensions import Self
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-ENV_FILE: str = ".env"
+ENV_FILE: str = "../.env"
 ENCODING: str = "utf-8"
 
 

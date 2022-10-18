@@ -19,6 +19,7 @@ python = "^3.10"
 
 shared = { path = "../shared", develop = true }
 
+
 [tool.poetry.group.dev.dependencies]
 black = "*"
 wemake-python-styleguide = "0.17.0"

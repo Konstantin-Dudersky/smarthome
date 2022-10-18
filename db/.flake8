@@ -4,7 +4,8 @@ exclude =
     tests/,
     */migrations/,
     .venv/,
-    env/
+    env/,
+    alembic/*
 ignore =
     D301, # Use r""" if any backslashes in a docstring
     E203, # whitespace before ':'

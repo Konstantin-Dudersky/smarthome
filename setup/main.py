@@ -159,7 +159,7 @@ if is_venv():
         venv_pi_create_env: src.Task = src.Task(
             desc="Создать файл .env с настройками",
             task=src.call_func.call_func(
-                work_dir_rel="../.",
+                work_dir_rel=".",
                 func=lambda: settings.create_env(
                     profiles={
                         settings.Prof.deconz_hub,

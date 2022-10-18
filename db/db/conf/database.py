@@ -7,9 +7,9 @@ from typing import Final
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
-    create_async_engine,  # pyright: ignore[reportUnknownVariableType]
+    async_sessionmaker,
+    create_async_engine,
 )
-from sqlalchemy.orm import sessionmaker
 
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -17,13 +17,16 @@ log.setLevel(logging.INFO)
 
 URL: Final[
     str
-] = "postgresql+psycopg3://{user}:{password}@{host}:{port}/db_conf"
+] = "postgresql+{driver}://{user}:{password}@{host}:{port}/db_conf"
 
 
 class DbConf(object):
     """Подключение к БД db_conf."""
 
-    __conn_str: str
+    __host: IPv4Address
+    __port: int
+    __user: str
+    __password: str
 
     def __init__(
         self,
@@ -46,11 +49,41 @@ class DbConf(object):
         password: str
             пароль
         """
-        self.__conn_str = URL.format(
-            user=user,
-            password=password,
-            host=host,
-            port=port,
+        self.__host = host
+        self.__port = port
+        self.__user = user
+        self.__password = password
+
+    @property
+    def connection_string(self) -> str:
+        """Возвращает строку подключения.
+
+        Returns
+        -------
+        Строка подключения
+        """
+        return URL.format(
+            driver="psycopg3",
+            host=self.__host,
+            port=self.__port,
+            user=self.__user,
+            password=self.__password,
+        )
+
+    @property
+    def connection_string_alembic(self) -> str:
+        """Возвращает строку подключения для alembic.
+
+        Returns
+        -------
+        Строка подключения
+        """
+        return URL.format(
+            driver="asyncpg",
+            host=self.__host,
+            port=self.__port,
+            user=self.__user,
+            password=self.__password,
         )
 
     @property
@@ -62,7 +95,7 @@ class DbConf(object):
         engine
         """
         return create_async_engine(
-            url=self.__conn_str,
+            url=self.connection_string,
             echo=False,
             future=True,
             connect_args={"timeout": 2},
@@ -76,14 +109,9 @@ class DbConf(object):
         -------
         Сессия подключения к БД
         """
-        engine: AsyncEngine = self.engine
-        session_maker: sessionmaker[AsyncSession] = sessionmaker(
+        session_maker: async_sessionmaker[AsyncSession] = async_sessionmaker(
             autocommit=False,
             autoflush=False,
-            bind=engine,
-            class_=Type[AsyncSession],
+            bind=self.engine,
         )
-        session: AsyncSession = (
-            session_maker()
-        )  # pyright: ignore[reportGeneralTypeIssues]
-        return session
+        return session_maker()

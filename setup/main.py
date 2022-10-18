@@ -156,7 +156,7 @@ if is_venv():
         Могут выполняться только в установленном виртуальном окружении.
         """
 
-        venv_pi_create_env_env: src.Task = src.Task(
+        venv_pi_create_env: src.Task = src.Task(
             desc="Создать файл .env с настройками",
             task=src.call_func.call_func(
                 work_dir_rel="../.",

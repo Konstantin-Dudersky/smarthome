@@ -1,5 +1,5 @@
 # Запуск контейнеров:
-# docker compose --profile pi up -d
+# docker compose --profile --pull always pi up -d
 
 version: '3.8'
 name: smarthome
@@ -8,8 +8,8 @@ services:
     image: konstantindudersky/sh_deconz_hub
     container_name: sh_deconz_hub
     hostname: sh_deconz_hub
-    # devices:
-    #   - /dev/ttyACM0
+    devices:
+      - /dev/ttyACM0
     environment:
       - DECONZ_VNC_MODE=1
     ports:

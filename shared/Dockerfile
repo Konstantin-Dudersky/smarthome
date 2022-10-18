@@ -1,5 +1,5 @@
-ARG POETRY_VER=1.2.2
-ARG PYTHON_VER=3.10.8
+ARG POETRY_VER
+ARG PYTHON_VER
 
 FROM python:${PYTHON_VER}-bullseye AS sh_base_image
 

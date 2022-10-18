@@ -165,6 +165,7 @@ if is_venv():
                         settings.Prof.deconz_hub,
                         settings.Prof.db,
                         settings.Prof.pgadmin,
+                        settings.Prof.driver_deconz,
                     },
                 ),
             ),

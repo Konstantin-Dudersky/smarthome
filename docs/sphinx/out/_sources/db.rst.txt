@@ -1,13 +1,13 @@
 db package
 ==========
 
-Submodules
-----------
+Subpackages
+-----------
 
 .. toctree::
    :maxdepth: 4
 
-   db.test
+   db.conf
 
 Module contents
 ---------------

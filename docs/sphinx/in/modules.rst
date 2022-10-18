@@ -1,7 +1,7 @@
-db
-==
+driver_deconz
+=============
 
 .. toctree::
    :maxdepth: 4
 
-   db
+   driver_deconz

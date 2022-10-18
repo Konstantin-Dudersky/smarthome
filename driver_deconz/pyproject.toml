@@ -1,0 +1,44 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 80
+
+
+[tool.poe.tasks.update_stubs]
+shell = """rm -rf .venv/typings/shared \
+    && pyright --createstub shared
+"""
+
+
+[tool.poetry]
+name = "driver-deconz"
+version = "0.0.1"
+description = ""
+authors = ["konstantin-dudersky <konstantin.dudersky@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "driver_deconz" }]
+
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+httpx = "0.23.0"
+pydantic = "1.10.2"
+websockets = "10.3"
+
+shared = { path = "../shared", develop = true }
+db = { path = "../db", develop = true }
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+wemake-python-styleguide = "*"
+
+
+[tool.pyright]
+pythonPlatform = "Linux"
+pythonVersion = "3.10"
+stubPath = '.venv/typings'
+typeCheckingMode = "strict"

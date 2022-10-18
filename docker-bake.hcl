@@ -48,6 +48,18 @@ target "sh_deconz_hub" {
     ]
 }
 
+target "sh_driver_deconz" {
+    contexts = {
+        sh_base_image = "target:sh_base_image"
+    }
+    dockerfile = "driver_deconz/Dockerfile"
+    tags = [ "konstantindudersky/sh_driver_deconz" ]
+    platforms = [ 
+        "linux/amd64",
+        "linux/arm64"
+    ]
+}
+
 target "sh_setup" {
     contexts = {
         sh_base_image = "target:sh_base_image"
@@ -61,5 +73,10 @@ target "sh_setup" {
 }
 
 group "pi" {
-    targets = ["sh_db", "sh_deconz_hub", "sh_setup"]
+    targets = [
+        "sh_db", 
+        "sh_deconz_hub", 
+        "sh_driver_deconz", 
+        "sh_setup", 
+    ]
 }

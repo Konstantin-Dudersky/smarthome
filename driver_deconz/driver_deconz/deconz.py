@@ -3,6 +3,7 @@
 # pyright: reportUnknownMemberType=false
 
 import asyncio
+import logging
 from enum import Enum, auto
 from typing import NamedTuple
 
@@ -10,14 +11,14 @@ import pydantic
 
 from websockets import client, exceptions
 
-from src.utils.logger import get_logger, LoggerLevel
 from src.utils.settings import settings
 
 from .api import get_config
 from . import schemas
 
-logger = get_logger(__name__)
-logger.setLevel(LoggerLevel.INFO)
+
+log: logging.Logger = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 DECONZ_REST_URL = (
     f"http://{settings.deconz_ip}:{settings.deconz_rest_port}"
@@ -148,7 +149,7 @@ class Websocket:
 
     async def __task(self: "Websocket") -> None:
         """Основной цикл."""
-        logger.debug(self.__state.name)
+        log.debug(self.__state.name)
         match self.__state:
             case States.INIT:
                 await self._get_config()
@@ -170,7 +171,7 @@ class Websocket:
             except exceptions.ConnectionClosed:
                 continue
             except ValueError:
-                logger.exception("Неизвестный формат сообщения websocket")
+                log.exception("Неизвестный формат сообщения websocket")
 
     def _parse_msg(self: "Websocket", data: str) -> None:
         # датчик открыт/закрыт
@@ -221,7 +222,7 @@ class Websocket:
             self.__msg.without_state[msg100.resource_id] = msg100
             return
         except pydantic.ValidationError as exc:
-            logger.exception("Неизвестный формат сообщения websocket")
+            log.exception("Неизвестный формат сообщения websocket")
             raise ValueError(
                 f"Неизвестный формат сообщения websocket:\n{data}",
             ) from exc

@@ -1,5 +1,12 @@
 """Deconz package."""
 
-from .deconz import Websocket
+# pyright: reportImportCycles=false
 
-__all__ = ["Websocket"]
+from . import api, deconz, schemas, sensors
+
+__all__: list[str] = [
+    "api",
+    "deconz",
+    "schemas",
+    "sensors",
+]

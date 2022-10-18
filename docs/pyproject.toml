@@ -12,8 +12,9 @@ line-length = 80
 script = "konstantin_docs.main:generate_images('diagrams/in', 'diagrams/out')"
 
 [tool.poe.tasks.sphinx]
-shell = """poetry run sphinx-apidoc --force --separate -o sphinx/in ../shared \
-    && poetry run sphinx-apidoc --force --separate -o sphinx/in ../db \
+shell = """poetry run sphinx-apidoc -f --separate -o sphinx/in ../shared \
+    && poetry run sphinx-apidoc -f --separate -o sphinx/in ../db \
+    && poetry run sphinx-apidoc -f --separate -o sphinx/in ../driver_deconz \
     && poetry run sphinx-build -b html sphinx/in sphinx/out
 """
 
@@ -40,6 +41,7 @@ sphinx = "*"
 
 shared = { path = "../shared", develop = true }
 db = { path = "../db", develop = true }
+driver_deconz = { path = "../driver_deconz", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 black = "*"

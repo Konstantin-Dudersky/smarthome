@@ -4,7 +4,7 @@
     {
       "label": "compose-up",
       "type": "shell",
-      "command": "docker compose --profile pi up -d --pull always"
+      "command": "docker compose --profile pi pull && docker compose --profile pi up -d --pull always"
     },
     {
       "label": "compose-down",

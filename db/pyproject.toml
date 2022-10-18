@@ -3,6 +3,10 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 
+[tool.black]
+line-length = 80
+
+
 [tool.poetry]
 name = "db"
 version = "0.0.1"
@@ -17,3 +21,8 @@ python = "^3.10"
 asyncpg = "0.26.0"
 psycopg = "3.1.3"
 sqlalchemy = "2.0.0b1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+wemake-python-styleguide = "0.17.0"

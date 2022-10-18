@@ -45,6 +45,7 @@ class Prof(Enum):
     dev = "dev"
     driver_ascue = "driver_ascue"
     deconz_hub = "deconz_hub"
+    driver_deconz = "driver_deconz"
     db = "db"
     pgadmin = "pgadmin"
 
@@ -67,25 +68,48 @@ class SettingsSchema(BaseSettings):
         Field(profiles=[Prof.db]),
     ] = SecretStr("postgres")
     db_host: Annotated[
-        ipaddress.IPv4Address, Field(profiles=[Prof.db])
+        ipaddress.IPv4Address,
+        Field(profiles=[Prof.db]),
     ] = ipaddress.IPv4Address("192.168.101.11")
     db_port: Annotated[int, Field(profiles=[Prof.db])] = 5432
 
+    driver_deconz_host: Annotated[
+        ipaddress.IPv4Address,
+        Field(profiles=[Prof.driver_deconz]),
+    ] = ipaddress.IPv4Address("192.168.101.11")
+    driver_deconz_port: Annotated[
+        int,
+        Field(profiles=[Prof.driver_deconz]),
+    ] = 8003
+
+    deconz_hub_api_key: Annotated[
+        SecretStr,
+        Field(profiles=[Prof.deconz_hub]),
+    ] = SecretStr("API_KEY")
     deconz_hub_host: Annotated[
-        ipaddress.IPv4Address, Field(profiles=[Prof.deconz_hub])
+        ipaddress.IPv4Address,
+        Field(profiles=[Prof.deconz_hub]),
     ] = ipaddress.IPv4Address("192.168.101.11")
     deconz_hub_port_api: Annotated[
-        int, Field(profiles=[Prof.deconz_hub])
+        int,
+        Field(profiles=[Prof.deconz_hub]),
     ] = 8001
     deconz_hub_port_vnc: Annotated[
-        int, Field(profiles=[Prof.deconz_hub])
+        int,
+        Field(profiles=[Prof.deconz_hub]),
     ] = 5901
+    deconz_hub_port_ws: Annotated[
+        int,
+        Field(profiles=[Prof.deconz_hub]),
+    ] = 8002
 
     pgadmin_email: Annotated[
-        EmailStr, Field(profiles=[Prof.pgadmin])
+        EmailStr,
+        Field(profiles=[Prof.pgadmin]),
     ] = EmailStr("test@mail.com")
     pgadmin_password: Annotated[
-        SecretStr, Field(profiles=[Prof.pgadmin])
+        SecretStr,
+        Field(profiles=[Prof.pgadmin]),
     ] = SecretStr("password")
     pgadmin_port: Annotated[int, Field(profiles=[Prof.pgadmin])] = 8080
 
@@ -98,9 +122,16 @@ def check_item_in_profile(
 
     Если нет поля profiles, возвращает True
 
-    :param key: ключ для проверки
-    :param profiles: профили для проверки
-    :return: True - можно экспортировать
+    Parameters
+    ----------
+    key: str
+        ключ для проверки
+    profiles: set[Prof]
+        профили для проверки
+
+    Returns
+    -------
+    True - можно экспортировать
     """
     schema_item: dict[str, Any] = SettingsSchema.schema()["properties"][key]
     if "profiles" not in schema_item.keys():
@@ -115,7 +146,10 @@ def create_env(profiles: set[Prof]) -> None:
     у которых в поле profiles указан необходимый профиль.
     Если у настройки нето поля profiles, она всегда экспортируется.
 
-    :param profiles: профили для экспорта настроек.
+    Parameters
+    ----------
+    profiles
+        профили для экспорта настроек
     """
     print(  # noqa: WPS421
         "Экспортируем настройки для профилей: ",
@@ -139,11 +173,14 @@ def create_env(profiles: set[Prof]) -> None:
                 export=False,
                 encoding=ENCODING,
             )
-            print(f"{key} = {setting_default}")  # noqa: WPS421
+            print("{0} = {1}".format(key, setting_default))  # noqa: WPS421
         else:
-            print(f"{key} = {setting_actual}")  # noqa: WPS421
+            print("{0} = {1}".format(key, setting_default))  # noqa: WPS421
     print(  # noqa: WPS421
-        f"\nНастройки сохранены в файле:\n\n{os.getcwd()}/{ENV_FILE}",
+        "\nНастройки сохранены в файле:\n\n{path}/{filename}".format(
+            path=os.getcwd(),
+            filename=ENV_FILE,
+        ),
     )
 
 
@@ -160,7 +197,9 @@ class SettingsStore(object):
     def settings(self: Self) -> SettingsSchema:
         """Получить настройки.
 
-        :return: настройки
+        Returns
+        -------
+        настройки
         """
         if self.__settings is None:
             self.__settings = SettingsSchema()
@@ -171,17 +210,21 @@ class SettingsStore(object):
 def export_env(path: str, filename: str) -> None:
     """Экспортировать настройки в формате JSON.
 
-    :param path: папка для экспорта
-    :param filename: название файла для экспорта
+    Parameters
+    ----------
+    path
+        папка для экспорта
+    filename
+        название файла для экспорта
     """
     with open(
-        f"{path}/{filename}.schema.json",
+        "{0}/{1}.schema.json".format(path, filename),
         "w",
         encoding="utf-8",
     ) as export_schema:
         export_schema.write(SettingsSchema().schema_json())
     with open(
-        f"{path}/{filename}.values.json",
+        "{0}/{1}.values.json".format(path, filename),
         "w",
         encoding="utf-8",
     ) as export_values:

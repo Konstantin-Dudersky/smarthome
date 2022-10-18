@@ -40,7 +40,6 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'shared.settings';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="db package" href="db.html" />
     <link rel="prev" title="shared.logger module" href="shared.logger.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
@@ -110,16 +109,23 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item current active">
-                    <a class="nav-link" href="shared.html">
-                        shared package
+                <li class="nav-item">
+                    <a class="nav-link" href="db.html">
+                        db package
                     </a>
                 </li>
                 
 
                 <li class="nav-item">
-                    <a class="nav-link" href="db.html">
-                        db package
+                    <a class="nav-link" href="driver_deconz.html">
+                        driver_deconz package
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="shared.html">
+                        shared package
                     </a>
                 </li>
                 
@@ -189,16 +195,23 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item current active">
-                    <a class="nav-link" href="shared.html">
-                        shared package
+                <li class="nav-item">
+                    <a class="nav-link" href="db.html">
+                        db package
                     </a>
                 </li>
                 
 
                 <li class="nav-item">
-                    <a class="nav-link" href="db.html">
-                        db package
+                    <a class="nav-link" href="driver_deconz.html">
+                        driver_deconz package
+                    </a>
+                </li>
+                
+
+                <li class="nav-item current active">
+                    <a class="nav-link" href="shared.html">
+                        shared package
                     </a>
                 </li>
                 
@@ -317,6 +330,11 @@ settings: SettingsSchema = settings_store.settings</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="shared.settings.Prof.driver_deconz">
+<span class="sig-name descname"><span class="pre">driver_deconz</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'driver_deconz'</span></em><a class="headerlink" href="#shared.settings.Prof.driver_deconz" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="shared.settings.Prof.pgadmin">
 <span class="sig-name descname"><span class="pre">pgadmin</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pgadmin'</span></em><a class="headerlink" href="#shared.settings.Prof.pgadmin" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -325,7 +343,7 @@ settings: SettingsSchema = settings_store.settings</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="shared.settings.SettingsSchema">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shared.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;object</span> <span class="pre">object&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_delimiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Europe/Minsk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'postgres'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SecretStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SecretStr('**********')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IPv4Address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">IPv4Address('192.168.101.11')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5432</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IPv4Address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">IPv4Address('192.168.101.11')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_port_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_port_vnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5901</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgadmin_email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EmailStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'test&#64;mail.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgadmin_password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SecretStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SecretStr('**********')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgadmin_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8080</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shared.settings.SettingsSchema" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">shared.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;object</span> <span class="pre">object&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_delimiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timezone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Europe/Minsk'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'postgres'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SecretStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SecretStr('**********')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IPv4Address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">IPv4Address('192.168.101.11')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5432</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_deconz_host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IPv4Address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">IPv4Address('192.168.101.11')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_deconz_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8003</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_api_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SecretStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SecretStr('**********')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">IPv4Address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">IPv4Address('192.168.101.11')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_port_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_port_vnc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5901</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deconz_hub_port_ws</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgadmin_email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EmailStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'test&#64;mail.com'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgadmin_password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SecretStr</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SecretStr('**********')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgadmin_port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8080</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#shared.settings.SettingsSchema" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSettings</span></code></p>
 <p>Модель для сохранения настроек.</p>
 <dl class="py class">
@@ -371,6 +389,11 @@ settings: SettingsSchema = settings_store.settings</p>
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="shared.settings.SettingsSchema.deconz_hub_api_key">
+<span class="sig-name descname"><span class="pre">deconz_hub_api_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">SecretStr</span></em><a class="headerlink" href="#shared.settings.SettingsSchema.deconz_hub_api_key" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="shared.settings.SettingsSchema.deconz_hub_host">
 <span class="sig-name descname"><span class="pre">deconz_hub_host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">IPv4Address</span></em><a class="headerlink" href="#shared.settings.SettingsSchema.deconz_hub_host" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -383,6 +406,21 @@ settings: SettingsSchema = settings_store.settings</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="shared.settings.SettingsSchema.deconz_hub_port_vnc">
 <span class="sig-name descname"><span class="pre">deconz_hub_port_vnc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#shared.settings.SettingsSchema.deconz_hub_port_vnc" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared.settings.SettingsSchema.deconz_hub_port_ws">
+<span class="sig-name descname"><span class="pre">deconz_hub_port_ws</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#shared.settings.SettingsSchema.deconz_hub_port_ws" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared.settings.SettingsSchema.driver_deconz_host">
+<span class="sig-name descname"><span class="pre">driver_deconz_host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">IPv4Address</span></em><a class="headerlink" href="#shared.settings.SettingsSchema.driver_deconz_host" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="shared.settings.SettingsSchema.driver_deconz_port">
+<span class="sig-name descname"><span class="pre">driver_deconz_port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#shared.settings.SettingsSchema.driver_deconz_port" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -417,7 +455,7 @@ settings: SettingsSchema = settings_store.settings</p>
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">settings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#shared.settings.SettingsSchema" title="shared.settings.SettingsSchema"><span class="pre">SettingsSchema</span></a></em><a class="headerlink" href="#shared.settings.SettingsStore.settings" title="Permalink to this definition">#</a></dt>
 <dd><p>Получить настройки.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>настройки</p>
 </dd>
 </dl>
@@ -433,11 +471,11 @@ settings: SettingsSchema = settings_store.settings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> – ключ для проверки</p></li>
-<li><p><strong>profiles</strong> – профили для проверки</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – ключ для проверки</p></li>
+<li><p><strong>profiles</strong> (<em>set</em><em>[</em><a class="reference internal" href="#shared.settings.Prof" title="shared.settings.Prof"><em>Prof</em></a><em>]</em>) – профили для проверки</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>True - можно экспортировать</p>
 </dd>
 </dl>
@@ -452,7 +490,7 @@ settings: SettingsSchema = settings_store.settings</p>
 Если у настройки нето поля profiles, она всегда экспортируется.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>profiles</strong> – профили для экспорта настроек.</p>
+<dd class="field-odd"><p><strong>profiles</strong> – профили для экспорта настроек</p>
 </dd>
 </dl>
 </dd></dl>
@@ -487,13 +525,6 @@ settings: SettingsSchema = settings_store.settings</p>
           <p class="prev-next-subtitle">previous</p>
           <p class="prev-next-title">shared.logger module</p>
       </div>
-  </a>
-  <a class='right-next' id="next-link" href="db.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">db package</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
   </a>
 </div>
             </footer>
@@ -561,6 +592,15 @@ settings: SettingsSchema = settings_store.settings</p>
      <code class="docutils literal notranslate">
       <span class="pre">
        Prof.driver_ascue
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shared.settings.Prof.driver_deconz">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       Prof.driver_deconz
       </span>
      </code>
     </a>
@@ -660,6 +700,15 @@ settings: SettingsSchema = settings_store.settings</p>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shared.settings.SettingsSchema.deconz_hub_api_key">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SettingsSchema.deconz_hub_api_key
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#shared.settings.SettingsSchema.deconz_hub_host">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -682,6 +731,33 @@ settings: SettingsSchema = settings_store.settings</p>
      <code class="docutils literal notranslate">
       <span class="pre">
        SettingsSchema.deconz_hub_port_vnc
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shared.settings.SettingsSchema.deconz_hub_port_ws">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SettingsSchema.deconz_hub_port_ws
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shared.settings.SettingsSchema.driver_deconz_host">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SettingsSchema.driver_deconz_host
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shared.settings.SettingsSchema.driver_deconz_port">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       SettingsSchema.driver_deconz_port
       </span>
      </code>
     </a>

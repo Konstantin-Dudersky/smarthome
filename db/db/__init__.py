@@ -1,5 +1,7 @@
-from . import test
+"""Подключение к БД db_conf, db_data."""
 
-__all__ : list[str] = [
-    "test",
+from . import conf
+
+__all__: list[str] = [
+    "conf",
 ]

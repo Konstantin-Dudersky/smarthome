@@ -12,19 +12,20 @@ poetry run poe sphinx
 
 ### Добавить новый пакет для генерации:
 
-- добавить зависимость в файле `pyproject.toml` проекта `docs`:
+- добавить зависимость в файле `pyproject.toml` проекта `docs`, обновить пакеты:
 
 ```toml
 __package_name__ = { path = "../__package_name__", develop = true }
 ```
-
-- добавить ссылку на пакет в файле `sphinx/in/index.rst`
 
 - обновить команду генерации в файле `pyproject.toml` проекта `docs`, секция `tool.poe.tasks.sphinx`:
 
 ```sh
 poetry run sphinx-apidoc --force --separate -o sphinx/in ../__package_name__
 ```
+
+- добавить ссылку на пакет в файле `sphinx/in/index.rst`
+
 
 ## Генерация документации webapp
 

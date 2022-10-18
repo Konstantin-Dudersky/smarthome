@@ -40,8 +40,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'db';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="db.test module" href="db.test.html" />
-    <link rel="prev" title="shared.settings module" href="shared.settings.html" />
+    <link rel="next" title="db.conf package" href="db.conf.html" />
+    <link rel="prev" title="Welcome to shared’s documentation!" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -110,16 +110,23 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item">
-                    <a class="nav-link" href="shared.html">
-                        shared package
+                <li class="nav-item current active">
+                    <a class="nav-link" href="#">
+                        db package
                     </a>
                 </li>
                 
 
-                <li class="nav-item current active">
-                    <a class="nav-link" href="#">
-                        db package
+                <li class="nav-item">
+                    <a class="nav-link" href="driver_deconz.html">
+                        driver_deconz package
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="shared.html">
+                        shared package
                     </a>
                 </li>
                 
@@ -189,16 +196,23 @@
     </p>
     <ul id="navbar-main-elements" class="navbar-nav">
         
-                <li class="nav-item">
-                    <a class="nav-link" href="shared.html">
-                        shared package
+                <li class="nav-item current active">
+                    <a class="nav-link" href="#">
+                        db package
                     </a>
                 </li>
                 
 
-                <li class="nav-item current active">
-                    <a class="nav-link" href="#">
-                        db package
+                <li class="nav-item">
+                    <a class="nav-link" href="driver_deconz.html">
+                        driver_deconz package
+                    </a>
+                </li>
+                
+
+                <li class="nav-item">
+                    <a class="nav-link" href="shared.html">
+                        shared package
                     </a>
                 </li>
                 
@@ -238,7 +252,11 @@
   </p>
   <div class="bd-toc-item navbar-nav">
     <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="db.test.html">db.test module</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="db.conf.html">db.conf package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="db.conf.database.html">db.conf.database module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="db.conf.models.html">db.conf.models module</a></li>
+</ul>
+</li>
 </ul>
 
   </div>
@@ -269,12 +287,26 @@
               
   <section id="db-package">
 <h1>db package<a class="headerlink" href="#db-package" title="Permalink to this heading">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="db.test.html">db.test module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="db.test.html#db.test.test_func"><code class="docutils literal notranslate"><span class="pre">test_func()</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="db.conf.html">db.conf package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="db.conf.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="db.conf.database.html">db.conf.database module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="db.conf.database.html#db.conf.database.connection_string"><code class="docutils literal notranslate"><span class="pre">connection_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="db.conf.database.html#db.conf.database.get_engine"><code class="docutils literal notranslate"><span class="pre">get_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="db.conf.database.html#db.conf.database.get_session"><code class="docutils literal notranslate"><span class="pre">get_session()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="db.conf.models.html">db.conf.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="db.conf.models.html#db.conf.models.Base"><code class="docutils literal notranslate"><span class="pre">Base</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="db.conf.models.html#db.conf.models.Entity"><code class="docutils literal notranslate"><span class="pre">Entity</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="db.conf.html#module-db.conf">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -282,6 +314,7 @@
 </section>
 <section id="module-db">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-db" title="Permalink to this heading">#</a></h2>
+<p>Подключение к БД db_conf, db_data.</p>
 </section>
 </section>
 
@@ -293,17 +326,17 @@
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="shared.settings.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="index.html" title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">shared.settings module</p>
+          <p class="prev-next-title">Welcome to shared’s documentation!</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="db.test.html" title="next page">
+  <a class='right-next' id="next-link" href="db.conf.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">db.test module</p>
+      <p class="prev-next-title">db.conf package</p>
   </div>
   <i class="fa-solid fa-angle-right"></i>
   </a>
@@ -324,8 +357,8 @@
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#submodules">
-   Submodules
+  <a class="reference internal nav-link" href="#subpackages">
+   Subpackages
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">

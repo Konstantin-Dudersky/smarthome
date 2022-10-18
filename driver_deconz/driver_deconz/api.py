@@ -1,20 +1,19 @@
 """Чтение данных REST API."""
 
-# pyright: reportUnknownMemberType=false
+import logging
 
 import httpx
-
-from src.utils.logger import get_logger, LoggerLevel
-from src.utils.settings import settings
+from shared.settings import settings_store
 
 from .schemas import ConfigModel
 
+log: logging.Logger = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
-logger = get_logger(__name__)
-logger.setLevel(LoggerLevel.INFO)
+settings = settings_store.settings
 
 DECONZ_REST_URL = (
-    f"http://{settings.deconz_ip}:{settings.deconz_rest_port}"
+    f"http://{settings.deconz_hub_host}:{settings.deconz_hub_port_api}"
     f"/api/{settings.deconz_api_key}"
 )
 
@@ -29,7 +28,7 @@ async def _base_query(endpoint: str) -> httpx.Response | None:
         try:
             return await http.get(f"{DECONZ_REST_URL}{endpoint}")
         except httpx.ConnectError as exc:
-            logger.exception("Ошибка выполнения запроса: %s", exc.request)
+            log.exception("Ошибка выполнения запроса: %s", exc.request)
             return None
 
 

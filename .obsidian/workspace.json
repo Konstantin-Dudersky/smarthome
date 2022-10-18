@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "todo.md",
                 "mode": "preview",
                 "source": true
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "todo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "todo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "deconz_hub/README.md"
+                "file": "todo.md"
               }
             }
           }
@@ -141,15 +141,15 @@
   },
   "active": "4e83008229c4062a",
   "lastOpenFiles": [
-    "README.md",
     "docs/README.md",
-    "src/setup/README.md",
     "docs/Установка.md",
+    "docs/схема.svg",
+    "README.md",
+    "todo.md",
+    "deconz_hub/README.md",
+    "src/setup/README.md",
     "docs/Описание.md",
     "src/deconz_hub/README.md",
-    "src/db/README.md",
-    "docs/docs/dia_dist/c4.svg",
-    "docs/схема.svg",
-    "todo.md"
+    "src/db/README.md"
   ]
 }

@@ -20,8 +20,7 @@ exclude =
     .venv/,
     env/
 per-file-ignores =
-    */settings.py:E501,
-    src/driver_ascue/db/models.py:CCE001
+    # */settings.py:E501,
 max-complexity = 10
 max-line-length=80
 inline-quotes = double

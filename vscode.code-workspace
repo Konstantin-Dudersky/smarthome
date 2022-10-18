@@ -1,17 +1,18 @@
 {
   "folders": [
     {
-      "name": "root_src",
+      "name": "(root)",
       "path": "."
     },
-    {
-      "path": "docs"
-    },
+
     {
       "path": "db"
     },
     {
       "path": "deconz_hub"
+    },
+    {
+      "path": "docs"
     },
     {
       "path": "driver_deconz"

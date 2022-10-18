@@ -8,8 +8,14 @@ requires = ["poetry-core>=1.0.0"]
 line-length = 80
 
 
-[tool.poe.tasks]
-docs = { script = "konstantin_docs.main:generate_images('docs/dia_src', 'docs/dia_dist')" }
+[tool.poe.tasks.diagrams]
+script = "konstantin_docs.main:generate_images('diagrams/in', 'diagrams/out')"
+
+[tool.poe.tasks.sphinx]
+shell = """poetry run sphinx-apidoc --force --separate -o sphinx/in ../shared \
+    && poetry run sphinx-apidoc --force --separate -o sphinx/in ../db \
+    && poetry run sphinx-build -b html sphinx/in sphinx/out
+"""
 
 [tool.poe.tasks.update_stubs]
 shell = """rm -rf .venv/typings/konstantin_docs \
@@ -29,11 +35,13 @@ python = "^3.10"
 
 konstantin-docs = "*"
 poethepoet = "*"
+pydata-sphinx-theme = "*"
 sphinx = "*"
 
 shared = { path = "../shared", develop = true }
+db = { path = "../db", develop = true }
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "*"
 
 

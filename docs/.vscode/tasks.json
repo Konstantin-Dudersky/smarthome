@@ -2,14 +2,19 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "docs",
+      "label": "diagrams",
       "type": "shell",
-      "command": "poetry run poe docs"
+      "command": "poetry run poe diagrams"
     },
     {
       "label": "update_stubs",
       "type": "shell",
       "command": "poetry run poe update_stubs"
+    },
+    {
+      "label": "sphinx",
+      "type": "shell",
+      "command": "poetry run poe sphinx"
     }
   ]
 }

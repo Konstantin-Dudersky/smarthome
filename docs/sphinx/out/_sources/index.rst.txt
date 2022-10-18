@@ -10,6 +10,8 @@ Welcome to shared's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   shared
+   db
 
 
 Indices and tables

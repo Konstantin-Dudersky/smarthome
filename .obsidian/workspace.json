@@ -14,8 +14,8 @@
               "type": "markdown",
               "state": {
                 "file": "README.md",
-                "mode": "source",
-                "source": false
+                "mode": "preview",
+                "source": true
               }
             }
           }
@@ -141,6 +141,7 @@
   },
   "active": "4e83008229c4062a",
   "lastOpenFiles": [
+    "docs/README.md",
     "README.md",
     "src/setup/README.md",
     "docs/Установка.md",

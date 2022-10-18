@@ -1,5 +1,10 @@
 Управление автоматикой в доме.
 
+Структурная схема:
+
+![docs/diagrams/out/c4.svg](docs/diagrams/out/c4.svg)
+
+
 Документацию можно смотреть в [obsidian](https://obsidian.md/). Открыть корневую папку репозитория (open folder as vault). Затем можно открывать по ярлыку `obsidian.py`.
 
 ## Установка
@@ -12,9 +17,17 @@
 
 ### Установка ПО
 
-Установка - [src/setup/README](src/setup/README.md)
+Установка - [setup/README](setup/README.md)
 
 Сервисы:
 
-- sh_db - [src/db/README](src/db/README.md)
+- sh_db - [db/README](db/README.md)
 - portainer - https://
+
+
+### Документация
+
+Ссылки:
+- исходный код python - [sphinx](docs/sphinx/out/index.html)
+
+Подробнее о генерации - [docs/README](docs/README.md)

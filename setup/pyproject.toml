@@ -18,6 +18,7 @@ version = "0.0.1"
 python = "^3.10"
 
 shared = { path = "../shared", develop = true }
+db = { path = "../db", develop = true }
 
 
 [tool.poetry.group.dev.dependencies]

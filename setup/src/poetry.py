@@ -2,6 +2,8 @@
 
 import logging
 import os
+import subprocess  # noqa: S404
+from pathlib import Path
 from typing import Callable
 
 from ._shared import get_logger, dir_rel_to_abs
@@ -98,3 +100,33 @@ def show_outdated(work_path_rel: str) -> Callable[[], None]:
         os.system("poetry show -o")
 
     return _main
+
+
+def update_lock_and_show_outdated(
+    dirs: list[str] | None = None,
+) -> Callable[[], None]:
+    """Обновить lock файл и вывести список устаревших пакетов.
+
+    Parameters
+    ----------
+    dirs
+        Перечень относительных путей к папкам
+
+    Returns
+    -------
+    Задача для выполнения
+    """
+
+    def _task() -> None:
+        cwd = Path.cwd()
+        for dir_rel in dirs:
+            dir_abs: str = Path(dir_rel).resolve().as_posix()
+            log.info("Папка: {0}".format(dir_abs))
+            os.chdir(dir_abs)
+            log.info("Обновим файл lock в {0}".format(dir_rel))
+            subprocess.run("poetry update --lock".split())  # noqa: S603
+            log.info("Перечень устаревших пакетов в {0}:".format(dir_rel))
+            subprocess.run("poetry show -o".split())  # noqa: S603
+            os.chdir(cwd)
+
+    return _task

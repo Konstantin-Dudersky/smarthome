@@ -42,18 +42,11 @@ class Tasks(NamedTuple):
             command="sudo apt update && sudo apt upgrade",
         ),
     )
-    docker_compose_build: src.Task = src.Task(
+    docker_build_images: src.Task = src.Task(
         desc="Собрать образы docker",
         task=src.cmd_in_dir(
-            work_dir=PARENT_FOLDER,
-            command="docker compose --profile pi --profile setup build --progress plain",
-        ),
-    )
-    docker_build_base_image: src.Task = src.Task(
-        desc="Собрать базовый образ docker",
-        task=src.cmd_in_dir(
-            work_dir="../shared",
-            command="docker build . --pull --tag sh_base_image",
+            work_dir="../.",
+            command="docker buildx bake --builder builder -f docker-bake.hcl --push pi",
         ),
     )
     docker_compose_push: src.Task = src.Task(
@@ -67,6 +60,15 @@ class Tasks(NamedTuple):
         desc="Установка docker",
         task=src.docker_tasks.install_raspbian(),
     )
+    db_alembic_upgrade: src.Task = src.Task(
+        desc="Обновить схему БД",
+        task=src.docker_tasks.run_exec_remove(
+            work_dir_rel=PARENT_FOLDER,
+            image=IMAGE_SETUP,
+            mount=BIND_SRC_FOLDER,
+            command="poetry run python main.py venv_db_alembic_upgrade",
+        ),
+    )
     pi_create_env: src.Task = src.Task(
         desc="Создать файл .env с настройками",
         task=src.docker_tasks.run_exec_remove(
@@ -79,6 +81,18 @@ class Tasks(NamedTuple):
     portainer_install: src.Task = src.Task(
         desc="Установить portainer для мониторинга docker",
         task=src.portainer.install(),
+    )
+    update_lock_and_show_outdated: src.Task = src.Task(
+        desc="Обновить пакеты poetry",
+        task=src.poetry.update_lock_and_show_outdated(
+            dirs=[
+                "../db",
+                "../docs",
+                "../driver_deconz",
+                "../setup",
+                "../shared",
+            ],
+        ),
     )
 
     # old ----------------------------------------------------------------------
@@ -109,13 +123,6 @@ class Tasks(NamedTuple):
     git_sync: src.Task = src.Task(
         desc="Синхронизировать проект через git",
         task=src.git_sync(),
-    )
-    server_alembic_upgrade: src.Task = src.Task(
-        desc="Обновить схему БД",
-        task=src.cmd_in_dir(
-            work_dir="../server",
-            command="poetry run alembic upgrade head",
-        ),
     )
     server_lint: src.Task = src.Task(
         desc="linting",
@@ -148,6 +155,8 @@ TASKS = Tasks()
 
 
 if is_venv():
+    from alembic import config as alembic_config
+
     from shared import settings  # noqa: WPS433
 
     class TasksEnv(NamedTuple):
@@ -171,6 +180,14 @@ if is_venv():
             ),
             confirm=False,
         )
+        venv_db_alembic_upgrade: src.Task = src.Task(
+            desc="Обновить схему БД",
+            task=src.call_func.call_func(
+                work_dir_rel="../db",
+                func=lambda: alembic_config.main(argv=["upgrade", "head"]),
+            ),
+            confirm=False,
+        )
 
     tasks_env = TasksEnv()
 else:
@@ -183,9 +200,8 @@ class ComposeTasks(NamedTuple):
     build: src.ComposeTask = src.ComposeTask(
         desc="Сборка проекта",
         subtasks=[
-            TASKS.docker_build_base_image,
-            TASKS.docker_compose_build,
-            TASKS.docker_compose_push,
+            TASKS.update_lock_and_show_outdated,
+            TASKS.docker_build_images,
         ],
     )
     install: src.ComposeTask = src.ComposeTask(

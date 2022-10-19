@@ -12,8 +12,8 @@
     },
     "**/__pycache__": true
   },
-  "python.formatting.provider": "black",
   "python.defaultInterpreterPath": ".venv/bin/python3",
+  "python.formatting.provider": "black",
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true
 }

@@ -16,32 +16,64 @@ log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-def connection_string(
-    *,
-    host: IPv4Address,
-    port: int = 5432,
-    user: str = "postgres",
-    password: str,
-) -> str:
-    """Собирает строку подключения.
-
-    :param user: пользователь
-    :param password: пароль
-    :param host: ip адрес
-    :param port: порт
-    :return: строка подключения к БД
-    """
-    return "postgresql://{user}:{password}@{host}:{port}/db_data".format(
-        user=user,
-        password=password,
-        host=host,
-        port=port,
-    )
-
-
 URL: Final[
     str
 ] = "postgresql+{driver}://{user}:{password}@{host}:{port}/db_data"
+
+
+class GetDbRow(object):
+    """Контекстный менеджер db_data. Тип models.Row."""
+
+    __url: str
+
+    def __init__(self, url: str) -> None:
+        """Контекстный менеджер db_data. Тип models.Row.
+
+        Parameters
+        ----------
+        url: str
+            Строка подключения к db_data
+        """
+        self._conn: psycopg.AsyncConnection[models.Row] | None = None
+        self.__url = url
+
+    async def __aenter__(self) -> psycopg.AsyncConnection[models.Row]:
+        """Enter the runtime context related to this object.
+
+        Returns
+        -------
+        Объект подключения к БД
+        """
+        factory: str = (
+            models.Row.row_factory  # pyright: ignore[reportGeneralTypeIssues]
+        )
+        self._conn = await psycopg.AsyncConnection.connect(
+            conninfo=self.__url,
+            row_factory=factory,
+            autocommit=True,
+        )
+        return self._conn  # pyright: ignore[reportUnknownVariableType]
+
+    async def __aexit__(
+        self,
+        exc_type: Type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
+        """Exit the runtime context related to this object.
+
+        Parameters
+        ----------
+        exc_type
+            exc_type
+        exc_value
+            exc_value
+        traceback
+            traceback
+        """
+        if self._conn is None:
+            return
+        await self._conn.close()
 
 
 class DbData(object):
@@ -94,50 +126,8 @@ class DbData(object):
             password=self.__password,
         )
 
-
-class GetDbRow(object):
-    """Контекстный менеджер db_data. Тип models.Row."""
-
-    __url: str
-
-    def __init__(self: Self, url: str) -> None:
-        """Контекстный менеджер db_data. Тип models.Row.
-
-        :param url: строка подключения к db_data
-        """
-        self._conn: psycopg.AsyncConnection[models.Row] | None = None
-        self.__url = url
-
-    async def __aenter__(self: Self) -> psycopg.AsyncConnection[models.Row]:
-        """Enter the runtime context related to this object.
-
-        :return: объект подключения к БД
-        """
-        factory: str = (
-            models.Row.row_factory  # pyright: ignore[reportGeneralTypeIssues]
-        )
-        self._conn = await psycopg.AsyncConnection.connect(
-            conninfo=self.__url,
-            row_factory=factory,
-            autocommit=True,
-        )
-        return self._conn  # pyright: ignore[reportUnknownVariableType]
-
-    async def __aexit__(
-        self: Self,
-        exc_type: Type[BaseException] | None,
-        exc_value: BaseException | None,
-        traceback: TracebackType | None,
-    ) -> None:
-        """Exit the runtime context related to this object.
-
-        :param exc_type: exc_type
-        :param exc_value: exc_value
-        :param traceback: traceback
-        """
-        if self._conn is None:
-            return
-        await self._conn.close()
+    def cm(self):
+        return GetDbRow(self.connection_string)
 
 
 CHUNK_INTERVAL: int = 60

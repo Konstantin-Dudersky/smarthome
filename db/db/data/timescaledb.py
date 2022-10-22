@@ -109,18 +109,18 @@ async def create_agg_type(url: str) -> None:
         await db.execute(stmt)
 
 
-async def create_status_type(url: str) -> None:
-    """Создать тип перечисления статуса значения.
+# async def create_status_type(url: str) -> None:
+#     """Создать тип перечисления статуса значения.
 
-    :param url: строка подключения
-    """
-    stmt: str = CREATE_TYPE.format(
-        name="status_type",
-        values=str(tuple(status.value for status in models.StatusEnum)),
-    )
-    log.info("create ENUM status_type: %s", stmt)
-    async with GetDbRow(url) as db:
-        await db.execute(stmt)
+#     :param url: строка подключения
+#     """
+#     stmt: str = CREATE_TYPE.format(
+#         name="status_type",
+#         values=str(tuple(status.value for status in models.StatusEnum)),
+#     )
+#     log.info("create ENUM status_type: %s", stmt)
+#     async with GetDbRow(url) as db:
+#         await db.execute(stmt)
 
 
 CREATE_TABLE_TEMPL: Final[

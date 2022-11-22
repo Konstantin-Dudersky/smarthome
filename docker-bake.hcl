@@ -4,12 +4,13 @@
 docker buildx bake --builder builder -f docker-bake.hcl --push pi
 */
 
-variable "POSTGRE_VER" { default = "14.5" }
-variable "TIMESCALEDB_VER" { default = "2.8.1" }
-variable "PYTHON_VER" { default = "3.10.8" }
-variable "POETRY_VER" { default = "1.2.2" }
-variable "DECONZ_VER" { default = "2.19.00" }
+POSTGRE_VER = "14.5"
+TIMESCALEDB_VER = "2.8.1"
+PYTHON_VER = "3.10.8"
+POETRY_VER = "1.2.2"
+DECONZ_VER = "2.19.00"
 
+REPO = "localhost:5000"
 
 target "sh_base_image" {
     dockerfile = "shared/Dockerfile"
@@ -25,7 +26,7 @@ target "sh_base_image" {
 
 target "sh_db" {
     dockerfile = "db/Dockerfile"
-    tags = [ "konstantindudersky/sh_db" ]
+    tags = [ "${REPO}/smarthome/sh_db" ]
     args = {
         POSTGRE_VER = "${POSTGRE_VER}"
         TIMESCALEDB_VER = "${TIMESCALEDB_VER}"
@@ -38,7 +39,7 @@ target "sh_db" {
 
 target "sh_deconz_hub" {
     dockerfile = "deconz_hub/Dockerfile"
-    tags = [ "konstantindudersky/sh_deconz_hub" ]
+    tags = [ "${REPO}/smarthome/sh_deconz_hub" ]
     args = {
         DECONZ_VER="${DECONZ_VER}"
     }
@@ -53,7 +54,7 @@ target "sh_driver_deconz" {
         sh_base_image = "target:sh_base_image"
     }
     dockerfile = "driver_deconz/Dockerfile"
-    tags = [ "konstantindudersky/sh_driver_deconz" ]
+    tags = [ "${REPO}/smarthome/sh_driver_deconz" ]
     platforms = [ 
         "linux/amd64",
         "linux/arm64"
@@ -65,7 +66,7 @@ target "sh_setup" {
         sh_base_image = "target:sh_base_image"
     }
     dockerfile = "setup/Dockerfile"
-    tags = [ "konstantindudersky/sh_setup" ]
+    tags = [ "${REPO}/smarthome/sh_setup" ]
     platforms = [
         "linux/amd64",
         "linux/arm64"

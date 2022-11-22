@@ -2,20 +2,24 @@
 
 ## Установка
 
-Подключаемся к pi
+Загрузка кода
 
 ```sh
-ssh __user__@__host
+rsync -vhra . admin@target:/home/admin/code --include='**.gitignore' --exclude='/.git' --filter=':- .gitignore' --delete-after
 ```
 
-После подключения
+Установка docker
+
+Установка системных образов docker
 
 ```sh
-sudo apt update \
-	&& sudo apt install -y git \
-	&& git clone https://github.com/Konstantin-Dudersky/smarthome.git
-	&& cd ~/smarthome/src/setup/
+docker compose --profile system up -d
 ```
+
+
+
+
+
 
 
 
@@ -37,20 +41,6 @@ work_dir_rel - относительный путь к рабочей папке 
 poetry run poe systemd
 ```
 
-## port_redirect
-
-Перенаправление портов, поскольку на linux нельзя запусить сервис с портом <= 1024
-
-```toml
-[tool.poe.tasks]
-port_redirect = {script = "src.port_redirect:main(from_port=80, to_port=8000)"}
-```
-
-```sh
-poetry run poe port_redirect
-```
-
-
 
 ## angular
 
@@ -67,8 +57,6 @@ poetry run poe ng_build
 
 ### разворачивание проекта
 
-
-
 ## tauri
 
 ```sh
@@ -79,4 +67,3 @@ tauri_build = {script = "src.tauri_build:main(work_dir_relative='../client', pro
 ```sh
 poetry run poe tauri_build
 ```
-

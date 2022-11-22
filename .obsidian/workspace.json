@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "2a96ad8178d24926",
+        "id": "6452998d2061de92",
         "type": "tabs",
         "children": [
           {
-            "id": "4e83008229c4062a",
+            "id": "e1dad8f7892dc9ca",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "todo.md",
+                "file": "setup/README.md",
                 "mode": "source",
                 "source": true
               }
@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "ssh",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,7 +65,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "todo.md",
+                "file": "setup/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "todo.md",
+                "file": "setup/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "todo.md"
+                "file": "setup/README.md"
               }
             }
           }
@@ -136,20 +137,17 @@
     "width": 300,
     "collapsed": true
   },
-  "ribbon": {
-    "mostRecentAction": ""
-  },
-  "active": "4e83008229c4062a",
+  "active": "e1dad8f7892dc9ca",
   "lastOpenFiles": [
+    "README.md",
+    "setup/README.md",
+    "todo.md",
     "docs/README.md",
     "docs/Установка.md",
     "docs/схема.svg",
-    "README.md",
-    "todo.md",
     "deconz_hub/README.md",
     "src/setup/README.md",
     "docs/Описание.md",
-    "src/deconz_hub/README.md",
-    "src/db/README.md"
+    "src/deconz_hub/README.md"
   ]
 }

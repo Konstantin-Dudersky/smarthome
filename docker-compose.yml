@@ -4,6 +4,7 @@
 version: '3.8'
 name: smarthome
 services:
+
   sh_deconz_hub:
     image: konstantindudersky/sh_deconz_hub
     container_name: sh_deconz_hub
@@ -21,7 +22,8 @@ services:
       - pi
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - sh_deconz_hub_volume:/opt/deCONZ
+      - sh_deconz_hub_volume:/opt/
+
   sh_db:
     image: konstantindudersky/sh_db
     container_name: sh_db
@@ -37,6 +39,7 @@ services:
     volumes:
       - sh_db_volume:/home/postgres/pgdata/data
       - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
+
   sh_driver_deconz:
     image: konstantindudersky/sh_driver_deconz
     container_name: sh_driver_deconz
@@ -62,6 +65,7 @@ services:
         #     - ${ssl_certfile}:/root/certs/server.crt
         #     - ${ssl_keyfile}:/root/certs/server.key
         #     - ./webapp/dist/webapp:/usr/share/nginx/html
+
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
@@ -73,8 +77,50 @@ services:
       - "${pgadmin_port}:80"
     profiles:
       - pi
+    restart: always
     volumes:
       - sh_pgadmin_volume:/var/lib/pgadmin
+
+  docker_registry:
+    image: registry:2.7
+    container_name: docker_registry
+    ports:
+      - "5000:5000"
+    profiles:
+      - system
+    restart: always
+    volumes:
+      - docker_registry_volume:/var/lib/registry
+      - ./docker-registry-config.yml:/etc/docker/registry/config.yml
+
+  docker_registry_ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: docker_registry_ui
+    depends_on:
+      - docker_registry
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+      - REGISTRY_URL=http://target:5000
+      - SINGLE_REGISTRY=true
+      - DELETE_IMAGES=true
+    ports:
+      - "8000:80"
+    profiles:
+      - system
+    restart: always
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - "8001:9000"
+    restart: always
+    profiles:
+      - system
+    volumes:
+      - portainer_data_volume:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
 volumes:
   sh_db_volume:
     name: sh_db_volume
@@ -82,3 +128,7 @@ volumes:
     name: sh_pgadmin_volume
   sh_deconz_hub_volume:
     name: sh_deconz_hub_volume
+  portainer_data_volume:
+    name: portainer_data_volume
+  docker_registry_volume:
+    name: docker_registry_volume

@@ -9,16 +9,13 @@ line-length = 80
 
 [tool.poetry]
 authors = ["konstantin-dudersky <konstantin.dudersky@gmail.com>"]
-description = ""
+description = "Скрипты установки"
 name = "setup"
-version = "0.0.1"
+version = "0.0.2"
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
-
-shared = { path = "../shared", develop = true }
-db = { path = "../db", develop = true }
+python = "3.11"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -26,8 +23,10 @@ black = "*"
 wemake-python-styleguide = "0.17.0"
 
 
-[tool.pyright]
-pythonPlatform = "Linux"
-pythonVersion = "3.10"
-stubPath = '.venv/typings'
-typeCheckingMode = "strict"
+[tool.poe.tasks]
+cmd_in_dir = { script = "src.cmd_in_dir:main(work_dir='../server', command='<command>')" }
+git_sync = { script = "src.git_sync:main" }
+ng_build = { script = "src.ng_build:main(work_dir_relative='../client', project='client')" }
+ng_dist = { script = "src.ng_dist:main(source_dir_rel='../client', target_dir_rel='../server/static/', project='client')" }
+systemd = { script = "src.systemd:main(service_name='<service_name>', description='<description>', work_dir_rel='<work_dir_rel>'" }
+tauri_build = { script = "src.tauri_build:main(work_dir_relative='../client', project='client')" }

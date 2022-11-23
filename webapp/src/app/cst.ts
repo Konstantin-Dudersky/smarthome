@@ -35,5 +35,4 @@ export namespace Cst {
         raised = "p-button-raised",
         rounded = "p-button-rounded",
     }
-
 }

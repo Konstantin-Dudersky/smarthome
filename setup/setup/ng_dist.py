@@ -24,6 +24,6 @@ def main(
         print(f"-> Исходный файл: {source_file}")
         target_dir = os.path.abspath(os.path.join(curr_dir, target_dir_rel))
         print(f"-> Целевая папка: {target_dir}")
-        os.system(f"unzip -u {source_file} -d {target_dir}")
+        os.system(f"unzip -uo {source_file} -d {target_dir}")
 
     return _main

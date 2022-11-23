@@ -5,7 +5,7 @@
 
 import logging
 import os
-from typing import Callable, Literal, Optional
+from typing import Callable, List, Literal, Optional
 
 from ._shared import dir_rel_to_abs, get_logger
 
@@ -42,7 +42,7 @@ def install_ubuntu() -> Callable[[], None]:
     return _task
 
 
-def install_raspbian() -> Callable[[], None]:
+def install() -> Callable[[], None]:
     """Установить на Debian.
 
     Returns:
@@ -51,8 +51,8 @@ def install_raspbian() -> Callable[[], None]:
     """
 
     def _task() -> None:
-
-        log.info("Устанавливаем Docker на Raspbian")
+        os.system("sudo apt install -y curl")
+        log.info("Устанавливаем Docker")
         os.system("curl -fsSL https://get.docker.com -o get-docker.sh")
         os.system("sudo sh get-docker.sh")
         log.info("Проверим, что docker установился корректно")
@@ -63,7 +63,7 @@ def install_raspbian() -> Callable[[], None]:
     return _task
 
 
-def _output_build(stream: list[str]) -> None:
+def _output_build(stream: List[str]) -> None:
     for item in stream[1]:
         for key, value in item.items():
             if key == "stream":
@@ -170,6 +170,7 @@ def run_exec_remove(
     command: str = "ls -la",
 ) -> Callable[[], None]:
     def _task() -> None:
+        curr_dir: str = os.getcwd()
         work_dir_abs = dir_rel_to_abs(work_dir_rel)
         log.info("Рабочая папка: %s", work_dir_abs)
         os.chdir(work_dir_abs)
@@ -184,5 +185,6 @@ def run_exec_remove(
                 command=command,
             ),
         )
+        os.chdir(curr_dir)
 
     return _task

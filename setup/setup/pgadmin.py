@@ -7,7 +7,7 @@ import os
 from typing import Callable
 
 
-def install() -> Callable[[], None]:
+def main() -> Callable[[], None]:
     """Entry point."""
 
     def _main() -> None:

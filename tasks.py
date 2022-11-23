@@ -68,6 +68,13 @@ class Tasks(NamedTuple):
         desc="Сборка образов docker",
         command="docker buildx bake --builder builder -f docker-bake.hcl --push pi",
     )
+    codesync: setup.BaseTask = setup.CodeSync(
+        desc="Синхронизация кода",
+    )
+    codesync_test: setup.BaseTask = setup.CodeSync(
+        desc="Синхронизация кода (проверка без выполнения)",
+        dry_run=True,
+    )
 
 
 class TasksOld(NamedTuple):

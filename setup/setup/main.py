@@ -4,6 +4,8 @@ from typing import Callable, List, NamedTuple, Optional
 
 from ._shared import get_logger
 from .internal.base_task import BaseTask
+from .internal.compose_task import ComposeTask
+
 
 log = get_logger(__name__, logging.DEBUG)
 
@@ -51,39 +53,6 @@ class Task:
                 elif ans == "n":
                     return
         self.__task()
-
-
-# class ComposeTask:
-#     def __init__(
-#         self: "ComposeTask",
-#         desc: str,
-#         subtasks: List[Task],
-#     ) -> None:
-#         self.__desc = desc
-#         self.__subtasks = subtasks
-#         self.__command: str = ""
-
-#     @property
-#     def command(self: "ComposeTask") -> str:
-#         return self.__command
-
-#     @command.setter
-#     def command(self: "ComposeTask", value: str) -> None:
-#         self.__command = value
-
-#     def execute(self: "ComposeTask") -> None:
-#         log.info("-" * 80)
-#         log.info(f"{self.__command} - {self.__desc}")
-#         for task in self.__subtasks:
-#             task.execute()
-
-#     def __str__(self: "ComposeTask") -> str:
-#         out = f"* {self.__command} - {self.__desc}:\n"
-#         for task in self.__subtasks:
-#             out += f"\t{task}\n"
-#         return out
-
-from .internal.compose_task import ComposeTask
 
 
 def execute(

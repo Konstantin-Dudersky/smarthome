@@ -1,5 +1,6 @@
 """Скрипты установки."""
 
+from .code_sync import CodeSync
 from .simple_command import SimpleCommand
 from .internal.base_task import BaseTask
 from .internal.compose_task import ComposeTask
@@ -28,6 +29,7 @@ __all__ = [
     "SimpleCommand",
     "BaseTask",
     "ComposeTask",
+    "CodeSync",
     "Task",
     "call_func",
     "create_folder_abs",

@@ -4,13 +4,18 @@
 docker buildx bake --builder builder -f docker-bake.hcl --push pi
 */
 
-POSTGRE_VER = "14.5"
+PYTHON_VER = "3.11.0"
+POETRY_VER = "1.2.2" // https://github.com/python-poetry/poetry
+POSTGRE_VER = "14.6" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
 TIMESCALEDB_VER = "2.8.1"
-PYTHON_VER = "3.10.8"
-POETRY_VER = "1.2.2"
-DECONZ_VER = "2.19.00"
+DECONZ_VER = "2.19.02" // https://hub.docker.com/r/deconzcommunity/deconz/tags
 
 REPO = "localhost:5000"
+
+PLATFORMS = [
+    "linux/amd64",
+    "linux/arm64"
+]
 
 target "sh_base_image" {
     dockerfile = "shared/Dockerfile"
@@ -18,10 +23,7 @@ target "sh_base_image" {
         POETRY_VER = "${POETRY_VER}",
         PYTHON_VER = "${PYTHON_VER}"
     }
-    platforms = [
-        "linux/amd64",
-        "linux/arm64"
-    ]
+    platforms = PLATFORMS
 }
 
 target "sh_db" {
@@ -31,10 +33,7 @@ target "sh_db" {
         POSTGRE_VER = "${POSTGRE_VER}"
         TIMESCALEDB_VER = "${TIMESCALEDB_VER}"
     }
-    platforms = [ 
-        "linux/amd64",
-        // "linux/arm64"
-    ]
+    platforms = PLATFORMS
 }
 
 target "sh_deconz_hub" {
@@ -43,10 +42,7 @@ target "sh_deconz_hub" {
     args = {
         DECONZ_VER="${DECONZ_VER}"
     }
-    platforms = [ 
-        "linux/amd64",
-        "linux/arm64"
-    ]
+    platforms = PLATFORMS
 }
 
 target "sh_driver_deconz" {
@@ -55,10 +51,7 @@ target "sh_driver_deconz" {
     }
     dockerfile = "driver_deconz/Dockerfile"
     tags = [ "${REPO}/smarthome/sh_driver_deconz" ]
-    platforms = [ 
-        "linux/amd64",
-        "linux/arm64"
-    ]
+    platforms = PLATFORMS
 }
 
 target "sh_setup" {
@@ -67,10 +60,7 @@ target "sh_setup" {
     }
     dockerfile = "setup/Dockerfile"
     tags = [ "${REPO}/smarthome/sh_setup" ]
-    platforms = [
-        "linux/amd64",
-        "linux/arm64"
-    ]
+    platforms = PLATFORMS
 }
 
 group "pi" {

@@ -14,7 +14,9 @@ PARENT_FOLDER: str = "../."
 
 
 python_projects: Set[str] = {
+    "./db",
     "./driver_deconz",
+    "./shared",
 }
 
 

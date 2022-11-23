@@ -23,7 +23,7 @@ packages = [{ include = "driver_deconz" }]
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.11"
 
 httpx = "0.23.0"
 pydantic = "1.10.2"

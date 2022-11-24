@@ -6,7 +6,7 @@ name: smarthome
 services:
 
   sh_deconz_hub:
-    image: konstantindudersky/sh_deconz_hub
+    image: target:5000/smarthome/sh_deconz_hub
     container_name: sh_deconz_hub
     hostname: sh_deconz_hub
     devices:
@@ -25,7 +25,7 @@ services:
       - sh_deconz_hub_volume:/opt/
 
   sh_db:
-    image: konstantindudersky/sh_db
+    image: target:5000/smarthome/sh_db
     container_name: sh_db
     hostname: sh_db
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
@@ -41,7 +41,7 @@ services:
       - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
 
   sh_driver_deconz:
-    image: konstantindudersky/sh_driver_deconz
+    image: target:5000/smarthome/sh_driver_deconz
     container_name: sh_driver_deconz
     hostname: sh_driver_deconz
     ports:

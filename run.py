@@ -73,10 +73,6 @@ class Tasks(NamedTuple):
         desc="Синхронизация кода с целевой системой (dry_run)",
         dry_run=True,
     )
-    build_docker_images: setup.BaseTask = setup.SimpleCommand(
-        desc="Сборка образов docker",
-        command="docker buildx bake --builder builder -f docker-bake.hcl --push pi",
-    )
     poetry_install: setup.BaseTask = setup.SimpleCommandMultifolder(
         desc="Установка виртуальных окружений python",
         dirs=PYTHON_PROJECTS,
@@ -137,6 +133,17 @@ class Tasks(NamedTuple):
         command="npm run compodoc",
         dirs=NG_PROJECTS,
     )
+    docker_build_images: setup.BaseTask = setup.SimpleCommand(
+        desc="Сборка образов docker",
+        command="docker buildx bake --builder builder -f docker-bake.hcl --push pi",
+    )
+    docker_move_images: setup.BaseTask = setup.DockerMoveImages(
+        profile="pi",
+        repo_from="localhost:5000",
+        repo_to="target:5000",
+        arch="linux/arm64",
+    )
+    
 
 
 class TasksOld(NamedTuple):
@@ -281,7 +288,8 @@ class ComposeTasks(NamedTuple):
             TASKS.npm_update,
             TASKS.prettier,
             TASKS.compodoc,
-            TASKS.build_docker_images,
+            TASKS.docker_build_images,
+            TASKS.docker_move_images,
         ],
     )
     dev_clear: setup.ComposeTask = setup.ComposeTask(

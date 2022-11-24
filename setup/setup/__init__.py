@@ -1,6 +1,7 @@
 """Скрипты установки."""
 
 from .code_sync import CodeSync
+from .docker_move_images import DockerMoveImages
 from .simple_command import SimpleCommand, SimpleCommandMultifolder
 from .internal.base_task import BaseTask
 from .internal.compose_task import ComposeTask
@@ -31,6 +32,7 @@ __all__ = [
     "BaseTask",
     "ComposeTask",
     "CodeSync",
+    "DockerMoveImages",
     "Task",
     "call_func",
     "create_folder_abs",

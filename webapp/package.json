@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "compodoc": "npx compodoc -p tsconfig.doc.json --output docs"
   },
   "private": true,
   "dependencies": {
@@ -40,7 +41,8 @@
     "karma-jasmine": "~5.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "prettier": "2.8.0",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "@compodoc/compodoc": "^1.1.19"
   },
   "prettier": {
     "overrides": [

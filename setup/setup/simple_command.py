@@ -4,6 +4,7 @@ import logging
 import os
 import subprocess
 from pathlib import Path
+from typing import Iterable
 
 from .internal.base_task import BaseTask
 
@@ -46,3 +47,31 @@ class SimpleCommand(BaseTask):
         log.info("Выполняем команду: {0}".format(self.__command))
         subprocess.run(self.__command.split())
         os.chdir(curr_dir)
+
+
+class SimpleCommandMultifolder(BaseTask):
+    """Выполнить команду в нескольких папках."""
+
+    def __init__(
+        self,
+        desc: str,
+        command: str,
+        dirs: Iterable[str],
+        need_confirm: bool = True,
+    ) -> None:
+        super().__init__(desc, need_confirm)
+        self.__dirs = dirs
+        self.__command = command
+
+    def _execute(self) -> None:
+        for directory in self.__dirs:
+            desc: str = "{desc}, папка {directory}".format(
+                desc=self.desc,
+                directory=directory,
+            )
+            SimpleCommand(
+                desc=desc,
+                command=self.__command,
+                need_confirm=False,
+                work_dir_rel=directory,
+            ).execute()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Скрипты установки.
+"""Скрипты для установки / обновления.
 
 Запускаются в python3.7 и выше.
 
@@ -37,6 +37,9 @@ PYTHON_PROJECTS: Set[str] = {
     "./driver_deconz",
     "./shared",
 }
+NG_PROJECTS: Set[str] = {
+    "./webapp",
+}
 
 
 def is_venv() -> bool:
@@ -59,42 +62,80 @@ class Tasks(NamedTuple):
         desc="Разрешение на использование порта",
         command=r"sudo gpasswd --add ${USER} dialout",
     )
-    webapp_docs: setup.BaseTask = setup.SimpleCommand(
-        desc="Документация веб-приложения",
-        command="npm run compodoc",
-        work_dir_rel="./webapp",
-    )
-    webapp_format: setup.BaseTask = setup.SimpleCommand(
-        desc="Форматирование исходников веб-приложения",
-        work_dir_rel="./webapp",
-        command="npx prettier --write src",
-    )
     reboot: setup.BaseTask = setup.SimpleCommand(
         desc="Перезагрузка",
         command="sudo reboot",
     )
-    poetry_install: setup.BaseTask = setup.poetry.PoetryInstall(
-        desc="Установка виртуальных окружений python",
-        dirs=PYTHON_PROJECTS,
+    codesync: setup.BaseTask = setup.CodeSync(
+        desc="Синхронизация кода с целевой системой",
     )
-    poetry_remove: setup.BaseTask = setup.poetry.PoetryRemove(
-        desc="Удаление виртуальных окружений python",
-        dirs=PYTHON_PROJECTS,
-    )
-    poetry_update: setup.BaseTask = setup.poetry.PoetryUpdate(
-        desc="Обновление виртуальных окружений python",
-        dirs=PYTHON_PROJECTS,
+    codesync_test: setup.BaseTask = setup.CodeSync(
+        desc="Синхронизация кода с целевой системой (dry_run)",
+        dry_run=True,
     )
     build_docker_images: setup.BaseTask = setup.SimpleCommand(
         desc="Сборка образов docker",
         command="docker buildx bake --builder builder -f docker-bake.hcl --push pi",
     )
-    codesync: setup.BaseTask = setup.CodeSync(
-        desc="Синхронизация кода",
+    poetry_install: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Установка виртуальных окружений python",
+        dirs=PYTHON_PROJECTS,
+        command="poetry install",
     )
-    codesync_test: setup.BaseTask = setup.CodeSync(
-        desc="Синхронизация кода (проверка без выполнения)",
-        dry_run=True,
+    poetry_remove: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Удаление виртуальных окружений python",
+        dirs=PYTHON_PROJECTS,
+        command="poetry env remove --all",
+    )
+    poetry_update: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Обновление виртуальных окружений python",
+        dirs=PYTHON_PROJECTS,
+        command="poetry update",
+    )
+    poetry_show_outdated: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Проверка устаревших пакетов python",
+        dirs=PYTHON_PROJECTS,
+        command="poetry show -o",
+    )
+    pyright: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Проверка pyright",
+        command="pyright",
+        dirs=PYTHON_PROJECTS,
+    )
+    flake8: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Проверка исходников через flake8",
+        command="poetry run flake8",
+        dirs=PYTHON_PROJECTS,
+    )
+    black: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Форматирование исходников через black",
+        command="poetry run black .",
+        dirs=PYTHON_PROJECTS,
+    )
+    npm_install: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Установка пакетов npm",
+        command="npm install",
+        dirs=NG_PROJECTS,
+    )
+    npm_update: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Обновление пакетов npm",
+        command="npm update",
+        dirs=NG_PROJECTS,
+    )
+    npm_remove: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Удаление пакетов npm",
+        command="rm -rf node_modules",
+        dirs=NG_PROJECTS,
+    )
+    prettier: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Форматирование исходников веб-приложения",
+        dirs=NG_PROJECTS,        
+        command="npx prettier --write src",
+    )
+    compodoc: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Документация веб-приложения",
+        command="npm run compodoc",
+        dirs=NG_PROJECTS,
     )
 
 
@@ -140,13 +181,6 @@ class TasksOld(NamedTuple):
     #     task=setup.cmd_in_dir(
     #         work_dir="../server",
     #         command="poetry run poe export_openapi",
-    #     ),
-    # )
-    # server_lint: setup.Task = setup.Task(
-    #     desc="linting",
-    #     task=setup.cmd_in_dir(
-    #         work_dir="../server",
-    #         command="poetry run poe lint",
     #     ),
     # )
     # server_service_start: setup.Task = setup.Task(
@@ -240,6 +274,13 @@ class ComposeTasks(NamedTuple):
         desc="Сборка проекта",
         subtasks=[
             TASKS.poetry_update,
+            TASKS.poetry_show_outdated,
+            TASKS.black,
+            TASKS.pyright,
+            TASKS.flake8,
+            TASKS.npm_update,
+            TASKS.prettier,
+            TASKS.compodoc,
             TASKS.build_docker_images,
         ],
     )
@@ -247,20 +288,20 @@ class ComposeTasks(NamedTuple):
         desc="Очистка dev системы",
         subtasks=[
             TASKS.poetry_remove,
+            TASKS.npm_remove,
         ],
     )
     dev_prepare: setup.ComposeTask = setup.ComposeTask(
         desc="Подготовка dev системы",
         subtasks=[
-            TASKS.poetry_remove,
+            TASKS.poetry_install,
+            TASKS.npm_install,
         ],
     )
 
     # build: setup.ComposeTask = setup.ComposeTask(
     #     desc="Сборка проекта",
     #     subtasks=[
-    #         TASKS.server_lint,
-    #         TASKS.client_lint,
     #         TASKS.client_docs,
     #         TASKS.webapp_build,
     #         TASKS.server_export_openapi,

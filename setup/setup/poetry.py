@@ -1,62 +1,12 @@
-#!/usr/bin/env python3
 """Установка poetry."""
 
 import logging
 import os
-from typing import Callable, Iterable
+from typing import Callable
 
-from .internal.base_task import BaseTask
-from .simple_command import SimpleCommand
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
-
-
-class PoetryBase(BaseTask):
-    def __init__(
-        self,
-        desc: str,
-        dirs: Iterable[str],
-        need_confirm: bool = True,
-    ) -> None:
-        super().__init__(desc, need_confirm)
-        self._dirs = dirs
-
-
-class PoetryInstall(PoetryBase):
-    def _execute(self) -> None:
-        for directory in self._dirs:
-            log.info("Установка в папке: {0}".format(directory))
-            SimpleCommand(
-                desc="Установка окружения poetry",
-                command="poetry install",
-                need_confirm=False,
-                work_dir_rel=directory,
-            ).execute()
-
-
-class PoetryRemove(PoetryBase):
-    def _execute(self) -> None:
-        for directory in self._dirs:
-            log.info("Удалить в папке: {0}".format(directory))
-            SimpleCommand(
-                desc="Удаление окружения poetry",
-                command="poetry env remove --all",
-                need_confirm=False,
-                work_dir_rel=directory,
-            ).execute()
-
-
-class PoetryUpdate(PoetryBase):
-    def _execute(self) -> None:
-        for directory in self._dirs:
-            log.info("Обновить в папке: {0}".format(directory))
-            SimpleCommand(
-                desc="Обновление окружения poetry",
-                command="poetry update",
-                need_confirm=False,
-                work_dir_rel=directory,
-            ).execute()
 
 
 # obsolete ---------------------------------------------------------------------

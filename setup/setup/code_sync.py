@@ -23,7 +23,6 @@ class CodeSync(BaseTask):
         desc: str,
         need_confirm: bool = True,
         remote_path: str = "user@target:/destination/project/",
-        dry_run: bool = False,
     ) -> None:
         """Базовый класс для задачи.
 
@@ -35,17 +34,20 @@ class CodeSync(BaseTask):
             Требуется подтверждение запуска
         remote_path: str
             ssh-путь на удаленной машине
-        dry_run: bool
-            проверка выполнения без синхронизации
         """
         super().__init__(desc, need_confirm)
         self.__remote_path = remote_path
-        self.__dry_run = dry_run
 
     def _execute(self) -> None:
-        command = CMD.format(
-            remote_path=self.__remote_path,
-            dry_run="--dry-run" if self.__dry_run else "",
-        )
-        log.info("Выполнение команды:\n{0}".format(command))
-        os.system(command)  # noqa: S605
+        command = CMD.format(remote_path=self.__remote_path)
+        log.debug("Выполнение команды:\n{0}".format(command))
+        log.info("Запускаем тестовый прогон:")
+        os.system("{0} --dry-run".format(command))  # noqa: S605
+        log.info("Синхронизировать файлы? (y/n)")
+        ans = input()  # noqa: WPS421
+        while True:
+            if ans == "y":
+                os.system(command)  # noqa: S605
+                return
+            elif ans == "n":
+                return

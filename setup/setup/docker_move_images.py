@@ -43,6 +43,18 @@ class DockerMoveImages(BaseTask):
         )
         self.__push_images(images_wo_repo, self.__repo_to)
 
+    def __get_images_from_compose(self, profile: str) -> list[str]:
+        cmd: str = "docker compose --profile {profile} config --images"
+        return (
+            subprocess.run(
+                args=cmd.format(profile=profile).split(),
+                capture_output=True,
+                text=True,
+            )
+            .stdout.strip()
+            .split("\n")
+        )
+
     def __pull_images(
         self,
         images: list[str],
@@ -75,18 +87,6 @@ class DockerMoveImages(BaseTask):
                 ).split(),
             )
 
-    def __get_images_from_compose(self, profile: str) -> list[str]:
-        cmd: str = "docker compose --profile {profile} config --images"
-        return (
-            subprocess.run(
-                args=cmd.format(profile=profile).split(),
-                capture_output=True,
-                text=True,
-            )
-            .stdout.strip()
-            .split("\n")
-        )
-
     def __remove_repo(self, images: list[str], repo: str) -> list[str]:
         images_wo_repo: list[str] = []
         for image in images:
@@ -102,7 +102,7 @@ class DockerMoveImages(BaseTask):
         repo_from: str,
         repo_to: str,
     ) -> None:
-        cmd: str = "docker tag {repo_from}/{image} {repo_to}/{image}"
+        cmd: str = "docker tag {repo_from}/{image} {repo_to}/image"
         for image in images:
             subprocess.run(
                 cmd.format(

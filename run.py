@@ -68,10 +68,7 @@ class Tasks(NamedTuple):
     )
     codesync: setup.BaseTask = setup.CodeSync(
         desc="Синхронизация кода с целевой системой",
-    )
-    codesync_test: setup.BaseTask = setup.CodeSync(
-        desc="Синхронизация кода с целевой системой (dry_run)",
-        dry_run=True,
+        remote_path="admin@target:/home/admin/code",
     )
     poetry_install: setup.BaseTask = setup.SimpleCommandMultifolder(
         desc="Установка виртуальных окружений python",
@@ -277,7 +274,14 @@ sudo systemctl restart docker
 
 
 class ComposeTasks(NamedTuple):
-    build: setup.ComposeTask = setup.ComposeTask(
+    dev_prepare: setup.ComposeTask = setup.ComposeTask(
+        desc="Подготовка dev системы",
+        subtasks=[
+            TASKS.poetry_install,
+            TASKS.npm_install,
+        ],
+    )
+    dev_build: setup.ComposeTask = setup.ComposeTask(
         desc="Сборка проекта",
         subtasks=[
             TASKS.poetry_update,
@@ -289,7 +293,6 @@ class ComposeTasks(NamedTuple):
             TASKS.prettier,
             TASKS.compodoc,
             TASKS.docker_build_images,
-            TASKS.docker_move_images,
         ],
     )
     dev_clear: setup.ComposeTask = setup.ComposeTask(
@@ -299,18 +302,23 @@ class ComposeTasks(NamedTuple):
             TASKS.npm_remove,
         ],
     )
-    dev_prepare: setup.ComposeTask = setup.ComposeTask(
-        desc="Подготовка dev системы",
+    target_install_1: setup.ComposeTask = setup.ComposeTask(
+        desc="Установка на целевой системе, ч.1",
         subtasks=[
-            TASKS.poetry_install,
-            TASKS.npm_install,
+            TASKS.codesync,
+        ],
+    )
+    target_install_2: setup.ComposeTask = setup.ComposeTask(
+        desc="Установка на целевой системе, ч.2",
+        subtasks=[
+            TASKS.codesync,
+            TASKS.docker_move_images,
         ],
     )
 
     # build: setup.ComposeTask = setup.ComposeTask(
     #     desc="Сборка проекта",
     #     subtasks=[
-    #         TASKS.client_docs,
     #         TASKS.webapp_build,
     #         TASKS.server_export_openapi,
     #     ],

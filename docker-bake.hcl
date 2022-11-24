@@ -17,7 +17,7 @@ PLATFORMS = [
     "linux/arm64"
 ]
 
-target "sh_base_image" {
+target "base_python_image" {
     dockerfile = "shared/Dockerfile"
     args = {
         POETRY_VER = "${POETRY_VER}",
@@ -47,7 +47,7 @@ target "sh_deconz_hub" {
 
 target "sh_driver_deconz" {
     contexts = {
-        sh_base_image = "target:sh_base_image"
+        base_python_image = "target:base_python_image"
     }
     dockerfile = "driver_deconz/Dockerfile"
     tags = [ "${REPO}/smarthome/sh_driver_deconz" ]
@@ -56,7 +56,7 @@ target "sh_driver_deconz" {
 
 target "sh_setup" {
     contexts = {
-        sh_base_image = "target:sh_base_image"
+        base_python_image = "target:base_python_image"
     }
     dockerfile = "setup/Dockerfile"
     tags = [ "${REPO}/smarthome/sh_setup" ]

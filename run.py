@@ -1,5 +1,24 @@
 #!/usr/bin/env python3
-"""Скрипты установки."""
+"""Скрипты установки.
+
+Запускаются в python3.7 и выше.
+
+Исходный репозиторий - https://github.com/Konstantin-Dudersky/setup.
+
+Обновить из репозитория:
+git clone https://github.com/Konstantin-Dudersky/setup.git setup_clone \
+&& rm -rf setup_clone/.git \
+&& rsync -va setup_clone/ setup \
+&& rm -rf setup_clone
+
+Использование:
+
+- вывести список задач для выполнения:
+./dev.py
+
+- запустить задачу task_name на выполнение:
+./dev.py task_name
+"""
 
 import sys
 from typing import NamedTuple, Set
@@ -13,7 +32,7 @@ BIND_SRC_FOLDER: str = "type=bind,src=`pwd`,dst=/root/code"
 PARENT_FOLDER: str = "../."
 
 
-python_projects: Set[str] = {
+PYTHON_PROJECTS: Set[str] = {
     "./db",
     "./driver_deconz",
     "./shared",
@@ -56,15 +75,15 @@ class Tasks(NamedTuple):
     )
     poetry_install: setup.BaseTask = setup.poetry.PoetryInstall(
         desc="Установка виртуальных окружений python",
-        dirs=python_projects,
+        dirs=PYTHON_PROJECTS,
     )
     poetry_remove: setup.BaseTask = setup.poetry.PoetryRemove(
         desc="Удаление виртуальных окружений python",
-        dirs=python_projects,
+        dirs=PYTHON_PROJECTS,
     )
     poetry_update: setup.BaseTask = setup.poetry.PoetryUpdate(
         desc="Обновление виртуальных окружений python",
-        dirs=python_projects,
+        dirs=PYTHON_PROJECTS,
     )
     build_docker_images: setup.BaseTask = setup.SimpleCommand(
         desc="Сборка образов docker",
@@ -224,8 +243,14 @@ class ComposeTasks(NamedTuple):
             TASKS.build_docker_images,
         ],
     )
-    clear: setup.ComposeTask = setup.ComposeTask(
-        desc="Очистка проекта",
+    dev_clear: setup.ComposeTask = setup.ComposeTask(
+        desc="Очистка dev системы",
+        subtasks=[
+            TASKS.poetry_remove,
+        ],
+    )
+    dev_prepare: setup.ComposeTask = setup.ComposeTask(
+        desc="Подготовка dev системы",
         subtasks=[
             TASKS.poetry_remove,
         ],

@@ -11,7 +11,7 @@ log.setLevel(logging.DEBUG)
 
 CMD: Final[str] = (
     "rsync -vhra . {remote_path} --include='**.gitignore' --exclude='/.git' "
-    + "--filter=':- .gitignore' --delete-after {dry_run}"
+    + "--filter=':- .gitignore' --delete-after"
 )
 
 

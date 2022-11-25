@@ -15,7 +15,7 @@ import logging
 import os
 from typing import Callable
 
-from ._shared import get_logger
+from ..internal.shared import get_logger
 
 log = get_logger(__name__, logging.DEBUG)
 

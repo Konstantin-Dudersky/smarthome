@@ -20,7 +20,6 @@ settings: SettingsSchema = settings_store.settings
 
 import ipaddress
 import logging
-import os
 from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any
@@ -43,8 +42,6 @@ class Prof(Enum):
     """Профили настроек."""
 
     api = "api"
-    dev = "dev"
-    driver_ascue = "driver_ascue"
     deconz_hub = "deconz_hub"
     driver_deconz = "driver_deconz"
     db = "db"

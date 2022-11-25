@@ -5,7 +5,7 @@ import logging
 import os
 from typing import Callable
 
-from ._shared import dir_rel_to_abs
+from ..internal.shared import dir_rel_to_abs
 
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

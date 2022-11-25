@@ -12,7 +12,7 @@ from .tasks import systemd
 from .tasks import user_intercation
 from .tasks.create_folder_abs import main as create_folder_abs
 from .tasks.create_folder_rel import main as create_folder_rel
-from .tasks.main import Task, execute
+from .tasks.main import Runner
 from .tasks.ng_build import main as ng_build
 from .tasks.ng_dist import main as ng_dist
 from .tasks.pgadmin import main as pgadmin
@@ -33,12 +33,11 @@ __all__ = [
     "ComposeTask",
     "CodeSync",
     "DockerMoveImages",
-    "Task",
+    "Runner",
     "call_func",
     "create_folder_abs",
     "create_folder_rel",
     "docker_tasks",
-    "execute",
     "ng_build",
     "ng_dist",
     "pgadmin",
@@ -53,4 +52,5 @@ __all__ = [
     "tauri_build",
     "timescaledb_install",
     "timescaledb_update_db",
+    "user_intercation",
 ]

@@ -138,18 +138,18 @@ class Tasks(NamedTuple):
 
 
 class TasksOld(NamedTuple):
-    webapp_build: setup.Task = setup.Task(
-        desc="Сборка проекта Angular",
-        task=setup.ng_build(
-            work_dir_relative="../webapp",
-            project="client",
-            base_href="/",
-        ),
-    )
-    docker_install: setup.Task = setup.Task(
-        desc="Установка docker",
-        task=setup.docker_tasks.install(),
-    )
+    # webapp_build: setup.Task = setup.Task(
+    #     desc="Сборка проекта Angular",
+    #     task=setup.ng_build(
+    #         work_dir_relative="../webapp",
+    #         project="client",
+    #         base_href="/",
+    #     ),
+    # )
+    # docker_install: setup.Task = setup.Task(
+    #     desc="Установка docker",
+    #     task=setup.docker_tasks.install(),
+    # )
     # server_export_openapi: setup.Task = setup.Task(
     #     desc="Экспорт спецификации API",
     #     task=setup.cmd_in_dir(
@@ -169,26 +169,27 @@ class TasksOld(NamedTuple):
     #         work_dir=".", command=f"sudo systemctl stop {SYSTEMD_SERVICE}"
     #     ),
     # )
-    system_share_folder: setup.Task = setup.Task(
-        desc="Создание общей папки", task=setup.samba("../../share")
-    )
-    server_systemd_create: setup.Task = setup.Task(
-        desc="Создание сервиса systemd",
-        task=setup.systemd.docker_compose(
-            service_name=SYSTEMD_SERVICE,
-            profile="server",
-            work_dir_rel="../.",
-        ),
-    )
-    alembic_upgrade: setup.Task = setup.Task(
-        desc="Обновить схему БД",
-        task=setup.docker_tasks.run_exec_remove(
-            work_dir_rel=PARENT_FOLDER,
-            image=IMAGE_SETUP,
-            mount=BIND_SRC_FOLDER,
-            command="poetry run python main.py venv_alembic_upgrade",
-        ),
-    )
+    # system_share_folder: setup.Task = setup.Task(
+    #     desc="Создание общей папки", task=setup.samba("../../share")
+    # )
+    # server_systemd_create: setup.Task = setup.Task(
+    #     desc="Создание сервиса systemd",
+    #     task=setup.systemd.docker_compose(
+    #         service_name=SYSTEMD_SERVICE,
+    #         profile="server",
+    #         work_dir_rel="../.",
+    #     ),
+    # )
+    # alembic_upgrade: setup.Task = setup.Task(
+    #     desc="Обновить схему БД",
+    #     task=setup.docker_tasks.run_exec_remove(
+    #         work_dir_rel=PARENT_FOLDER,
+    #         image=IMAGE_SETUP,
+    #         mount=BIND_SRC_FOLDER,
+    #         command="poetry run python main.py venv_alembic_upgrade",
+    #     ),
+    # )
+    pass
 
 
 TASKS = Tasks()
@@ -196,7 +197,7 @@ TASKS = Tasks()
 
 DOCKER_INSECURE: str = """
 Добавить в файл `/etc/docker/daemon.json` :
-
+sys.argv, TASKS, COMPOSE_TASKS
 $ sudo nano /etc/docker/daemon.json
 
 строку:
@@ -302,4 +303,4 @@ COMPOSE_TASKS = ComposeTasks()
 
 
 if __name__ == "__main__":
-    setup.execute(sys.argv, TASKS, COMPOSE_TASKS)
+    setup.Runner(sys.argv, TASKS, COMPOSE_TASKS)

@@ -7,7 +7,7 @@ import logging
 import os
 from typing import Callable, Literal
 
-from ._shared import get_logger
+from ..internal.shared import get_logger
 from ..internal.base_task import BaseTask
 
 

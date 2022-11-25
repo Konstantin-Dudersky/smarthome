@@ -4,7 +4,7 @@ import logging
 import os
 from typing import Final
 
-from .internal.base_task import BaseTask
+from ..internal.base_task import BaseTask
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

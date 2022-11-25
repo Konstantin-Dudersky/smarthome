@@ -1,10 +1,12 @@
+"""Запуск задач."""
+
 import logging
 import sys
 from typing import Callable, List, NamedTuple, Optional
 
 from ._shared import get_logger
-from .internal.base_task import BaseTask
-from .internal.compose_task import ComposeTask
+from ..internal.base_task import BaseTask
+from ..internal.compose_task import ComposeTask
 
 
 log = get_logger(__name__, logging.DEBUG)

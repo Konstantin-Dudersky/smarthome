@@ -4,7 +4,7 @@
 docker buildx bake --builder builder -f docker-bake.hcl --push pi
 */
 
-PYTHON_VER = "3.11.0"
+PYTHON_VER = "3.11.0" // https://www.python.org/downloads/
 POETRY_VER = "1.2.2" // https://github.com/python-poetry/poetry
 POSTGRE_VER = "14.6" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
 TIMESCALEDB_VER = "2.8.1"

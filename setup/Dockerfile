@@ -1,4 +1,4 @@
-FROM sh_base_image AS sh_setup
+FROM base_python_image
 # контекст - родительская папка
 COPY . /root/code 
 WORKDIR /root/code/setup

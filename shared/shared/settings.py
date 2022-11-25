@@ -22,6 +22,7 @@ import ipaddress
 import logging
 import os
 from enum import Enum
+from pathlib import Path
 from typing import Annotated, Any
 
 from dotenv import (
@@ -34,7 +35,7 @@ from typing_extensions import Self
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-ENV_FILE: str = "../.env"
+ENV_FILE: str = ".env"
 ENCODING: str = "utf-8"
 
 
@@ -139,7 +140,10 @@ def check_item_in_profile(
     return bool(profiles & set(schema_item["profiles"]))
 
 
-def create_env(profiles: set[Prof]) -> None:
+def create_env(
+    work_dir_abs: Path,
+    profiles: set[Prof],
+) -> None:
     """Записывает файл с дефолтными значениями.
 
     Экспортируются настройки,
@@ -150,23 +154,29 @@ def create_env(profiles: set[Prof]) -> None:
     ----------
     profiles
         профили для экспорта настроек
+    work_dir_abs
+        абсолютный путь к папке, в которой необходимо сохранить файл
     """
     print(  # noqa: WPS421
         "Экспортируем настройки для профилей: ",
         [profile.name for profile in profiles],
     )
+
+    env_file = Path("{0}/{1}".format(work_dir_abs, ENV_FILE)).resolve()
+
     print("\nНастройки:\n")  # noqa: WPS421
     for key, setting_default in SettingsSchema.construct().dict().items():
         if not check_item_in_profile(key, profiles):
             continue
+
         setting_actual: str | None = get_key(
-            dotenv_path=ENV_FILE,
+            dotenv_path=env_file,
             key_to_get=key,
             encoding=ENCODING,
         )
         if setting_actual is None:
             set_key(
-                dotenv_path=ENV_FILE,
+                dotenv_path=env_file,
                 key_to_set=key,
                 value_to_set=setting_default,
                 quote_mode="never",
@@ -177,9 +187,8 @@ def create_env(profiles: set[Prof]) -> None:
         else:
             print("{0} = {1}".format(key, setting_default))  # noqa: WPS421
     print(  # noqa: WPS421
-        "\nНастройки сохранены в файле:\n\n{path}/{filename}".format(
-            path=os.getcwd(),
-            filename=ENV_FILE,
+        "\nНастройки сохранены в файле:\n{env_file}".format(
+            env_file=env_file,
         ),
     )
 

@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 from typing import Iterable
 
-from .internal.base_task import BaseTask
+from ..internal.base_task import BaseTask
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

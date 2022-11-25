@@ -8,7 +8,8 @@
 Обновить из репозитория:
 git clone https://github.com/Konstantin-Dudersky/setup.git setup_clone \
 && rm -rf setup_clone/.git \
-&& rsync -va setup_clone/ setup \
+&& rsync -va setup_clone/ setup --ignore-existing \
+&& rsync -va setup_clone/setup/ setup/setup \
 && rm -rf setup_clone
 
 Использование:
@@ -35,26 +36,12 @@ PARENT_FOLDER: str = "../."
 PYTHON_PROJECTS: Set[str] = {
     "./db",
     "./driver_deconz",
+    "./setup",
     "./shared",
 }
 NG_PROJECTS: Set[str] = {
     "./webapp",
 }
-
-
-def is_venv() -> bool:
-    """Проверяем, что модуль запущен в виртуальном окружении.
-
-    Returns
-    -------
-    bool
-        True - в виртуальном окружении
-    """
-    is_real_prefix: bool = hasattr(sys, "real_prefix")  # noqa: WPS421
-    is_base_prefix: bool = (
-        hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix  # noqa: WPS421
-    )
-    return is_real_prefix or is_base_prefix
 
 
 class Tasks(NamedTuple):
@@ -145,17 +132,12 @@ class Tasks(NamedTuple):
         repo_to="target:5000",
         arch="linux/arm64",
     )
+    create_env: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
+        desc="Создать файл .env",
+    )
 
 
 class TasksOld(NamedTuple):
-    # docker_compose_system: setup.Task = setup.Task(
-    #     desc="Запустить системные сервисы",
-    #     task=setup.cmd_in_dir(
-    #         work_dir="../.",
-    #         command="docker compose -f docker-compose.system.yml up -d",
-    #     ),
-    # )
-
     webapp_build: setup.Task = setup.Task(
         desc="Сборка проекта Angular",
         task=setup.ng_build(
@@ -167,22 +149,6 @@ class TasksOld(NamedTuple):
     docker_install: setup.Task = setup.Task(
         desc="Установка docker",
         task=setup.docker_tasks.install(),
-    )
-    # docker_compose_pull: setup.Task = setup.Task(
-    #     desc="Скачать образы из dockerhub",
-    #     task=setup.cmd_in_dir(
-    #         work_dir="../.",
-    #         command="docker compose --profile server pull",
-    #     ),
-    # )
-    create_env: setup.Task = setup.Task(
-        desc="Создать файл .env с настройками",
-        task=setup.docker_tasks.run_exec_remove(
-            work_dir_rel=PARENT_FOLDER,
-            image=IMAGE_SETUP,
-            mount=BIND_SRC_FOLDER,
-            command="poetry run python main.py venv_create_env",
-        ),
     )
     # server_export_openapi: setup.Task = setup.Task(
     #     desc="Экспорт спецификации API",
@@ -228,40 +194,6 @@ class TasksOld(NamedTuple):
 TASKS = Tasks()
 
 
-if is_venv():
-    from alembic import config as alembic_config
-
-    # from server import utils  # noqa: WPS433
-    from server.utils import settings
-
-    class TasksEnv(NamedTuple):
-        """Перечень задач.
-
-        Могут выполняться только в установленном виртуальном окружении.
-        """
-
-        venv_create_env: setup.Task = setup.Task(
-            desc="Создать файл .env с настройками",
-            task=setup.call_func.call_func(
-                work_dir_rel=".",
-                func=lambda: settings.create_env(),
-            ),
-            confirm=False,
-        )
-        venv_alembic_upgrade: setup.Task = setup.Task(
-            desc="Обновить схему БД",
-            task=setup.call_func.call_func(
-                work_dir_rel="../server",
-                func=lambda: alembic_config.main(argv=["upgrade", "head"]),
-            ),
-            confirm=False,
-        )
-
-    tasks_env = TasksEnv()
-else:
-    tasks_env = None
-
-
 DOCKER_INSECURE: str = """
 Добавить в файл `/etc/docker/daemon.json` :
 
@@ -285,16 +217,21 @@ class ComposeTasks(NamedTuple):
             TASKS.npm_install,
         ],
     )
-    dev_build: setup.ComposeTask = setup.ComposeTask(
-        desc="Сборка проекта",
+    dev_update: setup.ComposeTask = setup.ComposeTask(
+        desc="Обновление зависимостей проекта",
         subtasks=[
             TASKS.poetry_update,
             TASKS.poetry_show_outdated,
+            TASKS.npm_update,
+            TASKS.npm_outdated,
+        ],
+    )
+    dev_build: setup.ComposeTask = setup.ComposeTask(
+        desc="Сборка проекта",
+        subtasks=[
             TASKS.black,
             TASKS.pyright,
             TASKS.flake8,
-            TASKS.npm_update,
-            TASKS.npm_outdated,
             TASKS.prettier,
             TASKS.compodoc,
             TASKS.docker_build_images,
@@ -365,4 +302,4 @@ COMPOSE_TASKS = ComposeTasks()
 
 
 if __name__ == "__main__":
-    setup.execute(sys.argv, TASKS, tasks_env, COMPOSE_TASKS)
+    setup.execute(sys.argv, TASKS, COMPOSE_TASKS)

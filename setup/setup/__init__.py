@@ -1,30 +1,30 @@
 """Скрипты установки."""
 
-from .code_sync import CodeSync
-from .docker_move_images import DockerMoveImages
-from .simple_command import SimpleCommand, SimpleCommandMultifolder
+from .tasks.code_sync import CodeSync
+from .tasks.docker_move_images import DockerMoveImages
+from .tasks.simple_command import SimpleCommand, SimpleCommandMultifolder
 from .internal.base_task import BaseTask
 from .internal.compose_task import ComposeTask
 
-from . import call_func
-from . import docker_tasks
-from . import systemd
-from . import user_intercation
-from .create_folder_abs import main as create_folder_abs
-from .create_folder_rel import main as create_folder_rel
-from .main import Task, execute
-from .ng_build import main as ng_build
-from .ng_dist import main as ng_dist
-from .pgadmin import main as pgadmin
-from .poetry import poetry_self_install, poetry_self_update
-from .port_redirect import main as port_redirect
-from .postgresql_add_db import main as postgresql_add_db
-from .postgresql_install import main as postgresql_install
-from .python import main as python
-from .samba import main as samba
-from .tauri_build import main as tauri_build
-from .timescaledb_install import main as timescaledb_install
-from .timescaledb_update_db import main as timescaledb_update_db
+from .tasks import call_func
+from .tasks import docker_tasks
+from .tasks import systemd
+from .tasks import user_intercation
+from .tasks.create_folder_abs import main as create_folder_abs
+from .tasks.create_folder_rel import main as create_folder_rel
+from .tasks.main import Task, execute
+from .tasks.ng_build import main as ng_build
+from .tasks.ng_dist import main as ng_dist
+from .tasks.pgadmin import main as pgadmin
+from .tasks.poetry import poetry_self_install, poetry_self_update
+from .tasks.port_redirect import main as port_redirect
+from .tasks.postgresql_add_db import main as postgresql_add_db
+from .tasks.postgresql_install import main as postgresql_install
+from .tasks.python import main as python
+from .tasks.samba import main as samba
+from .tasks.tauri_build import main as tauri_build
+from .tasks.timescaledb_install import main as timescaledb_install
+from .tasks.timescaledb_update_db import main as timescaledb_update_db
 
 __all__ = [
     "SimpleCommand",
@@ -49,7 +49,6 @@ __all__ = [
     "postgresql_install",
     "python",
     "samba",
-    "simple_command",
     "systemd",
     "tauri_build",
     "timescaledb_install",

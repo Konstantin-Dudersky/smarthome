@@ -120,9 +120,14 @@ class Tasks(NamedTuple):
         command="rm -rf node_modules",
         dirs=NG_PROJECTS,
     )
+    npm_outdated: setup.BaseTask = setup.SimpleCommandMultifolder(
+        desc="Проверка устаревших пакетов npm",
+        command="npm outdated",
+        dirs=NG_PROJECTS,
+    )
     prettier: setup.BaseTask = setup.SimpleCommandMultifolder(
         desc="Форматирование исходников веб-приложения",
-        dirs=NG_PROJECTS,        
+        dirs=NG_PROJECTS,
         command="npx prettier --write src",
     )
     compodoc: setup.BaseTask = setup.SimpleCommandMultifolder(
@@ -140,7 +145,6 @@ class Tasks(NamedTuple):
         repo_to="target:5000",
         arch="linux/arm64",
     )
-    
 
 
 class TasksOld(NamedTuple):
@@ -290,6 +294,7 @@ class ComposeTasks(NamedTuple):
             TASKS.pyright,
             TASKS.flake8,
             TASKS.npm_update,
+            TASKS.npm_outdated,
             TASKS.prettier,
             TASKS.compodoc,
             TASKS.docker_build_images,

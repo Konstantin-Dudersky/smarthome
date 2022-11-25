@@ -9,11 +9,14 @@ import httpx
 
 from pydantic import BaseModel
 
+from .deconz import schemas
+from .deconz.api import api
+
 from src.base.logic import CyclicRun
 from src.base.signals import SigBase, SigBool, SigFloat, Qual, Units
 from src.utils.logger import LoggerLevel, get_logger
 
-from . import api, deconz, schemas
+from . import deconz
 
 log = get_logger(__name__, LoggerLevel.INFO)
 

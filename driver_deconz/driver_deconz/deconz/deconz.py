@@ -13,7 +13,7 @@ from websockets import client, exceptions
 
 from src.utils.settings import settings
 
-from .api import get_config
+from .api.api import get_config
 from . import schemas
 
 

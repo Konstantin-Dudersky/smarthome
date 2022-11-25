@@ -5,7 +5,7 @@ import logging
 import httpx
 from shared.settings import settings_store
 
-from .schemas import ConfigModel
+from ..schemass import ConfigModel
 
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -14,7 +14,7 @@ settings = settings_store.settings
 
 DECONZ_REST_URL = (
     f"http://{settings.deconz_hub_host}:{settings.deconz_hub_port_api}"
-    f"/api/{settings.deconz_api_key}"
+    f"/api/{settings.deconz_hub_api_key}"
 )
 
 
@@ -32,7 +32,7 @@ async def _base_query(endpoint: str) -> httpx.Response | None:
             return None
 
 
-# configuration ---------------------------------------------------------------
+# configuration ----------------------------------------------------------------
 
 
 async def get_config() -> ConfigModel | None:
@@ -46,7 +46,7 @@ async def get_config() -> ConfigModel | None:
     return ConfigModel(**config.json())
 
 
-# sensors ---------------------------------------------------------------------
+# sensors ----------------------------------------------------------------------
 
 
 async def get_sensor(sensor_id: int) -> httpx.Response | None:

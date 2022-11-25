@@ -49,6 +49,7 @@ black = "*"
 
 [tool.pyright]
 pythonPlatform = "Linux"
-pythonVersion = "3.10"
+pythonVersion = "3.11"
+reportUnnecessaryTypeIgnoreComment = true
 stubPath = '.venv/typings'
 typeCheckingMode = "strict"

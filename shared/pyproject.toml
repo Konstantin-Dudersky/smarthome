@@ -24,7 +24,16 @@ poethepoet = "0.16.4"
 pydantic = "1.10.2"
 python-dotenv = "0.21.0"
 
+
 [tool.poetry.group.dev.dependencies]
 black = "*"
 pandas-stubs = "*"
 wemake-python-styleguide = "0.17.0"
+
+
+[tool.pyright]
+pythonPlatform = "Linux"
+pythonVersion = "3.11"
+reportUnnecessaryTypeIgnoreComment = true
+stubPath = '.venv/typings'
+typeCheckingMode = "strict"

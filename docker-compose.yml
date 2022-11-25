@@ -22,7 +22,7 @@ services:
       - pi
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - sh_deconz_hub_volume:/opt/
+      - sh_deconz_hub_volume:/opt/deCONZ
 
   sh_db:
     image: target:5000/smarthome/sh_db

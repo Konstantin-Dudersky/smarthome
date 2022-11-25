@@ -25,20 +25,23 @@ packages = [{ include = "driver_deconz" }]
 [tool.poetry.dependencies]
 python = "3.11"
 
-httpx = "0.23.0"
+httpx = "0.23.1"
 pydantic = "1.10.2"
-websockets = "10.3"
+websockets = "10.4"
 
 shared = { path = "../shared", develop = true }
 db = { path = "../db", develop = true }
 
+
 [tool.poetry.group.dev.dependencies]
 black = "*"
+poethepoet = "*"
 wemake-python-styleguide = "*"
 
 
 [tool.pyright]
 pythonPlatform = "Linux"
-pythonVersion = "3.10"
+pythonVersion = "3.11"
+reportUnnecessaryTypeIgnoreComment = true
 stubPath = '.venv/typings'
 typeCheckingMode = "strict"

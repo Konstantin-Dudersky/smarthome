@@ -1,0 +1,21 @@
+_id: req_20e1f3d512b94e598c1e884b18ad6c8b
+type: Request
+parentId: wrk_efa2a295000b4074a4cfc8c450bbfaea
+modified: 1669456031710
+created: 1669455953868
+url: http://192.168.101.10:8010/api
+name: New Request
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1669455953868
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

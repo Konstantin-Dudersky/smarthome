@@ -1,0 +1,10 @@
+_id: fld_b730372456264cb1b461840d48fa7cd6
+type: RequestGroup
+parentId: wrk_efa2a295000b4074a4cfc8c450bbfaea
+modified: 1669456245017
+created: 1669456245017
+name: deconz_hub
+description: ""
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: -1669456245017

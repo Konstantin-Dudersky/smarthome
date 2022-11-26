@@ -1,0 +1,21 @@
+_id: req_b62c42017ac2488da73e47c4694669fa
+type: Request
+parentId: fld_aa5d94b14bbf48fcb6078ea942a079c0
+modified: 1669456626411
+created: 1669456596868
+url: "{{ _.deconz_hub_api }}/api"
+name: New Request
+description: ""
+method: POST
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1669456596868
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

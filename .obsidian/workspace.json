@@ -31,7 +31,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -97,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "driver_deconz/README.md",
+                "file": "deconz_hub/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "driver_deconz/README.md",
+                "file": "deconz_hub/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "driver_deconz/README.md"
+                "file": "deconz_hub/README.md"
               }
             }
           }
@@ -148,10 +149,10 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "e1dad8f7892dc9ca",
+  "active": "f4617d2727432f7c",
   "lastOpenFiles": [
-    "deconz_hub/README.md",
     "driver_deconz/README.md",
+    "deconz_hub/README.md",
     "setup/README.md",
     "README.md",
     "todo.md",

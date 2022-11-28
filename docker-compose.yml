@@ -4,67 +4,7 @@
 version: '3.8'
 name: smarthome
 services:
-
-  sh_deconz_hub:
-    image: target:5000/smarthome/sh_deconz_hub
-    container_name: sh_deconz_hub
-    hostname: sh_deconz_hub
-    devices:
-      - /dev/ttyACM0
-    environment:
-      - DECONZ_VNC_MODE=1
-    ports:
-      - "${deconz_hub_port_api}:80"
-      - "${deconz_hub_port_ws}:443"
-      - "${deconz_hub_port_vnc}:5900"
-    privileged: true
-    profiles:
-      - pi
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - sh_deconz_hub_volume:/opt/deCONZ
-
-  sh_db:
-    image: target:5000/smarthome/sh_db
-    container_name: sh_db
-    hostname: sh_db
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
-    environment:
-      - POSTGRES_USER=${db_user}
-      - POSTGRES_PASSWORD=${db_password}
-    ports:
-      - "${db_port}:5432"
-    profiles:
-      - pi
-    volumes:
-      - sh_db_volume:/home/postgres/pgdata/data
-      - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
-
-  sh_driver_deconz:
-    image: target:5000/smarthome/sh_driver_deconz
-    container_name: sh_driver_deconz
-    hostname: sh_driver_deconz
-    ports:
-      - "${driver_deconz_port}:8000"
-    profiles:
-      - pi
-        # coca_webapp:
-        #   image: inosat/coca_webapp
-        #   container_name: coca_webapp
-        #   build:
-        #     context: .
-        #     dockerfile: webapp/Dockerfile
-        #     network: 'host'
-        #     target: webapp
-        #   env_file: .env
-        #   ports:
-        #     - "${service_webapp_port}:443"
-        #   profiles:
-        #     - server
-        #   volumes:
-        #     - ${ssl_certfile}:/root/certs/server.crt
-        #     - ${ssl_keyfile}:/root/certs/server.key
-        #     - ./webapp/dist/webapp:/usr/share/nginx/html
+  # system ---------------------------------------------------------------------
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -120,6 +60,77 @@ services:
     volumes:
       - portainer_data_volume:/data
       - /var/run/docker.sock:/var/run/docker.sock
+
+  # pi -------------------------------------------------------------------------
+
+  sh_deconz_hub:
+    image: target:5000/smarthome/sh_deconz_hub
+    container_name: sh_deconz_hub
+    hostname: sh_deconz_hub
+    devices:
+      - /dev/ttyACM0
+    environment:
+      - DECONZ_VNC_MODE=1
+      - DECONZ_VNC_PASSWORD=${deconz_hub_vnc_password}
+    ports:
+      - "${deconz_hub_port_api}:80"
+      - "${deconz_hub_port_ws}:443"
+      - "${deconz_hub_port_vnc}:5900"
+    privileged: true
+    profiles:
+      - pi
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - sh_deconz_hub_volume:/opt/deCONZ
+
+  sh_db:
+    image: target:5000/smarthome/sh_db
+    container_name: sh_db
+    hostname: sh_db
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - POSTGRES_USER=${db_user}
+      - POSTGRES_PASSWORD=${db_password}
+    ports:
+      - "${db_port}:5432"
+    profiles:
+      - pi
+    volumes:
+      - sh_db_volume:/home/postgres/pgdata/data
+      - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
+
+  sh_driver_deconz:
+    image: target:5000/smarthome/sh_driver_deconz
+    container_name: sh_driver_deconz
+    hostname: sh_driver_deconz
+    ports:
+      - "${driver_deconz_port}:8000"
+    profiles:
+      - pi
+
+  setup:
+    image: target:5000/smarthome/sh_setup
+    container_name: setup
+    hostname: setup
+    profiles:
+      - pi
+        # coca_webapp:
+        #   image: inosat/coca_webapp
+        #   container_name: coca_webapp
+        #   build:
+        #     context: .
+        #     dockerfile: webapp/Dockerfile
+        #     network: 'host'
+        #     target: webapp
+        #   env_file: .env
+        #   ports:
+        #     - "${service_webapp_port}:443"
+        #   profiles:
+        #     - server
+        #   volumes:
+        #     - ${ssl_certfile}:/root/certs/server.crt
+        #     - ${ssl_keyfile}:/root/certs/server.key
+        #     - ./webapp/dist/webapp:/usr/share/nginx/html
 
 volumes:
   sh_db_volume:

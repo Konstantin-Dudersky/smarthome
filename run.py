@@ -134,6 +134,7 @@ class Tasks(NamedTuple):
     )
     create_env: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
         desc="Создать файл .env",
+        image="localhost:5000/smarthome/sh_setup"
     )
 
 

@@ -10,7 +10,7 @@ import httpx
 from pydantic import BaseModel
 
 from .deconz import schemas
-from .deconz.api import api
+from .deconz import api
 
 from src.base.logic import CyclicRun
 from src.base.signals import SigBase, SigBool, SigFloat, Qual, Units

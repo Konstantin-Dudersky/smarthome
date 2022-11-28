@@ -226,8 +226,3 @@ class Websocket:
             raise ValueError(
                 f"Неизвестный формат сообщения websocket:\n{data}",
             ) from exc
-
-
-if __name__ == "__main__":
-    ws = Websocket()
-    asyncio.run(ws.task())

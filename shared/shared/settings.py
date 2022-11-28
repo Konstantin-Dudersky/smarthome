@@ -34,7 +34,7 @@ from typing_extensions import Self
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
-ENV_FILE: str = ".env"
+ENV_FILE: str = "../.env"
 ENCODING: str = "utf-8"
 
 
@@ -68,17 +68,17 @@ class SettingsSchema(BaseSettings):
     db_host: Annotated[
         ipaddress.IPv4Address,
         Field(profiles=[Prof.db]),
-    ] = ipaddress.IPv4Address("192.168.101.11")
+    ] = ipaddress.IPv4Address("192.168.101.10")
     db_port: Annotated[int, Field(profiles=[Prof.db])] = 5432
 
     driver_deconz_host: Annotated[
         ipaddress.IPv4Address,
         Field(profiles=[Prof.driver_deconz]),
-    ] = ipaddress.IPv4Address("192.168.101.11")
+    ] = ipaddress.IPv4Address("192.168.101.10")
     driver_deconz_port: Annotated[
         int,
         Field(profiles=[Prof.driver_deconz]),
-    ] = 8003
+    ] = 8012
 
     deconz_hub_api_key: Annotated[
         SecretStr,
@@ -87,11 +87,11 @@ class SettingsSchema(BaseSettings):
     deconz_hub_host: Annotated[
         ipaddress.IPv4Address,
         Field(profiles=[Prof.deconz_hub]),
-    ] = ipaddress.IPv4Address("192.168.101.11")
+    ] = ipaddress.IPv4Address("192.168.101.10")
     deconz_hub_port_api: Annotated[
         int,
         Field(profiles=[Prof.deconz_hub]),
-    ] = 8001
+    ] = 8010
     deconz_hub_port_vnc: Annotated[
         int,
         Field(profiles=[Prof.deconz_hub]),
@@ -99,7 +99,11 @@ class SettingsSchema(BaseSettings):
     deconz_hub_port_ws: Annotated[
         int,
         Field(profiles=[Prof.deconz_hub]),
-    ] = 8002
+    ] = 8011
+    deconz_hub_vnc_password: Annotated[
+        SecretStr,
+        Field(profiles=[Prof.deconz_hub]),
+    ] = SecretStr("password")
 
     pgadmin_email: Annotated[
         EmailStr,
@@ -133,7 +137,7 @@ def check_item_in_profile(
     """
     schema_item: dict[str, Any] = SettingsSchema.schema()["properties"][key]
     if "profiles" not in schema_item.keys():
-        return False
+        return True
     return bool(profiles & set(schema_item["profiles"]))
 
 

@@ -58,7 +58,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/components/deconz/zha-pressure/api.service.ts</code>
+            <code>src/app/components/deconz/zha-open-close/api.service.ts</code>
         </p>
 
 
@@ -118,7 +118,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/components/deconz/zha-pressure/api.service.ts:10</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/components/deconz/zha-open-close/api.service.ts:10</a></div>
                             </td>
                         </tr>
 
@@ -182,7 +182,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="14"
-                            class="link-to-prism">src/app/components/deconz/zha-pressure/api.service.ts:14</a></div>
+                            class="link-to-prism">src/app/components/deconz/zha-open-close/api.service.ts:14</a></div>
                 </td>
             </tr>
 
@@ -220,7 +220,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>        <code><a href="../interfaces/ZHAPressureSchema.html" target="_self" >Observable&lt;ZHAPressureSchema&gt;</a></code>
+                        <b>Returns : </b>        <code><a href="../interfaces/OpenCloseSchema.html" target="_self" >Observable&lt;OpenCloseSchema&gt;</a></code>
 
                     </div>
                     <div class="io-description">
@@ -254,7 +254,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/components/deconz/zha-pressure/api.service.ts:10</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="10" class="link-to-prism">src/app/components/deconz/zha-open-close/api.service.ts:10</a></div>
                         </td>
                     </tr>
 
@@ -270,7 +270,7 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpClient } from &quot;@angular/common/http&quot;;
 import { Injectable } from &quot;@angular/core&quot;;
 import { Observable, repeat } from &quot;rxjs&quot;;
-import { ZHAPressureSchema } from &quot;./schemas&quot;;
+import { OpenCloseSchema } from &quot;./schemas&quot;;
 
 @Injectable({
     providedIn: &quot;root&quot;,
@@ -280,10 +280,10 @@ export class ApiService {
 
     constructor(private http: HttpClient) {}
 
-    data(deviceId: string): Observable&lt;ZHAPressureSchema&gt; {
+    data(deviceId: string): Observable&lt;OpenCloseSchema&gt; {
         return this.http
-            .get&lt;ZHAPressureSchema&gt;(
-                &#x60;${this.IP}/devices/deconz/zhapressure/${deviceId}&#x60;
+            .get&lt;OpenCloseSchema&gt;(
+                &#x60;${this.IP}/devices/deconz/zhaopenclose/${deviceId}&#x60;
             )
             .pipe(repeat({ delay: 500 }));
     }

@@ -16,7 +16,6 @@ import logging
 import os
 import socket
 from logging.handlers import RotatingFileHandler
-from warnings import warn
 
 from .settings import SettingsSchema, settings_store
 
@@ -80,7 +79,7 @@ class StreamFormatter(logging.Formatter):
             + self.get_format("-" * CHAR_IN_LINE, record.levelno)
         )
         # логгинг не идет в debug console
-        print(formatter.format(record))  # noqa: WPS421
+        # print(formatter.format(record))  # noqa: WPS421
         return formatted_str
 
 
@@ -132,22 +131,5 @@ def logger_init(service: str = "log") -> None:
     logger = logging.getLogger(__name__)
     logger.info("Start at host: %s", socket.gethostname())
     logger.info("Settings:\n%s", settings.json())
-
-
-# ------------------------------------------------------------------------------
-
-
-def get_logger(
-    name: str,
-    level: int = logging.INFO,
-) -> logging.Logger:
-    """Return logger with name.
-
-    :param name: название логгера
-    :param level: уровень логгирования
-    :return: объект логгера
-    """
-    warn("DEPRECATED: Импортируйте из модуля logging")
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
-    return logger
+    if settings.debug:
+        logger.warning("Активирован вывод сообщений в консоль")

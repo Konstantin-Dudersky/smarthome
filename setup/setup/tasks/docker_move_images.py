@@ -102,12 +102,12 @@ class DockerMoveImages(BaseTask):
         repo_from: str,
         repo_to: str,
     ) -> None:
-        cmd: str = "docker tag {repo_from}/{image} {repo_to}/image"
+        cmd_templ: str = "docker tag {repo_from}/{image} {repo_to}/{image}"
         for image in images:
-            subprocess.run(
-                cmd.format(
-                    image=image,
-                    repo_from=repo_from,
-                    repo_to=repo_to,
-                ).split(),
+            cmd = cmd_templ.format(
+                image=image,
+                repo_from=repo_from,
+                repo_to=repo_to,
             )
+            log.debug("Add tag command: {0}".format(cmd))
+            subprocess.run(cmd.split())

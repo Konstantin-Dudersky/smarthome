@@ -1,8 +1,8 @@
 Обмен данными с deconz_hub
 
 - сервис получает данные с сервиса `deconz_hub` по двум каналам:
-	- websocket
-	- HTTP REST API
+  - websocket
+  - HTTP REST API
 - api для доступа к актуальному состоянию датчиков
 - архивирование показаний в БД
 
@@ -20,3 +20,11 @@
 ```
 
 API key будет в ответе.
+
+## Запуск
+
+Для запуска в консоли:
+
+```sh
+poetry run python -m driver_deconz
+```

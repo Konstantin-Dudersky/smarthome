@@ -45,3 +45,5 @@ pythonVersion = "3.11"
 reportUnnecessaryTypeIgnoreComment = true
 stubPath = '.venv/typings'
 typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"

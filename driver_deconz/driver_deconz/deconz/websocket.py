@@ -6,16 +6,16 @@
 import json
 import logging
 from ipaddress import IPv4Address
-from typing import Any, Final
+from typing import Final
 
 from websockets import client, exceptions
 
-from .websocket_buffer import WebsocketBuffer
+from .websocket_buffer import TMessage, WebsocketBuffer
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-WS: Final[str] = "ws://{host}:{port}"
+WS_URL: Final[str] = "ws://{host}:{port}"
 
 
 class Websocket(object):
@@ -27,7 +27,7 @@ class Websocket(object):
         port: int,
     ) -> None:
         """Получение данных с устройств по протоколу websocket."""
-        self.__url = WS.format(
+        self.__url = WS_URL.format(
             host=host,
             port=port,
         )
@@ -38,8 +38,12 @@ class Websocket(object):
         while True:  # noqa: WPS457
             await self.__task()
 
+    def get(self) -> TMessage | None:
+        """Возвращает и удаляет сообщение из буфера."""
+        return self.__buffer.get()
+
     async def __task(self) -> None:
-        async for websocket in client.connect(self.__url):
+        async for websocket in client.connect(self.__url):  # noqa: WPS327
             try:
                 async for message in websocket:
                     self.__process_message(str(message))
@@ -47,6 +51,6 @@ class Websocket(object):
                 continue
 
     def __process_message(self, message: str) -> None:
-        message_dict: dict[str, Any] = json.loads(message)
+        message_dict: TMessage = json.loads(message)
         if "state" in message_dict:
-            print(message_dict)
+            self.__buffer.put(message_dict)

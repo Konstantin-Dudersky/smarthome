@@ -5,7 +5,7 @@ import logging
 import httpx
 from shared.settings import settings_store
 
-from ..schemass import ConfigModel
+from ..schemas import ConfigModel
 
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)

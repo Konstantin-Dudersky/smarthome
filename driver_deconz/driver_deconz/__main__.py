@@ -2,8 +2,10 @@
 import asyncio
 import logging
 
-from shared import Logger
+from shared.logger import Logger
+from shared.settings import SettingsStore
 
+from .api.api_task import api_task
 from .deconz import sensor_types
 from .deconz.main import Deconz
 from .deconz.sensor import Sensor
@@ -14,15 +16,8 @@ Logger(output_to_console=True)
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-# settings = settings_store.settings
-
-from shared import SettingsStore
 
 settings = SettingsStore("../.env").settings
-
-import sys
-
-sys.exit(0)
 
 sensors = SensorCollection(
     sensors={
@@ -61,6 +56,7 @@ async def run() -> None:
     done, _ = await asyncio.wait(
         [
             *[asyncio.create_task(task) for task in dz.async_tasks],
+            asyncio.create_task(api_task(settings.driver_deconz_port)),
         ],
         return_when=asyncio.FIRST_COMPLETED,
     )
@@ -72,5 +68,10 @@ async def run() -> None:
         )
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Entry point."""
     asyncio.run(run())
+
+
+if __name__ == "__main__":
+    main()

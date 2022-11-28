@@ -8,7 +8,7 @@ line-length = 80
 
 
 [tool.poe.tasks.update_stubs]
-shell = """rm -rf .venv/typings/shared \
+shell = """rm -rf .venv/typings \
     && pyright --createstub shared
 """
 
@@ -25,8 +25,10 @@ packages = [{ include = "driver_deconz" }]
 [tool.poetry.dependencies]
 python = "3.11"
 
+fastapi = "0.88.0"
 httpx = "0.23.1"
 pydantic = "1.10.2"
+uvicorn = "0.20.0"
 websockets = "10.4"
 
 shared = { path = "../shared", develop = true }
@@ -39,11 +41,15 @@ poethepoet = "*"
 wemake-python-styleguide = "*"
 
 
+[tool.poetry.scripts]
+start = "driver_deconz.__main__:main"
+
+
 [tool.pyright]
 pythonPlatform = "Linux"
 pythonVersion = "3.11"
 reportUnnecessaryTypeIgnoreComment = true
-stubPath = '.venv/typings'
+stubPath = '.venv/typings/'
 typeCheckingMode = "strict"
 venvPath = "."
 venv = ".venv"

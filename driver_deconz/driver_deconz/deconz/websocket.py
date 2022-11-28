@@ -53,4 +53,4 @@ class Websocket(object):
     def __process_message(self, message: str) -> None:
         message_dict: TMessage = json.loads(message)
         if "state" in message_dict:
-            self.__buffer.put(message_dict["state"])
+            self.__buffer.put(message_dict)

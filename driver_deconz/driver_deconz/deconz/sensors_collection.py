@@ -6,19 +6,21 @@
 import logging
 from typing import Any, Final, Iterable
 
+from shared.patterns import SingletonMeta
+
 from .sensor import Sensor
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 MSG_DUBL_NAME: Final[str] = "Повторяющееся название датчика: {name}"
-MSG_DUBL_ID: Final[str] = "Повторяющейся id датчика: {id}"
+MSG_DUBL_ID: Final[str] = "Повторяющийся id датчика: {id}"
 
 UNKNOWN_NAME: Final[str] = "Неизвестное название: {name}"
-UNKNOWN_ID: Final[str] = "Незвестный идентификатор: {id}"
+UNKNOWN_ID: Final[str] = "Неизвестный идентификатор: {id}"
 
 
-class SensorCollection(object):
+class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
     """Коллеция датчиков."""
 
     def __init__(

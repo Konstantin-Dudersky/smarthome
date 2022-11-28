@@ -9,7 +9,7 @@ from .sensors_collection import SensorCollection
 from .websocket import Websocket
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.INFO)
 
 
 class Deconz(object):
@@ -49,6 +49,4 @@ class Deconz(object):
             sensor = self.__sensors.by_id(identificator)
         except ValueError:
             return
-        print(sensor.data)
-        sensor.parse_data(msg)
-        print(sensor.data)
+        sensor.parse_data(msg["state"])

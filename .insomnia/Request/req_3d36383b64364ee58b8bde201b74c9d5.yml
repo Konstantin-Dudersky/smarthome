@@ -1,0 +1,21 @@
+_id: req_3d36383b64364ee58b8bde201b74c9d5
+type: Request
+parentId: fld_e21d4e817e034766ba635cd391d3b144
+modified: 1669661248345
+created: 1669661170717
+url: "{{ _.driver_deconz }}"
+name: New Request
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1669661170717
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

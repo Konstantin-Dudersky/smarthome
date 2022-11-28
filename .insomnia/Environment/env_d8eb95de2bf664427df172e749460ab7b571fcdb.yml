@@ -1,16 +1,18 @@
 _id: env_d8eb95de2bf664427df172e749460ab7b571fcdb
 type: Environment
 parentId: wrk_efa2a295000b4074a4cfc8c450bbfaea
-modified: 1669456616685
+modified: 1669661280756
 created: 1669455953769
 name: Base Environment
 data:
   deconz_hub_ws: ws://192.168.101.10:8011
   deconz_hub_api: http://192.168.101.10:8010
+  driver_deconz: http://192.168.101.12:8003
 dataPropertyOrder:
   "&":
     - deconz_hub_ws
     - deconz_hub_api
+    - driver_deconz
 color: null
 isPrivate: false
 metaSortKey: 1669455953769

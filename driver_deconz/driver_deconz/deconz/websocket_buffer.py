@@ -4,7 +4,7 @@ import logging
 from typing import Any, Final
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
+log.setLevel(logging.DEBUG)
 
 MAX_BUFFER_SIZE: Final[int] = 10
 

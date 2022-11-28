@@ -27,7 +27,7 @@ wemake-python-styleguide = "0.17.0"
 
 [tool.poetry.scripts]
 create_env = "setup.local_tasks:create_env"
-
+export_env_schema = "setup.local_tasks:export_env_schema"
 
 [tool.pyright]
 pythonPlatform = "Linux"

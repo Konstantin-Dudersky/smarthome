@@ -23,11 +23,9 @@
             "id": "f4617d2727432f7c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "image",
               "state": {
-                "file": "deconz_hub/README.md",
-                "mode": "source",
-                "source": true
+                "file": "docs/diagrams/out/network.png"
               }
             }
           }
@@ -98,7 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "docs/diagrams/out/network.png",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +113,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "docs/diagrams/out/network.png",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +136,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "deconz_hub/README.md"
+                "file": "docs/diagrams/out/network.png"
               }
             }
           }
@@ -151,14 +149,14 @@
   },
   "active": "f4617d2727432f7c",
   "lastOpenFiles": [
-    "driver_deconz/README.md",
-    "deconz_hub/README.md",
-    "setup/README.md",
-    "README.md",
-    "todo.md",
     "docs/README.md",
-    "docs/Установка.md",
     "docs/схема.svg",
+    "README.md",
+    "deconz_hub/README.md",
+    "driver_deconz/README.md",
+    "setup/README.md",
+    "todo.md",
+    "docs/Установка.md",
     "src/setup/README.md",
     "docs/Описание.md"
   ]

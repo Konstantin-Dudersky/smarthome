@@ -1,7 +1,10 @@
-from . import debugger, logger, settings
+"""Общие пакеты для проекта."""
+
+from .logger import Logger
+from .settings import Profiles as SettingsProfiles, SettingsStore
 
 __all__: list[str] = [
-    "debugger",
-    "logger",
-    "settings",
+    "Logger",
+    "SettingsProfiles",
+    "SettingsStore",
 ]

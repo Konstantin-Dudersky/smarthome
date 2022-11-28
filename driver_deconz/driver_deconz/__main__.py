@@ -2,21 +2,27 @@
 import asyncio
 import logging
 
-from shared.logger import logger_init
-from shared.settings import settings_store
+from shared import Logger
 
 from .deconz import sensor_types
 from .deconz.main import Deconz
 from .deconz.sensor import Sensor
 from .deconz.sensors_collection import SensorCollection
 
-logger_init()
+Logger(output_to_console=True)
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-settings = settings_store.settings
+# settings = settings_store.settings
 
+from shared import SettingsStore
+
+settings = SettingsStore("../.env").settings
+
+import sys
+
+sys.exit(0)
 
 sensors = SensorCollection(
     sensors={

@@ -1,22 +1,25 @@
 """Скрипты для выполнения из виртуального окружения."""
 
-import os
 from pathlib import Path
 
-from shared import settings
+from shared import SettingsProfiles, SettingsStore, Logger
+
+Logger(output_to_console=True)
 
 
 def create_env():
     """Создать файл с настройками."""
-    path_str = "{current}/..".format(current=os.getcwd())
-    path = Path(path_str).resolve()
-    settings.create_env(
-        work_dir_abs=path,
+    SettingsStore("../.env").create_env(
         profiles={
-            settings.Prof.api,
-            settings.Prof.deconz_hub,
-            settings.Prof.driver_deconz,
-            settings.Prof.db,
-            settings.Prof.pgadmin,
+            SettingsProfiles.api,
+            SettingsProfiles.deconz_hub,
+            SettingsProfiles.driver_deconz,
+            SettingsProfiles.db,
+            SettingsProfiles.pgadmin,
         },
     )
+
+
+def export_env_schema() -> None:
+    """Экспортировать схему настроек."""
+    SettingsStore("../.env").export_schema(Path("../docs").resolve())

@@ -134,7 +134,13 @@ class Tasks(NamedTuple):
     )
     create_env: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
         desc="Создать файл .env",
-        image="localhost:5000/smarthome/sh_setup"
+        image="localhost:5000/smarthome/sh_setup",
+        command="poetry run create_env",
+    )
+    export_env_schema: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
+        desc="Экспортировать настройки в json файл",
+        image="localhost:5000/smarthome/sh_setup",
+        command="poetry run export_env_schema",
     )
 
 
@@ -236,6 +242,7 @@ class ComposeTasks(NamedTuple):
             TASKS.flake8,
             TASKS.prettier,
             TASKS.compodoc,
+            TASKS.export_env_schema,
             TASKS.docker_build_images,
         ],
     )

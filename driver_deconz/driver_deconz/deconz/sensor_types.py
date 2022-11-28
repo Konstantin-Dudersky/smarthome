@@ -1,8 +1,7 @@
 """Схемы типов датчиков."""
 import datetime as dt
-from typing import Annotated
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class ZHAHumidity(BaseModel):
@@ -12,21 +11,13 @@ class ZHAHumidity(BaseModel):
     lastupdated: dt.datetime = dt.datetime.min
 
 
-class ZHAOpenCloseState(BaseModel):
-    """Датчик открытия / закрытия - состояние."""
+class ZHAOpenClose(BaseModel):
+    """Датчик открытия / закрытия."""
 
     open: bool = False
     lastupdated: dt.datetime = dt.datetime.min
     lowbattery: bool | None
     tampered: bool | None
-
-
-class ZHAOpenClose(BaseModel):
-    """Датчик открытия / закрытия."""
-
-    state: ZHAOpenCloseState = ZHAOpenCloseState.construct()
-    lastseen: dt.datetime = dt.datetime.min
-    uniqueid: str | None
 
 
 class ZHAPressure(BaseModel):

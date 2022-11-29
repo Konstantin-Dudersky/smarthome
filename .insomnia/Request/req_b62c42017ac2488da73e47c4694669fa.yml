@@ -1,17 +1,25 @@
 _id: req_b62c42017ac2488da73e47c4694669fa
 type: Request
-parentId: fld_aa5d94b14bbf48fcb6078ea942a079c0
-modified: 1669456626411
+parentId: fld_4994ce8898784624b7e968dbe76a781d
+modified: 1669718767649
 created: 1669456596868
 url: "{{ _.deconz_hub_api }}/api"
-name: New Request
+name: Acquire API key
 description: ""
 method: POST
-body: {}
+body:
+  mimeType: application/json
+  text: |
+    {
+        "username": "1234567890",
+        "devicetype": "smarthome"
+    }
 parameters: []
-headers: []
+headers:
+  - name: Content-Type
+    value: application/json
 authentication: {}
-metaSortKey: -1669456596868
+metaSortKey: -1669717859326
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

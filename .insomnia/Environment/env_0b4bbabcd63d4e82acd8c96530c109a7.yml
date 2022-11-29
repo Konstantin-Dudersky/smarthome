@@ -1,14 +1,24 @@
 _id: env_0b4bbabcd63d4e82acd8c96530c109a7
 type: Environment
 parentId: env_d8eb95de2bf664427df172e749460ab7b571fcdb
-modified: 1669699572492
+modified: 1669718583737
 created: 1669699526495
-name: smarthome
+name: smarthome_notebook
 data:
-  deconz_hub_ws: ws://10.101.80.106:8011
+  deconz_hub_host: 10.101.80.106
+  deconz_hub_port_ws: 8011
+  deconz_hub_port_api: 8010
+  deconz_hub_ws: ws://{{ _.deconz_hub_host }}:{{ _.deconz_hub_port_ws }}
+  deconz_hub_api: http://{{ _.deconz_hub_host }}:{{ _.deconz_hub_port_api }}
+  deconz_hub_api_key: "1234567890"
 dataPropertyOrder:
   "&":
+    - deconz_hub_host
+    - deconz_hub_port_ws
+    - deconz_hub_port_api
     - deconz_hub_ws
+    - deconz_hub_api
+    - deconz_hub_api_key
 color: null
 isPrivate: false
 metaSortKey: 1669699526495

@@ -1,0 +1,21 @@
+_id: req_0e50b7528ca444b7af7b35a16449730d
+type: Request
+parentId: fld_4994ce8898784624b7e968dbe76a781d
+modified: 1669718423984
+created: 1669717859276
+url: "{{ _.deconz_hub_api }}/api/{{ _.deconz_hub_api_key }}"
+name: Get full state
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1669717859276
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,7 +1,7 @@
 _id: ws-req_ca77cfe9b87f43709a56bace9cbe8e5c
 type: WebSocketRequest
 parentId: fld_b730372456264cb1b461840d48fa7cd6
-modified: 1669456461973
+modified: 1669718762192
 created: 1669456250837
 name: websocket
 url: "{{ _.deconz_hub_ws }}"

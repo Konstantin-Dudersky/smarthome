@@ -1,58 +1,86 @@
-"""Чтение данных REST API."""
+"""Чтение данных по REST API."""
 
+import asyncio
 import logging
+from ipaddress import IPv4Address
+from typing import Coroutine, Final, Iterable
 
 import httpx
-from shared.settings import settings_store
+from pydantic import SecretStr
+from shared.async_tasks import TasksProtocol
 
-from ..schemas import ConfigModel
+from . import exceptions
 
 log: logging.Logger = logging.getLogger(__name__)
-log.setLevel(logging.INFO)
-
-settings = settings_store.settings
-
-DECONZ_REST_URL = (
-    f"http://{settings.deconz_hub_host}:{settings.deconz_hub_port_api}"
-    f"/api/{settings.deconz_hub_api_key}"
-)
 
 
-async def _base_query(endpoint: str) -> httpx.Response | None:
-    """Базовый запрос.
+BASE_URL: Final[str] = "http://{host}:{port_api}/api/{api_key}"
 
-    :param endpoint: endpoint
-    :return: ответ
-    """
-    async with httpx.AsyncClient() as http:
+
+class Api(TasksProtocol):
+    """Чтение данных по REST API."""
+
+    def __init__(
+        self,
+        host: IPv4Address,
+        port_api: int,
+        api_key: SecretStr,
+        seconds_between_polls: float = 2.0,
+        logging_level: int = logging.INFO,
+    ) -> None:
+        """Чтение данных по REST API."""
+        log.setLevel(logging_level)
+        self.__base_url = BASE_URL.format(
+            host=host,
+            port_api=port_api,
+            api_key=api_key.get_secret_value(),
+        )
+        self.__seconds_between_polls = seconds_between_polls
+
+    @property
+    def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
+        """Перечень задач для запуска."""
+        return {self.__task()}
+
+    async def __task(self) -> None:
+        while True:  # noqa: WPS457
+            await self.__update_full_state()
+            await asyncio.sleep(self.__seconds_between_polls)
+
+    async def __update_full_state(self) -> None:
+        log.debug("Start update values from API.")
         try:
-            return await http.get(f"{DECONZ_REST_URL}{endpoint}")
-        except httpx.ConnectError as exc:
-            log.exception("Ошибка выполнения запроса: %s", exc.request)
-            return None
+            response = await self.__http_query("")
+        except exceptions.DataNotReceivedError:
+            return
+        if not self.__check_status_code(response.status_code):
+            return
+        log.debug("Finish update values from API.")
 
+    async def __http_query(self, endpoint: str) -> httpx.Response:
+        """Базовый запрос."""
+        url = "{base_url}{endpoint}".format(
+            base_url=self.__base_url,
+            endpoint=endpoint,
+        )
+        async with httpx.AsyncClient() as http:
+            try:
+                return await http.get(url)
+            except httpx.ConnectError as exc:
+                log.error(
+                    "Ошибка выполнения запроса: {0}".format(exc.request),
+                )
+                raise exceptions.DataNotReceivedError
+            except httpx.ConnectTimeout:
+                log.error("Таймаут подключения")
+                raise exceptions.DataNotReceivedError
 
-# configuration ----------------------------------------------------------------
-
-
-async def get_config() -> ConfigModel | None:
-    """Return the current gateway configuration.
-
-    :return: конфигурация сервера
-    """
-    config = await _base_query("/config")
-    if config is None:
-        return None
-    return ConfigModel(**config.json())
-
-
-# sensors ----------------------------------------------------------------------
-
-
-async def get_sensor(sensor_id: int) -> httpx.Response | None:
-    """Return the sensor with the specified id.
-
-    :param sensor_id: id датчика
-    :return: инфо о всех датчиках
-    """
-    return await _base_query(f"/sensors/{sensor_id}")
+    def __check_status_code(
+        self,
+        code_response: int,
+        code_compare: int = httpx.codes.OK,
+    ) -> bool:
+        if code_response != code_compare:
+            log.error("Incorrect response code: {0}".format(code_response))
+            return False
+        return True

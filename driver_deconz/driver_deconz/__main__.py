@@ -2,10 +2,11 @@
 import asyncio
 import logging
 
+from shared.async_tasks import TasksRunner
 from shared.logger import Logger
 from shared.settings import SettingsStore
 
-from .api.api_task import api_task
+from .api.api_task import ApiTask
 from .deconz import sensor_types
 from .deconz.main import Deconz
 from .deconz.sensor import Sensor
@@ -44,33 +45,23 @@ sensors = SensorCollection(
     },
 )
 
-dz = Deconz(
-    host=settings.deconz_hub_host,
-    port_ws=settings.deconz_hub_port_ws,
-    sensosrs=sensors,
+runner = TasksRunner(
+    {
+        Deconz(
+            host=settings.deconz_hub_host,
+            port_api=settings.deconz_hub_port_api,
+            port_ws=settings.deconz_hub_port_ws,
+            api_key=settings.deconz_hub_api_key,
+            sensosrs=sensors,
+        ),
+        ApiTask(settings.driver_deconz_port),
+    },
 )
-
-
-async def run() -> None:
-    """Create main task."""
-    done, _ = await asyncio.wait(
-        [
-            *[asyncio.create_task(task) for task in dz.async_tasks],
-            asyncio.create_task(api_task(settings.driver_deconz_port)),
-        ],
-        return_when=asyncio.FIRST_COMPLETED,
-    )
-    try:
-        _ = [d.result() for d in done]
-    except BaseException:  # noqa: WPS424
-        log.exception(
-            "Необработанное исключение, программа заканчивает выполнение",
-        )
 
 
 def main() -> None:
     """Entry point."""
-    asyncio.run(run())
+    asyncio.run(runner())
 
 
 if __name__ == "__main__":

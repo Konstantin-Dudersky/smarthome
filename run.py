@@ -266,6 +266,13 @@ class ComposeTasks(NamedTuple):
             TASKS.docker_move_images,
         ],
     )
+    target_update: setup.ComposeTask = setup.ComposeTask(
+        desc="Обновление проекта на целевой системе",
+        subtasks=[
+            TASKS.codesync,
+            TASKS.docker_move_images,
+        ],
+    )
 
     # build: setup.ComposeTask = setup.ComposeTask(
     #     desc="Сборка проекта",

@@ -105,9 +105,12 @@ services:
     container_name: sh_driver_deconz
     hostname: sh_driver_deconz
     ports:
-      - "${driver_deconz_port}:8000"
+      - "${driver_deconz_port}:${driver_deconz_port}"
     profiles:
       - pi
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - .:/root/code
 
   setup:
     image: localhost:5000/smarthome/sh_setup

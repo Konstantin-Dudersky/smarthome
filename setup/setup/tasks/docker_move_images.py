@@ -32,7 +32,7 @@ class DockerMoveImages(BaseTask):
         log.info("target images: \n{0}\n".format(target_images))
         images_wo_repo = self.__remove_repo(
             images=target_images,
-            repo=self.__repo_to,
+            repo=self.__repo_from,
         )
         log.info("images w/o repo: \n{0}\n".format(images_wo_repo))
         self.__pull_images(images_wo_repo, self.__repo_from, self.__arch)

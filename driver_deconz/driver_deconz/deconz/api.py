@@ -85,6 +85,9 @@ class Api(TasksProtocol):
             except httpx.ConnectTimeout:
                 log.error("Таймаут подключения")
                 raise exceptions.DataNotReceivedError
+            except httpx.RemoteProtocolError as exc:
+                log.error(exc)
+                raise exceptions.DataNotReceivedError
 
     def __check_status_code(
         self,

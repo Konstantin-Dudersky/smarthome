@@ -14,9 +14,11 @@ def main(system_version: str = "ubuntu-22.04") -> Callable[[], None]:
     def _main() -> None:
         if system_version == "ubuntu-22.04":
             os.system("sudo apt install postgresql-14 libpq-dev")
-            os.system("""
+            os.system(
+                """
 echo "ALTER USER postgres PASSWORD 'postgres';" | sudo -u postgres psql
-""")
+"""
+            )
             print("-> для доступа к БД по сети в файле postgresql.conf:")
             print('-> listen_addresses = " * "')
             print("-> в файле pg_hba.conf:")

@@ -56,6 +56,9 @@ class Websocket(TasksProtocol):
                 await self.__iterate_messages(websocket)
             except exceptions.ConnectionClosed:
                 continue
+            except TimeoutError:
+                log.error("Таймаут подключения по websocket")
+                continue
 
     async def __iterate_messages(
         self,

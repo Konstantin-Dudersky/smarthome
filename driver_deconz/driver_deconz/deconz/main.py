@@ -15,7 +15,7 @@ from .sensors import SensorCollection
 from .websocket import Websocket
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.INFO)
 
 
 class Deconz(TasksProtocol):

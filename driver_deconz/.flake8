@@ -25,6 +25,7 @@ multi-line-output-modes = 3
 nested-classes-whitelist = Config
 per-file-ignores =
     # */settings.py:E501,
+    driver_deconz/deconz/sensors/open_close.py:I001,I005
 statistics = true
 # darglint
 docstring_style = numpy

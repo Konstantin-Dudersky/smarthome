@@ -7,10 +7,8 @@ from shared.logger import Logger
 from shared.settings import SettingsStore
 
 from .api.api_task import ApiTask
-from .deconz import sensor_types
+from .deconz import sensors
 from .deconz.main import Deconz
-from .deconz.sensor import Sensor
-from .deconz.sensors_collection import SensorCollection
 
 Logger(output_to_console=True)
 
@@ -20,28 +18,27 @@ log.setLevel(logging.DEBUG)
 
 settings = SettingsStore("../.env").settings
 
-sensors = SensorCollection(
+sensors = sensors.SensorCollection(
     sensors={
-        Sensor[sensor_types.ZHAOpenClose](
-            identificator=2,
+        sensors.OpenClose(
+            uniqueid="00:15:8d:00:03:21:44:8c-01-0006",
             name="open_close",
-            model=sensor_types.ZHAOpenClose,
         ),
-        Sensor[sensor_types.ZHAHumidity](
-            identificator=6,
-            name="humidity",
-            model=sensor_types.ZHAHumidity,
-        ),
-        Sensor[sensor_types.ZHATemperature](
-            identificator=7,
-            name="temperature",
-            model=sensor_types.ZHATemperature,
-        ),
-        Sensor[sensor_types.ZHAPressure](
-            identificator=8,
-            name="pressure",
-            model=sensor_types.ZHAPressure,
-        ),
+        # BaseSensor[sensor_types.ZHAHumidity](
+        #     uniqueid=6,
+        #     name="humidity",
+        #     model=sensor_types.ZHAHumidity,
+        # ),
+        # BaseSensor[sensor_types.ZHATemperature](
+        #     uniqueid=7,
+        #     name="temperature",
+        #     model=sensor_types.ZHATemperature,
+        # ),
+        # BaseSensor[sensor_types.ZHAPressure](
+        #     uniqueid=8,
+        #     name="pressure",
+        #     model=sensor_types.ZHAPressure,
+        # ),
     },
 )
 

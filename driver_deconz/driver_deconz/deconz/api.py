@@ -36,11 +36,21 @@ class Api(TasksProtocol):
             api_key=api_key.get_secret_value(),
         )
         self.__seconds_between_polls = seconds_between_polls
+        self.__full_state: str | None = None
 
     @property
     def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
         """Перечень задач для запуска."""
         return {self.__task()}
+
+    @property
+    def full_state(self) -> str:
+        """Возвращает данные, если есть."""
+        if self.__full_state is None:
+            raise exceptions.BufferEmptyError
+        full_state = self.__full_state
+        self.__full_state = None
+        return full_state
 
     async def __task(self) -> None:
         while True:  # noqa: WPS457
@@ -55,6 +65,7 @@ class Api(TasksProtocol):
             return
         if not self.__check_status_code(response.status_code):
             return
+        self.__full_state = response.text
         log.debug("Finish update values from API.")
 
     async def __http_query(self, endpoint: str) -> httpx.Response:

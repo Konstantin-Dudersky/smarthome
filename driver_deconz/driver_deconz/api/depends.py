@@ -1,5 +1,6 @@
-from ..deconz.sensors_collection import SensorCollection
+"""Конфигурирование зависимостей."""
 
+from ..deconz.sensors.sensors_collection import SensorCollection
 
 sensors_type = SensorCollection
 

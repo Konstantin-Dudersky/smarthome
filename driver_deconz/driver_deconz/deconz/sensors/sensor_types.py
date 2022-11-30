@@ -11,15 +11,6 @@ class ZHAHumidity(BaseModel):
     lastupdated: dt.datetime = dt.datetime.min
 
 
-class ZHAOpenClose(BaseModel):
-    """Датчик открытия / закрытия."""
-
-    open: bool = False
-    lastupdated: dt.datetime = dt.datetime.min
-    lowbattery: bool | None
-    tampered: bool | None
-
-
 class ZHAPressure(BaseModel):
     """Датчик давления."""
 

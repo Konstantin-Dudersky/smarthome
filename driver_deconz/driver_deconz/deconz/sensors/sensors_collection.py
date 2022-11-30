@@ -8,7 +8,7 @@ from typing import Any, Final, Iterable
 
 from shared.patterns import SingletonMeta
 
-from .sensor import Sensor
+from .base_sensor import BaseSensor
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -25,21 +25,22 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
 
     def __init__(
         self,
-        sensors: Iterable[Sensor[Any]],
+        sensors: Iterable[BaseSensor[Any]],
     ) -> None:
         """Коллеция датчиков."""
-        self.__by_id = self.__create_by_id(sensors)
+        self.__by_uniqueid = self.__create_by_uniqueid(sensors)
         self.__by_name = self.__create_by_name(sensors)
+        log.debug("Created sensor collection:\n{0}".format(self.__by_name))
 
-    def by_id(self, identificator: int) -> Sensor[Any]:
+    def by_id(self, identificator: str) -> BaseSensor[Any]:
         """Датчик по идентификатору."""
-        if identificator not in self.__by_id:
+        if identificator not in self.__by_uniqueid:
             msg = UNKNOWN_ID.format(id=identificator)
             log.warning(msg)
             raise ValueError(msg)
-        return self.__by_id[identificator]
+        return self.__by_uniqueid[identificator]
 
-    def by_name(self, name: str) -> Sensor[Any]:
+    def by_name(self, name: str) -> BaseSensor[Any]:
         """Датчик по названию."""
         if name not in self.__by_name:
             msg = UNKNOWN_NAME.format(name=name)
@@ -49,9 +50,9 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
 
     def __create_by_name(
         self,
-        sensors: Iterable[Sensor[Any]],
-    ) -> dict[str, Sensor[Any]]:
-        by_name: dict[str, Sensor[Any]] = {}
+        sensors: Iterable[BaseSensor[Any]],
+    ) -> dict[str, BaseSensor[Any]]:
+        by_name: dict[str, BaseSensor[Any]] = {}
         for sensor in sensors:
             if sensor.name in by_name:
                 msg = MSG_DUBL_NAME.format(name=sensor.name)
@@ -60,15 +61,15 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
             by_name[sensor.name] = sensor
         return by_name
 
-    def __create_by_id(
+    def __create_by_uniqueid(
         self,
-        sensors: Iterable[Sensor[Any]],
-    ) -> dict[int, Sensor[Any]]:
-        by_id: dict[int, Sensor[Any]] = {}
+        sensors: Iterable[BaseSensor[Any]],
+    ) -> dict[str, BaseSensor[Any]]:
+        by_id: dict[str, BaseSensor[Any]] = {}
         for sensor in sensors:
-            if sensor.identificator in by_id:
-                msg = MSG_DUBL_ID.format(id=sensor.identificator)
+            if sensor.uniqueid in by_id:
+                msg = MSG_DUBL_ID.format(id=sensor.uniqueid)
                 log.critical(msg)
                 raise ValueError(msg)
-            by_id[sensor.identificator] = sensor
+            by_id[sensor.uniqueid] = sensor
         return by_id

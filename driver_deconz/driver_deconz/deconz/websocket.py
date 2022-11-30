@@ -6,12 +6,12 @@
 import json
 import logging
 from ipaddress import IPv4Address
-from typing import Coroutine, Final, Iterable
+from typing import Any, Coroutine, Final, Iterable
 
 from shared.async_tasks import TasksProtocol
 from websockets import client, exceptions
 
-from .websocket_buffer import TMessage, WebsocketBuffer
+from .websocket_buffer import WebsocketBuffer, WebsocketBufferItem
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -41,7 +41,7 @@ class Websocket(TasksProtocol):
             self.__task(),
         }
 
-    def get(self) -> TMessage | None:
+    def get(self) -> WebsocketBufferItem:
         """Возвращает и удаляет сообщение из буфера."""
         return self.__buffer.get()
 
@@ -65,6 +65,11 @@ class Websocket(TasksProtocol):
             self.__process_message(str(message))
 
     def __process_message(self, message: str) -> None:
-        message_dict: TMessage = json.loads(message)
-        if "state" in message_dict:
-            self.__buffer.put(message_dict)
+        message_dict: dict[str, Any] = json.loads(message)
+        if "state" not in message_dict:
+            return
+        buffer_item = WebsocketBufferItem(
+            uniqueid=message_dict["uniqueid"],
+            state=message_dict["state"],
+        )
+        self.__buffer.put(buffer_item)

@@ -1,4 +1,4 @@
-"""ZHAOpenClose."""
+"""Daylight."""
 
 import datetime as dt
 
@@ -13,10 +13,10 @@ from .base_sensor import (
 class ConfigModel(BaseSensorConfigModel):
     """Модель конфигурации."""
 
-    battery: int = 0
+    configured: bool = False
     on: bool = False
-    reachable: bool = False
-    temperature: int = 0
+    sunriseoffset: int = 0
+    sunsetoffset: int = 0
 
 
 class StateModel(BaseSensorStateModel):
@@ -25,6 +25,13 @@ class StateModel(BaseSensorStateModel):
     open: bool = False
     lowbattery: bool | None
     tampered: bool | None
+
+    dark: bool = False
+    daylight: bool = False
+    lastupdated: dt.datetime = dt.datetime.min
+    status: int = 0
+    sunrise: dt.datetime = dt.datetime.min
+    sunset: dt.datetime = dt.datetime.min
 
 
 class Model(BaseSensorModel):
@@ -37,15 +44,15 @@ class Model(BaseSensorModel):
     state: StateModel = StateModel.construct()
 
 
-class OpenClose(BaseSensor[Model]):
-    """Датчик открытия / закрытия."""
+class Daylight(BaseSensor[Model]):
+    """Программный датчик времени суток."""
 
     def __init__(
         self,
         uniqueid: str,
         name: str,
     ) -> None:
-        """Датчик открытия / закрытия."""
+        """Программный датчик времени суток."""
         super().__init__(
             uniqueid=uniqueid,
             name=name,

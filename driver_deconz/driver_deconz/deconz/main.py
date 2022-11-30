@@ -34,7 +34,7 @@ class Deconz(TasksProtocol):
             host=host,
             port_api=port_api,
             api_key=api_key,
-            logging_level=logging.DEBUG,
+            logging_level=logging.INFO,
         )
         self.__ws = Websocket(host, port_ws)
         self.__sensors = sensosrs

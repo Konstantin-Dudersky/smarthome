@@ -1,4 +1,4 @@
-"""ZHAOpenClose."""
+"""ZHAHumidity."""
 
 import datetime as dt
 
@@ -16,15 +16,13 @@ class ConfigModel(BaseSensorConfigModel):
     battery: int = 0
     on: bool = False
     reachable: bool = False
-    temperature: int = 0
+    offset: int = 0
 
 
 class StateModel(BaseSensorStateModel):
     """Модель состояния."""
 
-    open: bool = False
-    lowbattery: bool | None
-    tampered: bool | None
+    temperature: int = 0
 
 
 class Model(BaseSensorModel):
@@ -32,20 +30,20 @@ class Model(BaseSensorModel):
 
     config: ConfigModel = ConfigModel.construct()
     ep: int = 0
-    lastannounced: dt.datetime = dt.datetime.min
+    lastannounced: dt.datetime | None = dt.datetime.min
     lastseen: dt.datetime = dt.datetime.min
     state: StateModel = StateModel.construct()
 
 
-class OpenClose(BaseSensor[Model]):
-    """Датчик открытия / закрытия."""
+class Humidity(BaseSensor[Model]):
+    """Датчик влажности."""
 
     def __init__(
         self,
         uniqueid: str,
         name: str,
     ) -> None:
-        """Датчик открытия / закрытия."""
+        """Датчик влажности."""
         super().__init__(
             uniqueid=uniqueid,
             name=name,

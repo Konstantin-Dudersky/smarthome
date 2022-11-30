@@ -24,21 +24,22 @@ sensors = sensors.SensorCollection(
             uniqueid="00:15:8d:00:03:21:44:8c-01-0006",
             name="open_close",
         ),
-        # BaseSensor[sensor_types.ZHAHumidity](
-        #     uniqueid=6,
-        #     name="humidity",
-        #     model=sensor_types.ZHAHumidity,
-        # ),
-        # BaseSensor[sensor_types.ZHATemperature](
-        #     uniqueid=7,
-        #     name="temperature",
-        #     model=sensor_types.ZHATemperature,
-        # ),
-        # BaseSensor[sensor_types.ZHAPressure](
-        #     uniqueid=8,
-        #     name="pressure",
-        #     model=sensor_types.ZHAPressure,
-        # ),
+        sensors.Temperature(
+            uniqueid="00:15:8d:00:03:f0:44:0d-01-0402",
+            name="temperature",
+        ),
+        sensors.Pressure(
+            uniqueid="00:15:8d:00:03:f0:44:0d-01-0403",
+            name="pressure",
+        ),
+        sensors.Humidity(
+            uniqueid="00:15:8d:00:03:f0:44:0d-01-0405",
+            name="humidity",
+        ),
+        sensors.Daylight(
+            uniqueid="00:21:2e:ff:ff:04:82:3b-01",
+            name="daylight",
+        ),
     },
 )
 

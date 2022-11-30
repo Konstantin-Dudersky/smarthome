@@ -2,9 +2,13 @@
 
 import abc
 import datetime as dt
+import logging
 from typing import Generic, Type, TypeVar
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.INFO)
 
 
 class BaseSensorConfigModel(BaseModel):
@@ -75,12 +79,22 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
 
         При опросе шлюза по API возвращаются все данные.
         """
-        self.__data = self.__model.parse_obj(message)
+        try:
+            self.__data = self.__model.parse_obj(message)
+        except ValidationError as exc:
+            log.error("Error parsing message:\n{0}".format(message))
+            log.error(exc)
+            return
 
     def update_state(self, message: str) -> None:
         """Обновить данные состояния.
 
         При опросе шлюза по websocket возвращается только состояние.
         """
-        state = self.__model_state.parse_obj(message)
+        try:
+            state = self.__model_state.parse_obj(message)
+        except ValidationError as exc:
+            log.error("Error parsing message:\n{0}".format(message))
+            log.error(exc)
+            return
         self.__data.state = state

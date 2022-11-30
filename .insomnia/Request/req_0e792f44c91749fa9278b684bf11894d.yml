@@ -1,17 +1,17 @@
-_id: req_20e1f3d512b94e598c1e884b18ad6c8b
+_id: req_0e792f44c91749fa9278b684bf11894d
 type: Request
-parentId: wrk_efa2a295000b4074a4cfc8c450bbfaea
-modified: 1669456031710
-created: 1669455953868
-url: http://192.168.101.10:8010/api
-name: New Request
+parentId: fld_e21d4e817e034766ba635cd391d3b144
+modified: 1669806999240
+created: 1669806993492
+url: "{{ _.driver_deconz }}/sensors"
+name: /sensors
 description: ""
 method: GET
 body: {}
 parameters: []
 headers: []
 authentication: {}
-metaSortKey: -1669455953868
+metaSortKey: -1669558562292.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

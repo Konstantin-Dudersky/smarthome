@@ -1,10 +1,10 @@
 _id: req_3d36383b64364ee58b8bde201b74c9d5
 type: Request
 parentId: fld_e21d4e817e034766ba635cd391d3b144
-modified: 1669661248345
+modified: 1669806985197
 created: 1669661170717
-url: "{{ _.driver_deconz }}"
-name: New Request
+url: "{{ _.driver_deconz }}/sensor-by-name/open_close"
+name: /sensor-by-name/{name}
 description: ""
 method: GET
 body: {}

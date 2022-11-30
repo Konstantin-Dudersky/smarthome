@@ -27,6 +27,7 @@ per-file-ignores =
     driver_deconz/deconz/sensors/open_close.py:I001,I005
     driver_deconz/deconz/sensors/pressure.py:I001,I005
     driver_deconz/deconz/sensors/temperature.py:I001,I005
+    driver_deconz/api/main.py:B008,WPS404,WPS430
 statistics = true
 # darglint
 docstring_style = numpy

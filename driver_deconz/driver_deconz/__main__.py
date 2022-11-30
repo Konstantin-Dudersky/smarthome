@@ -6,7 +6,7 @@ from shared.async_tasks import TasksRunner
 from shared.logger import Logger
 from shared.settings import SettingsStore
 
-from .api.api_task import ApiTask
+from .api.main import Api
 from .deconz import sensors
 from .deconz.main import Deconz
 
@@ -52,7 +52,10 @@ runner = TasksRunner(
             api_key=settings.deconz_hub_api_key,
             sensosrs=sensors,
         ),
-        ApiTask(settings.driver_deconz_port),
+        Api(
+            port=settings.driver_deconz_port,
+            depends_sensors=sensors,
+        ),
     },
 )
 

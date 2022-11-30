@@ -15,6 +15,7 @@
 
 ```json
 {
+  "username": "1234567890",
   "devicetype": "smarthome"
 }
 ```
@@ -26,5 +27,5 @@ API key будет в ответе.
 Для запуска в консоли:
 
 ```sh
-poetry run python -m driver_deconz
+poetry run start
 ```

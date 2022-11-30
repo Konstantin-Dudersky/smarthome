@@ -20,6 +20,9 @@ UNKNOWN_NAME: Final[str] = "Неизвестное название: {name}"
 UNKNOWN_ID: Final[str] = "Неизвестный идентификатор: {id}"
 
 
+TCollection = dict[str, BaseSensor[Any]]
+
+
 class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
     """Коллеция датчиков."""
 
@@ -28,8 +31,8 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
         sensors: Iterable[BaseSensor[Any]],
     ) -> None:
         """Коллеция датчиков."""
-        self.__by_uniqueid = self.__create_by_uniqueid(sensors)
-        self.__by_name = self.__create_by_name(sensors)
+        self.__by_uniqueid: TCollection = self.__view_by_uniqueid(sensors)
+        self.__by_name: TCollection = self.__view_by_name(sensors)
         log.debug("Created sensor collection:\n{0}".format(self.__by_name))
 
     def by_id(self, identificator: str) -> BaseSensor[Any]:
@@ -48,11 +51,16 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
             raise ValueError(msg)
         return self.__by_name[name]
 
-    def __create_by_name(
+    @property
+    def all_by_name(self) -> TCollection:
+        """Словарь всех датчиков."""
+        return self.__by_name
+
+    def __view_by_name(
         self,
         sensors: Iterable[BaseSensor[Any]],
-    ) -> dict[str, BaseSensor[Any]]:
-        by_name: dict[str, BaseSensor[Any]] = {}
+    ) -> TCollection:
+        by_name: TCollection = {}
         for sensor in sensors:
             if sensor.name in by_name:
                 msg = MSG_DUBL_NAME.format(name=sensor.name)
@@ -61,11 +69,11 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
             by_name[sensor.name] = sensor
         return by_name
 
-    def __create_by_uniqueid(
+    def __view_by_uniqueid(
         self,
         sensors: Iterable[BaseSensor[Any]],
-    ) -> dict[str, BaseSensor[Any]]:
-        by_id: dict[str, BaseSensor[Any]] = {}
+    ) -> TCollection:
+        by_id: TCollection = {}
         for sensor in sensors:
             if sensor.uniqueid in by_id:
                 msg = MSG_DUBL_ID.format(id=sensor.uniqueid)

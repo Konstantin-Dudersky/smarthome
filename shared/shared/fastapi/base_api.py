@@ -1,19 +1,26 @@
-"""Задача для хостинга api."""
+"""FastAPI."""
 
+import abc
 from typing import Coroutine, Iterable
 
 import uvicorn
-from shared.async_tasks import TasksProtocol
+from fastapi import FastAPI
 
-from .main import app
+from ..async_tasks import TasksProtocol
 
 
-class ApiTask(TasksProtocol):
-    """Асинхронная задача для запуска."""
+class BaseApi(abc.ABC, TasksProtocol):
+    """FastAPI."""
 
     def __init__(self, port: int = 8000) -> None:
-        """Асинхронная задача для запуска."""
+        """FastAPI."""
         self.__port = port
+        self.__app = FastAPI()
+
+    @property
+    def app(self) -> FastAPI:
+        """Return FastAPI application."""
+        return self.__app
 
     @property
     def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
@@ -22,12 +29,12 @@ class ApiTask(TasksProtocol):
 
     async def __task(self):
         config = uvicorn.Config(
-            app,
+            self.__app,
             host="0.0.0.0",
             port=self.__port,
             log_level="info",
         )
         server = uvicorn.Server(
             config,
-        )  # pyright: reportUnknownMemberType=false
+        )
         await server.serve()

@@ -4,6 +4,7 @@ import logging
 from typing import Type
 
 from ..connection_string import ConnectionString
+from .psycopg_adapters import register_adapters
 from .session import Session
 from .typings import TDataModel
 
@@ -21,9 +22,9 @@ class Database(object):
         """Подключение к БД."""
         self.__conn_str: ConnectionString
 
+        register_adapters()
         self.__conn_str = conn_str
         self.__conn_str.driver = "postgresql"
-        self.__conn_str.database = "db_data"
         log.info("DB connection string: {0}".format(conn_str.url))
 
     def create_session(self, model: Type[TDataModel]) -> Session[TDataModel]:
@@ -32,7 +33,7 @@ class Database(object):
         Parameters
         ----------
         model: BaseModel
-            модель pydantic для получаемых данных
+            модель pydantic для возвращаемых данных
 
         Returns
         -------

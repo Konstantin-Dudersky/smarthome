@@ -16,9 +16,10 @@ readme = "README.md"
 
 
 [tool.poetry.dependencies]
-python = "3.11"
+python = "3.11.*"
 
 alembic = "1.8.1"
+arrow = "*"
 psycopg = "3.1.4"
 sqlalchemy = "2.0.0b4"
 

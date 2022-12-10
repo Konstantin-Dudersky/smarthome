@@ -10,7 +10,7 @@ from typing import Final, Type
 import psycopg
 from typing_extensions import Self
 
-from . import models
+from . import models2
 
 log: logging.Logger = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -51,16 +51,16 @@ class GetDbRow(object):
 
         :param url: строка подключения к db_data
         """
-        self._conn: psycopg.AsyncConnection[models.Row] | None = None
+        self._conn: psycopg.AsyncConnection[models2.Row] | None = None
         self.__url = url
 
-    async def __aenter__(self: Self) -> psycopg.AsyncConnection[models.Row]:
+    async def __aenter__(self: Self) -> psycopg.AsyncConnection[models2.Row]:
         """Enter the runtime context related to this object.
 
         :return: объект подключения к БД
         """
         factory: str = (
-            models.Row.row_factory  # pyright: ignore[reportGeneralTypeIssues]
+            models2.Row.row_factory  # pyright: ignore[reportGeneralTypeIssues]
         )
         self._conn = await psycopg.AsyncConnection.connect(
             conninfo=self.__url,
@@ -102,7 +102,7 @@ async def create_agg_type(url: str) -> None:
     """
     stmt: str = CREATE_TYPE.format(
         name="agg_type",
-        values=str(tuple(agg.value for agg in models.AggEnum)),
+        values=str(tuple(agg.value for agg in models2.AggEnum)),
     )
     log.info("create ENUM agg_type: %s", stmt)
     async with GetDbRow(url) as db:

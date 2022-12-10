@@ -1,4 +1,3 @@
 - todo
-	- pgadmin не запускается
-	- setup - пока нет вообще ничего
+	- setup - сервис systemd для автозапуска
 - doing

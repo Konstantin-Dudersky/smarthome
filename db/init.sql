@@ -42,3 +42,8 @@ SELECT add_compression_policy('raw', INTERVAL '100000 hours');
 
 -- agg_30min
 CREATE TABLE agg_30min (LIKE raw);
+
+
+-- create databases for test
+CREATE DATABASE db_data_test WITH TEMPLATE db_data;
+CREATE DATABASE db_conf_test WITH TEMPLATE db_conf;

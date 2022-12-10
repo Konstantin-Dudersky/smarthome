@@ -18,7 +18,7 @@
 
 Копируем проект на целевую систему
 
-```sh
+```bash
 ./run.py codesync
 ```
 
@@ -26,6 +26,13 @@
 
 - sh_db - [db/README](db/README.md)
 - portainer - https://
+
+### Запуск
+
+```bash
+docker compose --profile pi pull
+docker compose --profile pi up -d
+```
 
 ### Документация
 

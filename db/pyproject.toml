@@ -19,9 +19,8 @@ readme = "README.md"
 python = "3.11"
 
 alembic = "1.8.1"
-asyncpg = "0.27.0"
 psycopg = "3.1.4"
-sqlalchemy = "2.0.0b3"
+sqlalchemy = "2.0.0b4"
 
 shared = { path = "../shared", develop = true }
 
@@ -29,11 +28,21 @@ shared = { path = "../shared", develop = true }
 [tool.poetry.group.dev.dependencies]
 alembic-autogen-check = "*"
 black = "*"
+pytest = "*"
 wemake-python-styleguide = "0.17.0"
 
 
 [tool.pyright]
 pythonPlatform = "Linux"
-pythonVersion = "3.10"
-stubPath = '.venv/typings'
+pythonVersion = "3.11"
+reportUnnecessaryTypeIgnoreComment = true
+stubPath = '.venv/typings/'
 typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+log_format = "%(levelname)s: %(asctime)s.%(msecs)03d | %(name)s:%(lineno)d - %(funcName)s\n-> %(message)s"
+log_date_format = "%H:%M:%S"

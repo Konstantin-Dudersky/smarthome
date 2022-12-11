@@ -16,7 +16,9 @@ CREATE: Final[
 INSERT INTO {table}
 VALUES {values}
 ON CONFLICT (ts, entity, attr, agg) DO UPDATE
-    SET value = excluded.value;
+    SET value = excluded.value,
+        status = excluded.status,
+        aggts = excluded.aggts;
 """
 
 READ_ALL: Final[str] = "SELECT * FROM {table}"

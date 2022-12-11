@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "db/README.md",
                 "mode": "source",
                 "source": true
               }
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "db/README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "deconz_hub/README.md",
+                "file": "db/README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "deconz_hub/README.md"
+                "file": "db/README.md"
               }
             }
           }
@@ -151,11 +151,14 @@
   },
   "active": "f4617d2727432f7c",
   "lastOpenFiles": [
+    "todo.md",
+    "README.md",
+    "db/README.md",
+    "deconz_hub/README.md",
     "docs/diagrams/out/network.png",
     "docs/README.md",
     "docs/схема.svg",
     "setup/README.md",
-    "todo.md",
     "docs/Установка.md",
     "src/setup/README.md"
   ]

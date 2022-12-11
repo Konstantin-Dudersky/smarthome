@@ -1,13 +1,16 @@
 """Модель для строки в БД."""
 
+from typing import ClassVar
+
 import arrow
 from pydantic import BaseConfig, BaseModel, validator
 
 from .enums import AggEnum, StatusEnum
+from .format_psycopg import FormatPsycopg
 
 
 class Row(BaseModel):
-    """Строка в таблице."""
+    """Модель для строки в БД."""
 
     class Config(BaseConfig):
         """Конфигурация."""
@@ -23,6 +26,8 @@ class Row(BaseModel):
     aggts: arrow.Arrow | None = None
     aggnext: tuple[AggEnum, ...] | None = None
 
+    num_of_fields: ClassVar[int] = 8
+
     @validator("aggnext", pre=True)
     def validate_aggnext(
         cls,  # noqa: N805
@@ -33,41 +38,35 @@ class Row(BaseModel):
         Возможно, баг в psycopg - при чтении из БД вместо списка возвращается
         строка, обернутая фигурными скобками: {item1, item2, ...}
         """
-        if aggnext is None:
-            return None
-        if isinstance(aggnext, tuple):
-            return aggnext
-        aggnext_list: tuple[str] = tuple(
-            aggnext.replace("{", "").replace("}", "").split(","),
-        )
-        return tuple(AggEnum(agg) for agg in aggnext_list)
+        match aggnext:
+            case tuple():
+                return aggnext
+            case str():
+                aggnext_str: list[str] = (
+                    aggnext.replace("{", "").replace("}", "").split(",")
+                )
+                aggnext_enum: list[AggEnum] = [
+                    AggEnum(agg) for agg in aggnext_str
+                ]
+                return tuple(aggnext_enum)
+            case None:
+                return None
+            case _:
+                raise ValueError(
+                    "Unknown type of aggnext: {0}".format(type(aggnext)),
+                )
 
     @property
-    def execute_query(self) -> str:
-        """Для вставки в параметр query инструкции execute."""
-        return "(%s, %s, %s, %s, %s, %s, %s, %s)"
-
-    @property
-    def execute_params(
-        self,
-    ) -> tuple[
-        arrow.Arrow,
-        int,
-        str,
-        float | None,
-        StatusEnum,
-        AggEnum,
-        arrow.Arrow | None,
-        list[AggEnum] | None,
-    ]:
-        """Для вставки в параметр params инструкции execute."""
-        return (
-            self.ts,
-            self.entity,
-            self.attr,
-            self.value,
-            self.status,
-            self.agg,
-            self.aggts,
-            list(self.aggnext) if self.aggnext else None,
-        )
+    def format_psycopg(self) -> FormatPsycopg:
+        """Форматирование данных модели для вставки в зарос psycopg."""
+        dict_query_params = {
+            "ts": self.ts,
+            "entity": self.entity,
+            "attr": self.attr,
+            "value": self.value,
+            "status": self.status,
+            "agg": self.agg,
+            "aggts": self.aggts,
+            "aggnext": list(self.aggnext) if self.aggnext else None,
+        }
+        return FormatPsycopg(dict_query_params)

@@ -1,4 +1,6 @@
 import asyncio
+import copy
+
 
 import arrow
 import db
@@ -71,27 +73,31 @@ def test_create_many(database: db.data.Database) -> None:
 
 
 def test_create_many_large(database: db.data.Database) -> None:
+    """Проверка записи большого кол-ва строк.
+
+    В psycopg есть ограничение на макс. кол-во параметров при одной записи.
+    """
+
+    entity_inc = 0
+    rows_to_save_large: list[model] = []
+    rows_count = 3 * (CHUNK_SIZE // model.num_of_fields)
+    copy_repetions = rows_count / len(rows_to_save)
+    for _ in range(int(copy_repetions)):
+        rows = copy.deepcopy(rows_to_save)
+        for row in rows:
+            row.entity = entity_inc
+            entity_inc += 1
+        rows_to_save_large.extend(rows)
+
     async def run() -> None:
-
-        import copy
-
         async with database.create_session(model) as session:
-            entity_index = 0
-            rows_to_save_large: list[model] = []
-            value = 3 * (CHUNK_SIZE / 8) / len(rows_to_save)
-            for _ in range(int(value)):
-                rows = copy.deepcopy(rows_to_save)
-                for row in rows:
-                    row.entity = entity_index
-                    entity_index += 1
-                rows_to_save_large.extend(rows)
             crud = db.data.crud.crud_rows.CrudRows(session, "raw")
             await crud.delete_all()
             await crud.create_many(rows_to_save_large)
+            actual_count = len(await crud.read_all())
+            assert actual_count == rows_count
 
     asyncio.run(run())
-
-    assert True
 
 
 def test_create_one_read_all(database: db.data.Database) -> None:

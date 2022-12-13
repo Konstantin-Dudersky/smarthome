@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 from typing import Callable
 
+from ..internal.base_task import BaseTask
 from ..internal.shared import dir_rel_to_abs
 
 log: logging.Logger = logging.getLogger(__name__)
@@ -118,6 +119,44 @@ def docker_compose(
         os.system(f"sudo systemctl enable {service_name}")
 
     return _task
+
+
+class SystemdDockerCompose(BaseTask):
+    """Запуск docker compose через systemd."""
+
+    def __init__(
+        self,
+        desc: str,
+        service_name: str,
+        profile: str,
+        work_dir_rel: str,
+        need_confirm: bool = True,
+    ) -> None:
+        """Запуск docker compose через systemd."""
+        self.__service_name: str
+        self.__profile: str
+        self.__work_dir_rel: str
+
+        super().__init__(desc, need_confirm)
+        self.__service_name = service_name
+        self.__profile = profile
+        self.__work_dir_rel = work_dir_rel
+
+    def _execute(self) -> None:
+        log.info("Создаем сервис для запуска docker compose")
+        work_dir_abs: str = dir_rel_to_abs(self.__work_dir_rel)
+        log.info("Рабочая папка с проектом: %s", work_dir_abs)
+        service: str = SERVICE_DOCKER_COMPOSE.format(
+            workdir=work_dir_abs,
+            profile=self.__profile,
+        )
+        log.info("Файл сервиса:\n%s", service)
+        filename: str = "{0}.service".format(self.__service_name)
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(service)
+        os.system(f"sudo mv {filename} /etc/systemd/system")
+        os.system("sudo systemctl daemon-reload")
+        os.system(f"sudo systemctl enable {self.__service_name}")
 
 
 if __name__ == "__main__":

@@ -5,11 +5,19 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/__pycache__": true,
-    ".directory": true
+    "**/Thumbs.db": true,
+    "**/*.pyc": {
+      "when": "$(basename).py"
+    },
+    "**/__pycache__": true
   },
-  "python.linting.enabled": true,
-  "python.linting.flake8Enabled": true,
+  "python.defaultInterpreterPath": ".venv/bin/python3",
+  "python.formatting.blackPath": ".venv/bin/black",
   "python.formatting.provider": "black",
-  "python.defaultInterpreterPath": ".venv/bin/python3"
+  "python.linting.enabled": true,
+  "python.linting.flake8Args": ["--config", ".flake8"],
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Path": ".venv/bin/flake8",
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false
 }

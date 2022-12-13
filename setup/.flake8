@@ -1,5 +1,4 @@
 [flake8]
-docstring_style = numpy
 exclude =
     tests/,
     */migrations/,
@@ -18,8 +17,6 @@ ignore =
     WPS348, # Found a line that starts with a dot
     WPS410, # Found wrong metadata variable: __all__
     WPS412, # Found `__init__.py` module with logic
-    S404, # Consider possible security implications associated with the subprocess module.
-    S603, # subprocess call - check for execution of untrusted input.
 inline-quotes = double
 max-arguments = 10
 max-complexity = 10
@@ -28,3 +25,7 @@ multi-line-output-modes = 3
 nested-classes-whitelist = Config
 per-file-ignores =
     # */settings.py:E501,
+statistics = true
+# darglint
+docstring_style = numpy
+strictness = long

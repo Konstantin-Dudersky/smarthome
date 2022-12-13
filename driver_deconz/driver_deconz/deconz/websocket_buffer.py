@@ -36,8 +36,9 @@ class WebsocketBuffer(object):
 
     def get(self) -> WebsocketBufferItem:
         """Возвращает и удаляет сообщение из буфера."""
-        if not self.__buffer:
-            raise BufferEmptyError
-        message = self.__buffer.pop(0)
+        try:
+            message = self.__buffer.pop(0)
+        except IndexError as exc:
+            raise BufferEmptyError from exc
         log.debug("remove message from buffer:\n{0}".format(message))
         return message

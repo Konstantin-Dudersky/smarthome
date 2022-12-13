@@ -24,10 +24,9 @@ git clone https://github.com/Konstantin-Dudersky/setup.git setup_clone \
 import sys
 from typing import NamedTuple, Set
 
-
 from setup import setup
 
-SYSTEMD_SERVICE: str = "kleck"
+SYSTEMD_SERVICE: str = "smarthome"
 IMAGE_SETUP: str = "target:5000/inosat/kleck_setup"
 BIND_SRC_FOLDER: str = "type=bind,src=`pwd`,dst=/root/code"
 PARENT_FOLDER: str = "../."
@@ -142,6 +141,12 @@ class Tasks(NamedTuple):
         image="localhost:5000/smarthome/sh_setup",
         command="poetry run export_env_schema",
     )
+    systemd_create: setup.BaseTask = setup.systemd.SystemdDockerCompose(
+        desc="Создание сервиса systemd",
+        profile="pi",
+        work_dir_rel=".",
+        service_name=SYSTEMD_SERVICE,
+    )
 
 
 class TasksOld(NamedTuple):
@@ -178,14 +183,6 @@ class TasksOld(NamedTuple):
     # )
     # system_share_folder: setup.Task = setup.Task(
     #     desc="Создание общей папки", task=setup.samba("../../share")
-    # )
-    # server_systemd_create: setup.Task = setup.Task(
-    #     desc="Создание сервиса systemd",
-    #     task=setup.systemd.docker_compose(
-    #         service_name=SYSTEMD_SERVICE,
-    #         profile="server",
-    #         work_dir_rel="../.",
-    #     ),
     # )
     # alembic_upgrade: setup.Task = setup.Task(
     #     desc="Обновить схему БД",
@@ -264,6 +261,7 @@ class ComposeTasks(NamedTuple):
         subtasks=[
             TASKS.codesync,
             TASKS.docker_move_images,
+            TASKS.systemd_create,
         ],
     )
     target_update: setup.ComposeTask = setup.ComposeTask(

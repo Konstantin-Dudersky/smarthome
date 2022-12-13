@@ -16,6 +16,10 @@ log: logging.Logger = logging.getLogger(__name__)
 
 BASE_URL: Final[str] = "http://{host}:{port_api}/api/{api_key}"
 
+EXC_REQUEST_ERROR: Final[
+    str
+] = "Ошибка выполнения запроса\nзапрос: {request}\nсообщение: {message}"
+
 
 class Api(TasksProtocol):
     """Чтение данных по REST API."""
@@ -70,24 +74,27 @@ class Api(TasksProtocol):
 
     async def __http_query(self, endpoint: str) -> httpx.Response:
         """Базовый запрос."""
-        url = "{base_url}{endpoint}".format(
-            base_url=self.__base_url,
-            endpoint=endpoint,
-        )
+        url = self.__construct_full_enpoint(endpoint)
         async with httpx.AsyncClient() as http:
             try:
                 return await http.get(url)
-            except httpx.ConnectError as exc:
-                log.error(
-                    "Ошибка выполнения запроса: {0}".format(exc.request),
-                )
+            except httpx.RequestError as exc:
+                self.__handle_http_query_exc(exc)
                 raise exceptions.DataNotReceivedError
-            except httpx.ConnectTimeout:
-                log.error("Таймаут подключения")
-                raise exceptions.DataNotReceivedError
-            except httpx.RemoteProtocolError as exc:
-                log.error(exc)
-                raise exceptions.DataNotReceivedError
+
+    def __construct_full_enpoint(self, endpoint: str) -> str:
+        return "{base_url}{endpoint}".format(
+            base_url=self.__base_url,
+            endpoint=endpoint,
+        )
+
+    def __handle_http_query_exc(self, exc: httpx.RequestError) -> None:
+        log.error(
+            EXC_REQUEST_ERROR.format(
+                request=exc.request,
+                message=str(exc),
+            ),
+        )
 
     def __check_status_code(
         self,

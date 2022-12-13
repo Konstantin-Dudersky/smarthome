@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "db/README.md",
+                "file": "todo.md",
                 "mode": "source",
                 "source": true
               }
@@ -61,7 +61,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "ssh",
+                "query": "#pyproject",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +78,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -98,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "db/README.md",
+                "file": "todo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "db/README.md",
+                "file": "todo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "db/README.md"
+                "file": "todo.md"
               }
             }
           }
@@ -149,11 +150,11 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "f4617d2727432f7c",
+  "active": "d44c2f4003292101",
   "lastOpenFiles": [
+    "db/README.md",
     "todo.md",
     "README.md",
-    "db/README.md",
     "deconz_hub/README.md",
     "docs/diagrams/out/network.png",
     "docs/README.md",

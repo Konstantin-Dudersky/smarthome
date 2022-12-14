@@ -1,4 +1,7 @@
-"""Чтение данных по REST API."""
+"""Чтение данных по REST API.
+
+Периодически читает данные и сохраняет в свойстве full_state.
+"""
 
 import asyncio
 import logging

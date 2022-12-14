@@ -39,6 +39,7 @@ db = { path = "../db", develop = true }
 black = "*"
 poethepoet = "*"
 pytest = "*"
+pytest-httpx = "0.21.2"
 wemake-python-styleguide = "*"
 
 

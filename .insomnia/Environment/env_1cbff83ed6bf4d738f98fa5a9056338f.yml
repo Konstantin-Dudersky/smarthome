@@ -1,15 +1,15 @@
 _id: env_1cbff83ed6bf4d738f98fa5a9056338f
 type: Environment
 parentId: env_d8eb95de2bf664427df172e749460ab7b571fcdb
-modified: 1669811116077
+modified: 1671031232201
 created: 1669808198830
 name: pi
 data:
-  deconz_hub_host: 10.101.80.106
+  deconz_hub_host: 192.168.101.10
   deconz_hub_port_ws: 8011
   deconz_hub_port_api: 8010
   deconz_hub_api_key: "1234567890"
-  driver_deconz_host: 10.101.80.106
+  driver_deconz_host: 192.168.101.10
   driver_deconz_port: 8012
 dataPropertyOrder:
   "&":

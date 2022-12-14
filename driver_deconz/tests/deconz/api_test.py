@@ -1,4 +1,5 @@
 import asyncio
+import json
 from pytest_httpx import HTTPXMock
 
 
@@ -6,8 +7,10 @@ from driver_deconz.deconz.api import Api
 
 
 def test_api(httpx_mock: HTTPXMock, deconz_api: Api) -> None:
+    with open("tests/deconz/full_state_response.json", "r") as file:
+        response = json.load(file)
     httpx_mock.add_response(
-        json=[{"key1": "value1", "key2": "value2"}],
+        json=response,
     )
 
     async def run():
@@ -19,6 +22,4 @@ def test_api(httpx_mock: HTTPXMock, deconz_api: Api) -> None:
 
     asyncio.run(run())
 
-    print(deconz_api.full_state)
-
-    assert True
+    assert response == json.loads(deconz_api.full_state)

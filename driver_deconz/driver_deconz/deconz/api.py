@@ -52,7 +52,7 @@ class Api(TasksProtocol):
 
     @property
     def full_state(self) -> str:
-        """Возвращает данные, если есть."""
+        """Возвращает данные. Если данных нет, то BufferEmptyError."""
         if self.__full_state is None:
             raise exceptions.BufferEmptyError
         full_state = self.__full_state

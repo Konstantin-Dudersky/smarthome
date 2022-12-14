@@ -1,0 +1,250 @@
+{
+  "alarmsystems": {
+    "1": {
+      "config": {
+        "armed_away_entry_delay": 120,
+        "armed_away_exit_delay": 120,
+        "armed_away_trigger_duration": 120,
+        "armed_night_entry_delay": 120,
+        "armed_night_exit_delay": 120,
+        "armed_night_trigger_duration": 120,
+        "armed_stay_entry_delay": 120,
+        "armed_stay_exit_delay": 120,
+        "armed_stay_trigger_duration": 120,
+        "armmode": "disarmed",
+        "configured": false,
+        "disarmed_entry_delay": 0,
+        "disarmed_exit_delay": 0
+      },
+      "devices": {},
+      "name": "default",
+      "state": {
+        "armstate": "disarmed",
+        "seconds_remaining": 0
+      }
+    }
+  },
+  "config": {
+    "UTC": "2022-12-14T15:29:16",
+    "apiversion": "1.16.0",
+    "backup": {
+      "errorcode": 0,
+      "status": "idle"
+    },
+    "bridgeid": "00212EFFFF04823B",
+    "datastoreversion": "93",
+    "devicename": "ConBee II",
+    "dhcp": true,
+    "disablePermitJoinAutoOff": false,
+    "factorynew": false,
+    "fwversion": "0x26720700",
+    "gateway": "172.20.0.1",
+    "internetservices": {
+      "internet": "connected",
+      "remoteaccess": "disconnected",
+      "swupdate": "connected",
+      "time": "connected"
+    },
+    "ipaddress": "172.20.0.8",
+    "lightlastseeninterval": 60,
+    "linkbutton": false,
+    "localtime": "2022-12-14T18:29:16",
+    "mac": "02:42:ac:14:00:08",
+    "modelid": "deCONZ",
+    "name": "Phoscon-GW",
+    "netmask": "255.255.0.0",
+    "networkopenduration": 180,
+    "panid": 763,
+    "portalconnection": "disconnected",
+    "portalservices": false,
+    "portalstate": {
+      "communication": "disconnected",
+      "incoming": false,
+      "outgoing": false,
+      "signedon": false
+    },
+    "proxyaddress": "none",
+    "proxyport": 0,
+    "replacesbridgeid": null,
+    "rfconnected": true,
+    "starterkitid": "",
+    "swupdate": {
+      "checkforupdate": false,
+      "devicetypes": {
+        "bridge": false,
+        "lights": [],
+        "sensors": []
+      },
+      "notify": false,
+      "text": "",
+      "updatestate": 0,
+      "url": ""
+    },
+    "swupdate2": {
+      "autoinstall": {
+        "on": false,
+        "updatetime": ""
+      },
+      "bridge": {
+        "lastinstall": "2022-11-10T15:29:53",
+        "state": "noupdates"
+      },
+      "checkforupdate": false,
+      "lastchange": "",
+      "state": "noupdates"
+    },
+    "swversion": "2.19.2",
+    "timeformat": "24h",
+    "timezone": "Etc/UTC",
+    "uuid": "e7d54dd8-7228-4f6b-a968-3d8689e2cf0b",
+    "websocketnotifyall": true,
+    "websocketport": 443,
+    "whitelist": {
+      "1234567890": {
+        "create date": "2022-11-29T10:42:48",
+        "last use date": "2022-12-14T15:29:16",
+        "name": "smarthome"
+      },
+      "9FCFEEF1AB": {
+        "create date": "2022-12-13T16:47:34",
+        "last use date": "2022-12-13T19:39:15",
+        "name": "Phoscon#B2560x938"
+      },
+      "C80C894FF2": {
+        "create date": "2022-11-25T18:24:01",
+        "last use date": "2022-11-26T10:08:54",
+        "name": "Phoscon#B2560x938"
+      },
+      "C99461D70C": {
+        "create date": "2022-11-26T10:06:51",
+        "last use date": "2022-11-27T08:19:38",
+        "name": "smarthome"
+      },
+      "CAB65DD9F9": {
+        "create date": "2022-11-29T10:42:26",
+        "last use date": "2022-11-29T11:03:37",
+        "name": "Phoscon#B960x933"
+      }
+    },
+    "zigbeechannel": 15
+  },
+  "groups": {},
+  "lights": {},
+  "resourcelinks": {},
+  "rules": {},
+  "scenes": {},
+  "schedules": {},
+  "sensors": {
+    "1": {
+      "config": {
+        "configured": true,
+        "on": true,
+        "sunriseoffset": 30,
+        "sunsetoffset": -30
+      },
+      "etag": "9e3c30831967645f7099600167432842",
+      "manufacturername": "Philips",
+      "modelid": "PHDL00",
+      "name": "Daylight",
+      "state": {
+        "dark": true,
+        "daylight": false,
+        "lastupdated": "2022-12-14T15:24:51.775",
+        "status": 220,
+        "sunrise": "2022-12-14T06:22:06",
+        "sunset": "2022-12-14T13:49:11"
+      },
+      "swversion": "1.0",
+      "type": "Daylight",
+      "uniqueid": "00:21:2e:ff:ff:04:82:3b-01"
+    },
+    "6": {
+      "config": {
+        "battery": 100,
+        "offset": 0,
+        "on": true,
+        "reachable": false
+      },
+      "ep": 1,
+      "etag": "34885634005dd30bda94cc0a13eb1a3b",
+      "lastannounced": null,
+      "lastseen": "2022-12-14T15:24Z",
+      "manufacturername": "LUMI",
+      "modelid": "lumi.weather",
+      "name": "Multi Sensor 123",
+      "state": {
+        "humidity": 3978,
+        "lastupdated": "2022-11-29T12:47:49.621"
+      },
+      "swversion": "20161129",
+      "type": "ZHAHumidity",
+      "uniqueid": "00:15:8d:00:03:f0:44:0d-01-0405"
+    },
+    "7": {
+      "config": {
+        "battery": 100,
+        "offset": 0,
+        "on": true,
+        "reachable": false
+      },
+      "ep": 1,
+      "etag": "34885634005dd30bda94cc0a13eb1a3b",
+      "lastannounced": null,
+      "lastseen": "2022-12-14T15:24Z",
+      "manufacturername": "LUMI",
+      "modelid": "lumi.weather",
+      "name": "Multi Sensor 123",
+      "state": {
+        "lastupdated": "2022-11-29T12:47:49.595",
+        "temperature": 2437
+      },
+      "swversion": "20161129",
+      "type": "ZHATemperature",
+      "uniqueid": "00:15:8d:00:03:f0:44:0d-01-0402"
+    },
+    "8": {
+      "config": {
+        "battery": 100,
+        "offset": 0,
+        "on": true,
+        "reachable": false
+      },
+      "ep": 1,
+      "etag": "34885634005dd30bda94cc0a13eb1a3b",
+      "lastannounced": null,
+      "lastseen": "2022-12-14T15:24Z",
+      "manufacturername": "LUMI",
+      "modelid": "lumi.weather",
+      "name": "Multi Sensor 123",
+      "state": {
+        "lastupdated": "2022-11-29T12:47:49.634",
+        "pressure": 1001
+      },
+      "swversion": "20161129",
+      "type": "ZHAPressure",
+      "uniqueid": "00:15:8d:00:03:f0:44:0d-01-0403"
+    },
+    "9": {
+      "config": {
+        "battery": 100,
+        "on": true,
+        "reachable": true,
+        "temperature": 2800
+      },
+      "ep": 1,
+      "etag": "75af2a2ca152d101e4856c050f9d63e6",
+      "lastannounced": "2022-12-13T16:33:17Z",
+      "lastseen": "2022-12-13T20:29Z",
+      "manufacturername": "LUMI",
+      "modelid": "lumi.sensor_magnet.aq2",
+      "name": "Window / Door Sensor",
+      "state": {
+        "lastupdated": "2022-12-13T20:29:06.218",
+        "open": false
+      },
+      "swversion": "20161128",
+      "type": "ZHAOpenClose",
+      "uniqueid": "00:15:8d:00:03:21:44:8c-01-0006"
+    }
+  }
+}

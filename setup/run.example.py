@@ -15,22 +15,24 @@ git clone https://github.com/Konstantin-Dudersky/setup.git setup_clone \
 Использование:
 
 - вывести список задач для выполнения:
-./run.py
+./dev.py
 
 - запустить задачу task_name на выполнение:
-./run.py task_name
+./dev.py task_name
 """
 
 import sys
-from typing import NamedTuple, Set
+from typing import Final, NamedTuple, Set, TYPE_CHECKING
 
 from setup import setup
 
+if TYPE_CHECKING:
+    import setup
+
 SYSTEMD_SERVICE: str = "smarthome"
-IMAGE_SETUP: str = "docker-registry:5000/smarthome/sh_setup"
+IMAGE_SETUP: str = "target:5000/inosat/kleck_setup"
 BIND_SRC_FOLDER: str = "type=bind,src=`pwd`,dst=/root/code"
 PARENT_FOLDER: str = "../."
-
 
 PYTHON_PROJECTS: Set[str] = {
     "./db",
@@ -41,6 +43,9 @@ PYTHON_PROJECTS: Set[str] = {
 NG_PROJECTS: Set[str] = {
     "./webapp",
 }
+REMOTE_USER: Final[str] = "root"
+REMOTE_HOST: Final[str] = "target"
+REMOTE_CODE_FOLDER: Final[str] = "/home/code"
 
 
 class Tasks(NamedTuple):
@@ -55,6 +60,14 @@ class Tasks(NamedTuple):
     codesync: setup.BaseTask = setup.CodeSync(
         desc="Синхронизация кода с целевой системой",
         remote_path="admin@target:/home/admin/code",
+    )
+    docker_install: setup.BaseTask = setup.DockerInstall()
+    docker_install_remote: setup.BaseTask = setup.RemoteCommand(
+        desc="Устанока Docker на целевой машине",
+        command="./run.py docker_install",
+        remote_user=REMOTE_USER,
+        remote_host=REMOTE_HOST,
+        remote_folder=REMOTE_CODE_FOLDER,
     )
     poetry_install: setup.BaseTask = setup.SimpleCommandMultifolder(
         desc="Установка виртуальных окружений python",
@@ -125,14 +138,40 @@ class Tasks(NamedTuple):
         desc="Сборка образов docker",
         command="docker buildx bake --builder builder -f docker-bake.hcl --push pi",
     )
-    docker_pull_images: setup.BaseTask = setup.SimpleCommand(
-        desc="Загрузка образов docker",
-        command="docker compose --profile system --profile pi pull -q",
+    docker_compose_pull_remote: setup.BaseTask = setup.RemoteCommand(
+        desc="Загрузить образы docker из хранилища",
+        command="docker compose --profile {profile} pull".format(
+            profile="notification",
+        ),
+        remote_user=REMOTE_USER,
+        remote_host=REMOTE_HOST,
+        remote_folder=REMOTE_CODE_FOLDER,
+    )
+    docker_compose_up_system: setup.BaseTask = setup.RemoteCommand(
+        desc="Запуск системных образов Docker",
+        command="docker compose --profile system up -d",
+        remote_user=REMOTE_USER,
+        remote_host=REMOTE_HOST,
+        remote_folder=REMOTE_CODE_FOLDER,
     )
     create_env: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
         desc="Создать файл .env",
         image=IMAGE_SETUP,
         command="poetry run create_env",
+    )
+    create_env_remote: setup.BaseTask = setup.RemoteCommand(
+        desc="Создать файл .env на целевой машине",
+        command="./run.py create_env",
+        remote_user=REMOTE_USER,
+        remote_host=REMOTE_HOST,
+        remote_folder=REMOTE_CODE_FOLDER,
+    )
+    edit_env_remote: setup.BaseTask = setup.RemoteCommand(
+        desc="Редактировать файл .env на целевой машине",
+        command="nano .env",
+        remote_user=REMOTE_USER,
+        remote_host=REMOTE_HOST,
+        remote_folder=REMOTE_CODE_FOLDER,
     )
     export_env_schema: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
         desc="Экспортировать настройки в json файл",
@@ -145,6 +184,13 @@ class Tasks(NamedTuple):
         work_dir_rel=".",
         service_name=SYSTEMD_SERVICE,
     )
+    systemd_create_remote: setup.BaseTask = setup.RemoteCommand(
+        desc="Создание сервиса systemd на целевой машине",
+        command="./run.py systemd_create",
+        remote_user=REMOTE_USER,
+        remote_host=REMOTE_HOST,
+        remote_folder=REMOTE_CODE_FOLDER,
+    )
 
 
 class TasksOld(NamedTuple):
@@ -156,9 +202,12 @@ class TasksOld(NamedTuple):
     #         base_href="/",
     #     ),
     # )
-    # docker_install: setup.Task = setup.Task(
-    #     desc="Установка docker",
-    #     task=setup.docker_tasks.install(),
+    # server_export_openapi: setup.Task = setup.Task(
+    #     desc="Экспорт спецификации API",
+    #     task=setup.cmd_in_dir(
+    #         work_dir="../server",
+    #         command="poetry run poe export_openapi",
+    #     ),
     # )
     # server_service_start: setup.Task = setup.Task(
     #     desc="Запустить сервис",
@@ -188,6 +237,21 @@ class TasksOld(NamedTuple):
 
 
 TASKS = Tasks()
+
+
+DOCKER_INSECURE: str = """
+Добавить в файл `/etc/docker/daemon.json` :
+sys.argv, TASKS, COMPOSE_TASKS
+$ sudo nano /etc/docker/daemon.json
+
+строку:
+
+{ "insecure-registries":["target:5000"] }
+
+И перезагрузить сервис:
+
+sudo systemctl restart docker
+"""
 
 
 class ComposeTasks(NamedTuple):
@@ -230,24 +294,36 @@ class ComposeTasks(NamedTuple):
         desc="Установка на целевой системе, ч.1",
         subtasks=[
             TASKS.codesync,
+            TASKS.docker_install_remote,
+            TASKS.docker_compose_up_system,
+            TASKS.docker_move_images,
+            TASKS.create_env_remote,
+            TASKS.edit_env_remote,
+            TASKS.docker_compose_pull_remote,
+            TASKS.systemd_create_remote,
         ],
     )
     target_install_2: setup.ComposeTask = setup.ComposeTask(
         desc="Установка на целевой системе, ч.2",
         subtasks=[
-            TASKS.docker_pull_images,
-            TASKS.create_env,
-            TASKS.systemd_create,
+            TASKS.codesync,
         ],
     )
     target_update: setup.ComposeTask = setup.ComposeTask(
         desc="Обновление проекта на целевой системе",
         subtasks=[
             TASKS.codesync,
-            TASKS.docker_pull_images,
+            TASKS.docker_move_images,
         ],
     )
 
+    # build: setup.ComposeTask = setup.ComposeTask(
+    #     desc="Сборка проекта",
+    #     subtasks=[
+    #         TASKS.webapp_build,
+    #         TASKS.server_export_openapi,
+    #     ],
+    # )
     # install_1: setup.ComposeTask = setup.ComposeTask(
     #     desc="Первоначальная установка проекта на целевой системе, ч.1",
     #     subtasks=[
@@ -264,7 +340,9 @@ class ComposeTasks(NamedTuple):
     # install_2: setup.ComposeTask = setup.ComposeTask(
     #     desc="Первоначальная установка проекта на целевой системе, ч.2",
     #     subtasks=[
+    #         TASKS.create_env,
     #         TASKS.alembic_upgrade,
+    #         TASKS.server_systemd_create,
     #         TASKS.server_service_start,
     #     ],
     # )

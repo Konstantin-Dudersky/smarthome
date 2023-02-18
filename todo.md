@@ -1,3 +1,0 @@
-- todo
-	- setup - сервис systemd для автозапуска
-- doing

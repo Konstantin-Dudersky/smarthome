@@ -15,12 +15,18 @@ version = "0.0.2"
 
 
 [tool.poetry.dependencies]
-python = "3.11"
+python = "3.11.*"
+
+shared = { path = '../shared', develop = true }
 
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
 wemake-python-styleguide = "0.17.0"
+
+
+[tool.poetry.scripts]
+create_env = "setup.local_tasks:create_env"
 
 
 [tool.pyright]

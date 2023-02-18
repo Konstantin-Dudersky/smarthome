@@ -4,13 +4,15 @@
 docker buildx bake --builder builder -f docker-bake.hcl --push pi
 */
 
-PYTHON_VER = "3.11.1" // https://www.python.org/downloads/
-POETRY_VER = "1.3.0" // https://github.com/python-poetry/poetry
-POSTGRE_VER = "14.6" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
-TIMESCALEDB_VER = "2.8.1"
-DECONZ_VER = "2.19.03" // https://hub.docker.com/r/deconzcommunity/deconz/tags
+PYTHON_VER = "3.11.2" // https://www.python.org/downloads/
+POETRY_VER = "1.3.2" // https://github.com/python-poetry/poetry
+POSTGRE_VER = "15.2" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
+REDIS = "7.0.8" // https://hub.docker.com/_/redis
+TIMESCALEDB_VER = "2.9.3"
+DECONZ_VER = "2.20.01" // https://hub.docker.com/r/deconzcommunity/deconz/tags
 
-REPO = "localhost:5000"
+
+REPO = "docker-registry:5000"
 
 PLATFORMS = [
     "linux/amd64",
@@ -60,6 +62,15 @@ target "sh_setup" {
     }
     dockerfile = "setup/Dockerfile"
     tags = [ "${REPO}/smarthome/sh_setup" ]
+    platforms = PLATFORMS
+}
+
+target "sh_redis" {
+    dockerfile = "redis/Dockerfile"
+    tags = [ "${REPO}/smarthome/sh_redis" ]
+    args = {
+        REDIS = REDIS
+    }
     platforms = PLATFORMS
 }
 

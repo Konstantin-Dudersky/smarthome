@@ -2,12 +2,10 @@
 
 import logging
 from pathlib import Path
-from typing import Final, Iterable
-
-from shared.patterns import SingletonMeta
+from typing import Final
 
 from .create_env import CreateEnv
-from .schema import Profiles, SettingsSchema
+from .schema import SettingsSchema
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -19,7 +17,7 @@ SCHEMA_JSON: Final[str] = "{path}/{env_file}.schema.json"
 VALUES_JSON: Final[str] = "{path}/{env_file}.values.json"
 
 
-class SettingsStore(object, metaclass=SingletonMeta["SettingsStore"]):
+class SettingsStore(object):
     """Класс для управления настройками."""
 
     def __init__(self, env_file: str = ".env") -> None:
@@ -35,25 +33,9 @@ class SettingsStore(object, metaclass=SingletonMeta["SettingsStore"]):
         """Настройки."""
         return self.__settings
 
-    def create_env(
-        self,
-        profiles: Iterable[Profiles],
-    ) -> None:
-        """Записывает файл с дефолтными значениями.
-
-        Экспортируются настройки,
-        у которых в поле profiles указан необходимый профиль.
-        Если у настройки нет поля profiles, она всегда экспортируется.
-
-        Parameters
-        ----------
-        profiles
-            профили для экспорта настроек
-        """
-        CreateEnv(
-            profiles=profiles,
-            env_file=self.__env_file,
-        ).export()
+    def create_env(self) -> None:
+        """Записывает файл с дефолтными значениями."""
+        CreateEnv(env_file=self.__env_file).export()
 
     def export_schema(self, path: Path) -> None:
         """Экспортировать настройки в формате JSON.
@@ -86,4 +68,4 @@ class SettingsStore(object, metaclass=SingletonMeta["SettingsStore"]):
 
 if __name__ == "__main__":
     s1 = SettingsStore("../.env")
-    s2 = SettingsStore.instance()
+    s2 = SettingsStore.settings

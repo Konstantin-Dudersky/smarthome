@@ -1,0 +1,9 @@
+{
+  "items": [
+    {
+      "type": "file",
+      "title": "todo",
+      "path": "docs/todo.md"
+    }
+  ]
+}

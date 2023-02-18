@@ -1,0 +1,4 @@
+- todo
+	- 
+- doing
+	- docker для redis

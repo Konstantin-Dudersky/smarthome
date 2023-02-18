@@ -43,27 +43,6 @@ def install_ubuntu() -> Callable[[], None]:
     return _task
 
 
-def install() -> Callable[[], None]:
-    """Установить на Debian.
-
-    Returns:
-    --------
-    Задача для выполнения
-    """
-
-    def _task() -> None:
-        os.system("sudo apt install -y curl")
-        log.info("Устанавливаем Docker")
-        os.system("curl -fsSL https://get.docker.com -o get-docker.sh")
-        os.system("sudo sh get-docker.sh")
-        log.info("Проверим, что docker установился корректно")
-        os.system("sudo docker run --name hello-world hello-world")
-        os.system("sudo groupadd docker")
-        os.system("sudo usermod -aG docker $USER")
-
-    return _task
-
-
 TEMPL: str = "docker run --rm -w {work_dir} --pull always --mount {mount} {image} {command}"
 
 

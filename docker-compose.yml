@@ -22,34 +22,6 @@ services:
     volumes:
       - sh_pgadmin_volume:/var/lib/pgadmin
 
-  docker_registry:
-    image: registry:2.7
-    container_name: docker_registry
-    ports:
-      - "5000:5000"
-    profiles:
-      - system
-    restart: always
-    volumes:
-      - docker_registry_volume:/var/lib/registry
-      - ./docker-registry-config.yml:/etc/docker/registry/config.yml
-
-  docker_registry_ui:
-    image: joxit/docker-registry-ui:latest
-    container_name: docker_registry_ui
-    depends_on:
-      - docker_registry
-    environment:
-      - REGISTRY_TITLE=My Private Docker Registry
-      - REGISTRY_URL=http://target:5000
-      - SINGLE_REGISTRY=true
-      - DELETE_IMAGES=true
-    ports:
-      - "8000:80"
-    profiles:
-      - system
-    restart: always
-
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -65,7 +37,7 @@ services:
   # pi -------------------------------------------------------------------------
 
   sh_deconz_hub:
-    image: localhost:5000/smarthome/sh_deconz_hub
+    image: docker-registry:5000/smarthome/sh_deconz_hub
     container_name: sh_deconz_hub
     hostname: sh_deconz_hub
     devices:
@@ -85,7 +57,7 @@ services:
       - sh_deconz_hub_volume:/opt/deCONZ
 
   sh_db:
-    image: localhost:5000/smarthome/sh_db
+    image: docker-registry:5000/smarthome/sh_db
     container_name: sh_db
     hostname: sh_db
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
@@ -101,7 +73,7 @@ services:
       - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
 
   sh_driver_deconz:
-    image: localhost:5000/smarthome/sh_driver_deconz
+    image: docker-registry:5000/smarthome/sh_driver_deconz
     container_name: sh_driver_deconz
     hostname: sh_driver_deconz
     ports:
@@ -112,12 +84,24 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - .:/root/code
 
-  setup:
-    image: localhost:5000/smarthome/sh_setup
-    container_name: setup
-    hostname: setup
+  sh_redis:
+    image: docker-registry:5000/smarthome/sh_redis
+    container_name: sh_redis
+    hostname: sh_redis
+    ports:
+      - "${redis_port}:6379"
     profiles:
       - pi
+
+  sh_setup:
+    image: docker-registry:5000/smarthome/sh_setup
+    container_name: sh_setup
+    hostname: sh_setup
+    profiles:
+      - pi
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - .:/root/code
 
 volumes:
   sh_db_volume:

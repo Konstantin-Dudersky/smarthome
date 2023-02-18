@@ -1,0 +1,43 @@
+@startuml
+!include C4_Dynamic.puml
+!include <tupadr3/common>
+!include <tupadr3/devicons/angular>
+!include <tupadr3/devicons/postgresql>
+!include <tupadr3/devicons/python>
+!include <tupadr3/devicons/redis>
+!include <tupadr3/font-awesome-5/lightbulb>
+!include <tupadr3/font-awesome-5/server>
+!include <tupadr3/font-awesome-5/sun>
+!include <tupadr3/font-awesome-5/telegram>
+!include <tupadr3/font-awesome-5/thermometer>
+
+System_Boundary($alias=14, $label="smarthome") {
+    Container($alias=1, $label="web app", $techn="angular", $sprite=angular)
+    Container($alias=2, $label="desktop app", $techn="angular, tauri", $sprite=angular)
+    Container_Ext($alias=3, $label="deconz_hub", $techn="REST API, websockets", $sprite=server)
+    Container_Boundary($alias=11, $label="raspberry") {
+        Component($alias=4, $label="API", $techn="FastAPI", $sprite=python)
+        Component($alias=5, $label="weather-service", $techn="Python", $sprite=python)
+        Component($alias=6, $label="driver_deconz", $techn="httpx, websockets", $sprite=python)
+        ComponentDb($alias=7, $label="db", $descr="Настройки, архивы", $techn="PostgreSQL+TimescaleDB", $sprite=postgresql)
+        Component($alias=8, $label="driver_yeelight", $techn="asyncio stream", $sprite=python)
+        Component($alias=9, $label="telegram-service", $techn="telegram", $sprite=python)
+        ComponentQueue($alias=10, $label="Redis", $sprite=redis)
+    }
+    Container_Ext($alias=12, $label="Zigbee sensors", $techn="T, P, ...", $sprite=thermometer)
+    Container_Ext($alias=13, $label="Yeelight bulbs", $techn="Yeelight", $sprite=lightbulb)
+}
+System_Ext($alias=15, $label="Weather", $sprite=sun)
+System_Ext($alias=16, $label="Telegram", $sprite=telegram)
+
+Rel($from=1, $to=4, $label="Uses", $techn="http")
+Rel($from=2, $to=4, $label="Uses", $techn="http")
+Rel_Back($from=15, $to=5, $label="Uses", $techn="http")
+BiRel($from=6, $to=3, $label="Uses", $techn="http")
+Rel($from=3, $to=12, $label="Uses", $techn="zigbee")
+Rel($from=8, $to=13, $label="R/W", $techn="http,Wi-Fi")
+Rel_Back($from=16, $to=9, $label="send", $techn="http")
+BiRel($from=10, $to=8, $label="r/w")
+
+SHOW_LEGEND()
+@enduml

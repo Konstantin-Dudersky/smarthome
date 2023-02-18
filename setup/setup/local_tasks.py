@@ -2,22 +2,15 @@
 
 from pathlib import Path
 
-from shared import SettingsProfiles, SettingsStore, Logger
+from shared import Logger
+from shared.settings import SettingsStore
 
 Logger(output_to_console=True)
 
 
 def create_env():
     """Создать файл с настройками."""
-    SettingsStore("../.env").create_env(
-        profiles={
-            SettingsProfiles.api,
-            SettingsProfiles.deconz_hub,
-            SettingsProfiles.driver_deconz,
-            SettingsProfiles.db,
-            SettingsProfiles.pgadmin,
-        },
-    )
+    SettingsStore("../.env").create_env()
 
 
 def export_env_schema() -> None:

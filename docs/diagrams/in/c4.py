@@ -1,134 +1,136 @@
-from konstantin_docs.dia.c4 import (
-    C4,
-    component,
-    container,
-    context,
-    rel,
-    sprite,
-)
+from dataclass_to_diagram.models import c4
 
-
-web_app = container.Container(
-    label="web app",
-    techn="angular",
-    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.ANGULAR),
-)
-desktop_app = container.Container(
-    label="desktop app",
-    techn="angular, tauri",
-    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.ANGULAR),
-)
-zigbee = container.ContainerExt(
-    label="Zigbee sensors",
-    techn="T, P, ...",
-    sprite=sprite.tupadr3.FontAwesome5(
-        sprite.tupadr3.FontAwesome5Lib.THERMOMETER
-    ),
-)
-yeelight = container.ContainerExt(
-    label="Yeelight bulbs",
-    techn="Yeelight",
-    sprite=sprite.tupadr3.FontAwesome5(
-        sprite.tupadr3.FontAwesome5Lib.LIGHTBULB
-    ),
-)
-# server app
-api = component.Component(
-    label="API",
-    techn="FastAPI",
-    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.PYTHON),
-)
-server_weather = component.Component(
-    label="weather-service",
-    techn="Python",
-    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.PYTHON),
-)
-server_yeelight = component.Component(
-    label="yeelight-service",
-    techn="asyncio stream",
-    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.PYTHON),
-)
-server_telegram = component.Component(
-    label="telegram-service",
-    techn="telegram",
-    sprite=sprite.tupadr3.Devicons(sprite.tupadr3.DeviconsLib.PYTHON),
-)
-
-weather = context.SystemExt(
-    label="Weather",
-    sprite=sprite.tupadr3.FontAwesome5(sprite.tupadr3.FontAwesome5Lib.SUN),
-)
-telegram = context.SystemExt(
-    label="Telegram",
-    sprite=sprite.tupadr3.FontAwesome5(sprite.tupadr3.FontAwesome5Lib.TELEGRAM),
-)
-
-dia = C4(
-    filename="c4",
-    title="C4",
-    links_context=[
-        smarthome := context.SystemBoundary(
+dia = c4.C4(
+    contexts=[
+        smarthome := c4.context.SystemBoundary(
             label="smarthome",
-            links_container=[
-                web_app,
-                desktop_app,
-                deconz_hub := container.ContainerExt(
-                    label="deconz_hub",
-                    techn="REST API, websockets",
-                    sprite=sprite.tupadr3.FontAwesome5(
-                        sprite.tupadr3.FontAwesome5Lib.SERVER
+            containers=[
+                web_app := c4.container.Container(
+                    label="web app",
+                    techn="angular",
+                    sprite=c4.sprite.tupadr3.Devicons(
+                        c4.sprite.tupadr3.Devicons.angular
                     ),
                 ),
-                raspberry := container.ContainerBoundary(
+                desktop_app := c4.container.Container(
+                    label="desktop app",
+                    techn="angular, tauri",
+                    sprite=c4.sprite.tupadr3.Devicons(
+                        c4.sprite.tupadr3.Devicons.angular
+                    ),
+                ),
+                deconz_hub := c4.container.ContainerExt(
+                    label="deconz_hub",
+                    techn="REST API, websockets",
+                    sprite=c4.sprite.tupadr3.FontAwesome5(
+                        c4.sprite.tupadr3.FontAwesome5.server
+                    ),
+                ),
+                raspberry := c4.container.ContainerBoundary(
                     label="raspberry",
-                    links_component=[
-                        api,
-                        server_weather,
-                        driver_deconz := component.Component(
-                            label="driver_deconz",
-                            techn="httpx, websockets",
-                            sprite=sprite.tupadr3.Devicons(
-                                sprite.tupadr3.DeviconsLib.PYTHON
+                    components=[
+                        api := c4.component.Component(
+                            label="API",
+                            techn="FastAPI",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.python
                             ),
                         ),
-                        server_db := component.ComponentDb(
+                        server_weather := c4.component.Component(
+                            label="weather-service",
+                            techn="Python",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.python
+                            ),
+                        ),
+                        driver_deconz := c4.component.Component(
+                            label="driver_deconz",
+                            techn="httpx, websockets",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.python
+                            ),
+                        ),
+                        server_db := c4.component.ComponentDb(
                             label="db",
                             techn="PostgreSQL+TimescaleDB",
                             descr="Настройки, архивы",
-                            sprite=sprite.tupadr3.Devicons(
-                                sprite.tupadr3.DeviconsLib.POSTGRESQL
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.postgresql
                             ),
                         ),
-                        server_yeelight,
-                        server_telegram,
+                        driver_yeelight := c4.component.Component(
+                            label="driver_yeelight",
+                            techn="asyncio stream",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.python
+                            ),
+                        ),
+                        server_telegram := c4.component.Component(
+                            label="telegram-service",
+                            techn="telegram",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.python
+                            ),
+                        ),
+                        redis := c4.component.ComponentQueue(
+                            label="Redis",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.redis
+                            ),
+                        ),
                     ],
                 ),
-                zigbee,
-                yeelight,
+                zigbee := c4.container.ContainerExt(
+                    label="Zigbee sensors",
+                    techn="T, P, ...",
+                    sprite=c4.sprite.tupadr3.FontAwesome5(
+                        c4.sprite.tupadr3.FontAwesome5.thermometer
+                    ),
+                ),
+                yeelight_bulbs := c4.container.ContainerExt(
+                    label="Yeelight bulbs",
+                    techn="Yeelight",
+                    sprite=c4.sprite.tupadr3.FontAwesome5(
+                        c4.sprite.tupadr3.FontAwesome5.lightbulb
+                    ),
+                ),
             ],
         ),
-        weather,
-        telegram,
+        weather := c4.context.SystemExt(
+            label="Weather",
+            sprite=c4.sprite.tupadr3.FontAwesome5(
+                c4.sprite.tupadr3.FontAwesome5.sun
+            ),
+        ),
+        telegram := c4.context.SystemExt(
+            label="Telegram",
+            sprite=c4.sprite.tupadr3.FontAwesome5(
+                c4.sprite.tupadr3.FontAwesome5.telegram
+            ),
+        ),
     ],
-    links_rel=[
-        rel.Rel(label="Uses", links=(web_app, api), techn="http"),
-        rel.Rel(label="Uses", links=(desktop_app, api), techn="http"),
-        rel.RelBack(
-            label="Uses", links=(weather, server_weather), techn="http"
+    relations=[
+        c4.rel.Rel(label="Uses", begin=web_app, end=api, techn="http"),
+        c4.rel.Rel(label="Uses", begin=desktop_app, end=api, techn="http"),
+        c4.rel.RelBack(
+            label="Uses", begin=weather, end=server_weather, techn="http"
         ),
-        rel.BiRel(
-            label="Uses", links=(driver_deconz, deconz_hub), techn="http"
+        c4.rel.BiRel(
+            label="Uses", begin=driver_deconz, end=deconz_hub, techn="http"
         ),
-        rel.Rel(label="Uses", links=(deconz_hub, zigbee), techn="zigbee"),
-        rel.Rel(
+        c4.rel.Rel(label="Uses", begin=deconz_hub, end=zigbee, techn="zigbee"),
+        c4.rel.Rel(
             label="R/W",
-            links=(server_yeelight, yeelight),
+            begin=driver_yeelight,
+            end=yeelight_bulbs,
             techn="http,Wi-Fi",
         ),
-        rel.RelBack(
+        c4.rel.RelBack(
             label="send",
-            links=(telegram, server_telegram),
+            begin=telegram,
+            end=server_telegram,
             techn="http",
         ),
+        c4.rel.BiRel(begin=redis, end=driver_yeelight, label="r/w"),
     ],
 )

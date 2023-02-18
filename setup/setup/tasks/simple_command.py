@@ -2,7 +2,6 @@
 
 import logging
 import os
-import subprocess
 from pathlib import Path
 from typing import Iterable
 
@@ -45,7 +44,7 @@ class SimpleCommand(BaseTask):
         log.info("Рабочая папка: {0}".format(work_dir_abs))
         os.chdir(work_dir_abs)
         log.info("Выполняем команду: {0}".format(self.__command))
-        subprocess.run(self.__command.split())
+        os.system(self.__command)
         os.chdir(curr_dir)
 
 

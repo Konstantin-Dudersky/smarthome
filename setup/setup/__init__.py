@@ -1,10 +1,11 @@
 """Скрипты установки."""
 
-from .tasks.code_sync import CodeSync
-from .tasks.docker_move_images import DockerMoveImages
-from .tasks.simple_command import SimpleCommand, SimpleCommandMultifolder
 from .internal.base_task import BaseTask
 from .internal.compose_task import ComposeTask
+from .tasks.code_sync import CodeSync
+from .tasks.docker_install import DockerInstall
+from .tasks.remote_command import RemoteCommand
+from .tasks.simple_command import SimpleCommand, SimpleCommandMultifolder
 
 from .tasks import call_func
 from .tasks import docker_tasks
@@ -32,7 +33,8 @@ __all__ = [
     "BaseTask",
     "ComposeTask",
     "CodeSync",
-    "DockerMoveImages",
+    "DockerInstall",
+    "RemoteCommand",
     "Runner",
     "call_func",
     "create_folder_abs",

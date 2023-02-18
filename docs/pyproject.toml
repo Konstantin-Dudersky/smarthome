@@ -9,7 +9,7 @@ line-length = 80
 
 
 [tool.poe.tasks.diagrams]
-script = "konstantin_docs.main:generate_images('diagrams/in', 'diagrams/out')"
+shell = "poetry run dtd process 'diagrams/in' 'diagrams/out'"
 
 [tool.poe.tasks.sphinx]
 shell = """poetry run sphinx-apidoc -f --separate -o sphinx/in ../shared \
@@ -32,9 +32,9 @@ version = "0.0.1"
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "3.11.*"
 
-konstantin-docs = "*"
+dataclass_to_diagram = "0.0.5"
 poethepoet = "*"
 pydata-sphinx-theme = "*"
 sphinx = "*"

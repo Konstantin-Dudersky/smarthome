@@ -1,5 +1,3 @@
-import ipaddress
-
 import pydantic
 import pytest
 
@@ -15,7 +13,7 @@ def settings() -> SettingsSchema:
 @pytest.fixture
 def deconz_api(settings: SettingsSchema) -> Api:
     return Api(
-        host=ipaddress.IPv4Address("127.0.0.1"),
-        port_api=8000,
+        host=settings.deconz_hub_host,
+        port_api=settings.deconz_hub_port_api,
         api_key=pydantic.SecretStr(""),
     )

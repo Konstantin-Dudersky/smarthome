@@ -79,6 +79,7 @@ group "pi" {
         "sh_db", 
         "sh_deconz_hub", 
         "sh_driver_deconz", 
-        "sh_setup", 
+        "sh_redis",
+        "sh_setup",
     ]
 }

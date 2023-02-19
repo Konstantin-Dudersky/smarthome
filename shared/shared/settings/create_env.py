@@ -4,10 +4,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from dotenv import (
-    get_key,  # pyright: ignore[reportUnknownVariableType]
-    set_key,  # pyright: ignore[reportUnknownVariableType]
-)
+from dotenv import get_key, set_key
 
 from .const import ENCODING
 from .schema import SettingsSchema

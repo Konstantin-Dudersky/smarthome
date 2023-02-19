@@ -127,7 +127,7 @@ class Tasks(NamedTuple):
     )
     docker_pull_images: setup.BaseTask = setup.SimpleCommand(
         desc="Загрузка образов docker",
-        command="docker compose --profile system --profile pi pull -q",
+        command="docker compose --profile system --profile pi pull",
     )
     create_env: setup.BaseTask = setup.docker_tasks.DockerRunExecRemove(
         desc="Создать файл .env",

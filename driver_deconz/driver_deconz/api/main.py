@@ -10,7 +10,6 @@ from shared.fastapi import (
     FastAPI,
     HTTPException,
     Path,
-    Query,
     status,
 )
 
@@ -35,7 +34,7 @@ class Api(BaseApi):
 
 
 def _configure_endpoints(app: FastAPI, depends: Dependencies) -> None:
-    @app.get("/sensors")
+    @app.get("/sensors", response_model=dict)
     def all_sensors(
         sensors: depends.sensors_type = Depends(depends.sensors),
     ) -> dict[str, BaseSensor[Any]]:
@@ -45,12 +44,12 @@ def _configure_endpoints(app: FastAPI, depends: Dependencies) -> None:
             for uniqueid, sensor in sensors.all_by_name.items()
         }
 
-    @app.get("/sensor-by-name/{name}")
+    @app.get("/sensor-by-name/{name}", response_model=dict)
     def sensor_by_name(
         name: str = Path(),
         sensors: depends.sensors_type = Depends(depends.sensors),
     ) -> BaseSensor[Any]:
-        """Данные датчика по названию."""
+        # """Данные датчика по названию."""
         try:
             return sensors.by_name(name).sensor_data
         except ValueError:

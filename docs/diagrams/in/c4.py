@@ -50,6 +50,20 @@ dia = c4.C4(
                                 c4.sprite.tupadr3.Devicons.python
                             ),
                         ),
+                        driver_yeelight := c4.component.Component(
+                            label="driver_yeelight",
+                            techn="asyncio stream",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.python
+                            ),
+                        ),
+                        redis := c4.component.ComponentQueue(
+                            label="Redis",
+                            techn="Redis",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.redis
+                            ),
+                        ),
                         server_db := c4.component.ComponentDb(
                             label="db",
                             techn="PostgreSQL+TimescaleDB",
@@ -58,24 +72,11 @@ dia = c4.C4(
                                 c4.sprite.tupadr3.Devicons.postgresql
                             ),
                         ),
-                        driver_yeelight := c4.component.Component(
-                            label="driver_yeelight",
-                            techn="asyncio stream",
-                            sprite=c4.sprite.tupadr3.Devicons(
-                                c4.sprite.tupadr3.Devicons.python
-                            ),
-                        ),
                         server_telegram := c4.component.Component(
                             label="telegram-service",
                             techn="telegram",
                             sprite=c4.sprite.tupadr3.Devicons(
                                 c4.sprite.tupadr3.Devicons.python
-                            ),
-                        ),
-                        redis := c4.component.ComponentQueue(
-                            label="Redis",
-                            sprite=c4.sprite.tupadr3.Devicons(
-                                c4.sprite.tupadr3.Devicons.redis
                             ),
                         ),
                     ],
@@ -132,5 +133,6 @@ dia = c4.C4(
             techn="http",
         ),
         c4.rel.BiRel(begin=redis, end=driver_yeelight, label="r/w"),
+        c4.rel.BiRel(begin=redis, end=driver_deconz, label="r/w"),
     ],
 )

@@ -97,8 +97,6 @@ services:
     image: docker-registry:5000/smarthome/sh_setup
     container_name: sh_setup
     hostname: sh_setup
-    profiles:
-      - pi
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - .:/root/code

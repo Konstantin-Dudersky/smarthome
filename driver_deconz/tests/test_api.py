@@ -8,7 +8,7 @@ from driver_deconz.deconz import sensors
 api = Api(
     depends_sensors=sensors.SensorCollection(
         sensors=[],
-    )
+    ),
 )
 client = TestClient(api.app)
 

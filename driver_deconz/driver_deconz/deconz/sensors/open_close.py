@@ -2,6 +2,8 @@
 
 import datetime as dt
 
+from shared import messages
+
 from .base_sensor import (
     BaseSensor,
     BaseSensorConfigModel,
@@ -51,4 +53,14 @@ class OpenClose(BaseSensor[Model]):
             name=name,
             model=Model,
             model_state=StateModel,
+        )
+
+    def create_messages(self) -> None:
+        """Создать сообщения для передачи в брокер."""
+        self._messages.clear()
+        self._messages.add(
+            messages.BinarySensor(
+                entity=self.name,
+                opened=self._data.state.open,
+            ).json(),
         )

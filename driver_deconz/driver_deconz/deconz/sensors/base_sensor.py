@@ -51,13 +51,15 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         """Сенсор."""
         self.__uniqueid = uniqueid
         self.__name = name
-        self.__data = model.construct()
+        self._data = model.construct()
         self.__model = model
         self.__model_state = model_state
 
+        self._messages: set[str] = set()
+
     def __repr__(self) -> str:
         """Represent as string."""
-        return str(self.__data.dict(by_alias=True))
+        return str(self._data.dict(by_alias=True))
 
     @property
     def uniqueid(self) -> str:
@@ -72,7 +74,11 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
     @property
     def sensor_data(self) -> TSensor:
         """Данные датчика."""
-        return self.__data
+        return self._data
+
+    @abc.abstractmethod
+    def create_messages(self) -> None:
+        """Создать сообщения для передачи в брокер."""
 
     def update_data(self, message: str) -> None:
         """Обновить данные полностью.
@@ -80,11 +86,12 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         При опросе шлюза по API возвращаются все данные.
         """
         try:
-            self.__data = self.__model.parse_obj(message)
+            self._data = self.__model.parse_obj(message)
         except ValidationError as exc:
             log.error("Error parsing message:\n{0}".format(message))
             log.error(exc)
             return
+        self.create_messages()
 
     def update_state(self, message: str) -> None:
         """Обновить данные состояния.
@@ -97,4 +104,5 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
             log.error("Error parsing message:\n{0}".format(message))
             log.error(exc)
             return
-        self.__data.state = state
+        self._data.state = state
+        self.create_messages()

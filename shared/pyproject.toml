@@ -30,7 +30,7 @@ uvicorn = "0.20.0"
 [tool.poetry.group.dev.dependencies]
 black = "*"
 pandas-stubs = "*"
-poethepoet = "0.16.5"
+poethepoet = "0.18.1"
 wemake-python-styleguide = "0.17.0"
 
 

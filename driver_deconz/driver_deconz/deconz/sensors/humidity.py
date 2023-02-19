@@ -50,3 +50,7 @@ class Humidity(BaseSensor[Model]):
             model=Model,
             model_state=StateModel,
         )
+
+    def create_messages(self) -> None:
+        """Создать сообщения для передачи в брокер."""
+        pass

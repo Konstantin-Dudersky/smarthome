@@ -34,7 +34,7 @@ class Model(BaseSensorModel):
 
     config: ConfigModel = ConfigModel.construct()
     ep: int = 0
-    lastannounced: dt.datetime = dt.datetime.min
+    lastannounced: dt.datetime | None = None
     lastseen: dt.datetime = dt.datetime.min
     state: StateModel = StateModel.construct()
 
@@ -57,8 +57,7 @@ class OpenClose(BaseSensor[Model]):
 
     def create_messages(self) -> None:
         """Создать сообщения для передачи в брокер."""
-        self._messages.clear()
-        self._messages.add(
+        self.messagebus.append(
             messages.BinarySensor(
                 entity=self.name,
                 opened=self._data.state.open,

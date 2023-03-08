@@ -5,12 +5,11 @@ docker buildx bake --builder builder -f docker-bake.hcl --push pi
 */
 
 PYTHON_VER = "3.11.2" // https://www.python.org/downloads/
-POETRY_VER = "1.3.2" // https://github.com/python-poetry/poetry
+POETRY_VER = "1.4.0" // https://github.com/python-poetry/poetry
 POSTGRE_VER = "15.2" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
-REDIS = "7.0.8" // https://hub.docker.com/_/redis
-TIMESCALEDB_VER = "2.9.3"
-DECONZ_VER = "2.20.01" // https://hub.docker.com/r/deconzcommunity/deconz/tags
-
+REDIS = "7.0.9" // https://hub.docker.com/_/redis
+TIMESCALEDB_VER = "2.10.1"
+DECONZ_VER = "2.21.00" // https://hub.docker.com/r/deconzcommunity/deconz/tags
 
 REPO = "docker-registry:5000"
 

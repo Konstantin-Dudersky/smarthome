@@ -54,7 +54,7 @@ class Tasks(NamedTuple):
     )
     codesync: setup.BaseTask = setup.CodeSync(
         desc="Синхронизация кода с целевой системой",
-        remote_path="admin@target:/home/admin/code",
+        remote_path="admin@target:/mnt/ext_drive/code",
     )
     poetry_install: setup.BaseTask = setup.SimpleCommandMultifolder(
         desc="Установка виртуальных окружений python",

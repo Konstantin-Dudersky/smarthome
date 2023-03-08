@@ -6,6 +6,7 @@
 import logging
 from typing import Any, Final, Iterable
 
+from shared.messagebus import MessagebusProtocolAppend
 from shared.patterns import SingletonMeta
 
 from .base_sensor import BaseSensor
@@ -29,11 +30,14 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
     def __init__(
         self,
         sensors: Iterable[BaseSensor[Any]],
+        messagebus: MessagebusProtocolAppend,
     ) -> None:
         """Коллеция датчиков."""
         self.__by_uniqueid: TCollection = self.__view_by_uniqueid(sensors)
         self.__by_name: TCollection = self.__view_by_name(sensors)
         log.debug("Created sensor collection:\n{0}".format(self.__by_name))
+        for sensor in sensors:
+            sensor.messagebus = messagebus
 
     def by_id(self, identificator: str) -> BaseSensor[Any]:
         """Датчик по идентификатору."""

@@ -1,12 +1,17 @@
 import asyncio
 
-import redis.asyncio as redis
+from redis.asyncio import Redis
+
+from shared.settings import SettingsSchema
 
 
-def test_redis():
-    r = redis.Redis(host="192.168.101.10")
+def test_publish(settings: SettingsSchema):
+    redis_client: Redis[str] = Redis(
+        host=str(settings.redis_host),
+        port=settings.redis_port,
+    )
 
     async def publish():
-        await r.publish("test_channel", "Hello from python")
+        await redis_client.publish("test_channel", "Hello from python")
 
     asyncio.run(publish())

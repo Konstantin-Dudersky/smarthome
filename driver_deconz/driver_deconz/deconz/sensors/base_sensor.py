@@ -7,6 +7,8 @@ from typing import Generic, Type, TypeVar
 
 from pydantic import BaseModel, Field, ValidationError
 
+from shared.messagebus import MessagebusProtocolAppend
+
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
@@ -51,11 +53,11 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         """Сенсор."""
         self.__uniqueid = uniqueid
         self.__name = name
-        self._data = model.construct()
         self.__model = model
         self.__model_state = model_state
 
-        self._messages: set[str] = set()
+        self._data = model.construct()
+        self._messagebus: MessagebusProtocolAppend | None = None
 
     def __repr__(self) -> str:
         """Represent as string."""
@@ -76,6 +78,19 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         """Данные датчика."""
         return self._data
 
+    @property
+    def messagebus(self) -> MessagebusProtocolAppend:
+        """Ссылка на шину сообщений."""
+        if self._messagebus is None:
+            msg: str = "Ссылка на шину сообщений на задана"
+            log.error(msg)
+            raise ValueError(msg)
+        return self._messagebus
+
+    @messagebus.setter
+    def messagebus(self, messagebus: MessagebusProtocolAppend) -> None:
+        self._messagebus = messagebus
+
     @abc.abstractmethod
     def create_messages(self) -> None:
         """Создать сообщения для передачи в брокер."""
@@ -88,8 +103,9 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         try:
             self._data = self.__model.parse_obj(message)
         except ValidationError as exc:
-            log.error("Error parsing message:\n{0}".format(message))
-            log.error(exc)
+            log.error(
+                "Error parsing:\nmessage: {0}\nerror:{1}".format(message, exc),
+            )
             return
         self.create_messages()
 

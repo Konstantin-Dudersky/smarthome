@@ -24,6 +24,23 @@ EXC_REQUEST_ERROR: Final[
 ] = "Ошибка выполнения запроса\nзапрос: {request}\nсообщение: {message}"
 
 
+def _construct_full_enpoint(base_url: str, endpoint: str) -> str:
+    return "{base_url}{endpoint}".format(
+        base_url=base_url,
+        endpoint=endpoint,
+    )
+
+
+def _check_status_code(
+    code_response: int,
+    code_compare: int = httpx.codes.OK,
+) -> bool:
+    if code_response != code_compare:
+        log.error("Incorrect response code: {0}".format(code_response))
+        return False
+    return True
+
+
 class Api(TasksProtocol):
     """Чтение данных по REST API."""
 
@@ -70,26 +87,20 @@ class Api(TasksProtocol):
             response = await self.__http_query("")
         except exceptions.DataNotReceivedError:
             return
-        if not self.__check_status_code(response.status_code):
+        if not _check_status_code(response.status_code):
             return
         self.__full_state = response.text
         log.debug("Finish update values from API.")
 
     async def __http_query(self, endpoint: str) -> httpx.Response:
         """Базовый запрос."""
-        url = self.__construct_full_enpoint(endpoint)
+        url = _construct_full_enpoint(self.__base_url, endpoint)
         async with httpx.AsyncClient() as http:
             try:
                 return await http.get(url)
             except httpx.RequestError as exc:
                 self.__handle_http_query_exc(exc)
                 raise exceptions.DataNotReceivedError
-
-    def __construct_full_enpoint(self, endpoint: str) -> str:
-        return "{base_url}{endpoint}".format(
-            base_url=self.__base_url,
-            endpoint=endpoint,
-        )
 
     def __handle_http_query_exc(self, exc: httpx.RequestError) -> None:
         log.error(
@@ -98,13 +109,3 @@ class Api(TasksProtocol):
                 message=str(exc),
             ),
         )
-
-    def __check_status_code(
-        self,
-        code_response: int,
-        code_compare: int = httpx.codes.OK,
-    ) -> bool:
-        if code_response != code_compare:
-            log.error("Incorrect response code: {0}".format(code_response))
-            return False
-        return True

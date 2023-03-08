@@ -9,7 +9,7 @@ from driver_deconz.deconz.api import Api
 def test_api(httpx_mock: HTTPXMock, deconz_api: Api) -> None:
     with open("tests/deconz/full_state_response.json", "r") as file:
         response = json.load(file)
-    httpx_mock.add_response(
+    httpx_mock.add_response(  # type: ignore
         json=response,
     )
 

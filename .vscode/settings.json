@@ -14,5 +14,6 @@
     "webapp": true,
     ".obsidian": true,
     ".directory": true
-  }
+  },
+  "python.formatting.provider": "black"
 }

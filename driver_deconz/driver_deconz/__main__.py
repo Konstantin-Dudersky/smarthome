@@ -4,6 +4,8 @@ import logging
 
 from shared.async_tasks import TasksRunner
 from shared.logger import Logger
+from shared.messagebus import MessageBus
+from shared.redis_publisher import RedisPublisher
 from shared.settings import SettingsStore
 
 from .api.main import Api
@@ -17,6 +19,8 @@ log.setLevel(logging.DEBUG)
 
 
 settings = SettingsStore("../.env").settings
+
+messagebus = MessageBus()
 
 sensors = sensors.SensorCollection(
     sensors={
@@ -41,6 +45,7 @@ sensors = sensors.SensorCollection(
             name="daylight",
         ),
     },
+    messagebus=messagebus,
 )
 
 runner = TasksRunner(
@@ -55,6 +60,11 @@ runner = TasksRunner(
         Api(
             port=settings.driver_deconz_port,
             depends_sensors=sensors,
+        ),
+        RedisPublisher(
+            host=settings.redis_host,
+            port=settings.redis_port,
+            messagebus=messagebus,
         ),
     },
 )

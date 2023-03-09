@@ -4,10 +4,11 @@
 docker buildx bake --builder builder -f docker-bake.hcl --push pi
 */
 
+GRAFANA = "9.4.3" // https://hub.docker.com/r/grafana/grafana/tags
 PYTHON_VER = "3.11.2" // https://www.python.org/downloads/
 POETRY_VER = "1.4.0" // https://github.com/python-poetry/poetry
 POSTGRE_VER = "15.2" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
-REDIS = "7.0.9" // https://hub.docker.com/_/redis
+REDIS = "7.0.6-RC7" // https://hub.docker.com/r/redis/redis-stack/tags
 TIMESCALEDB_VER = "2.10.1"
 DECONZ_VER = "2.21.00" // https://hub.docker.com/r/deconzcommunity/deconz/tags
 
@@ -55,6 +56,15 @@ target "sh_driver_deconz" {
     platforms = PLATFORMS
 }
 
+target "sh_grafana" {
+    dockerfile = "grafana/Dockerfile"
+    tags = [ "${REPO}/smarthome/sh_grafana" ]
+    args = {
+        GRAFANA = GRAFANA
+    }
+    platforms = PLATFORMS
+}
+
 target "sh_setup" {
     contexts = {
         base_python_image = "target:base_python_image"
@@ -73,11 +83,14 @@ target "sh_redis" {
     platforms = PLATFORMS
 }
 
+
+
 group "pi" {
     targets = [
-        "sh_db", 
-        "sh_deconz_hub", 
-        "sh_driver_deconz", 
+        "sh_db",
+        "sh_deconz_hub",
+        "sh_driver_deconz",
+        "sh_grafana",
         "sh_redis",
         "sh_setup",
     ]

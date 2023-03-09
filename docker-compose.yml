@@ -76,6 +76,9 @@ services:
     image: docker-registry:5000/smarthome/sh_driver_deconz
     container_name: sh_driver_deconz
     hostname: sh_driver_deconz
+    depends_on:
+      - sh_deconz_hub
+      - sh_redis
     ports:
       - "${driver_deconz_port}:${driver_deconz_port}"
     profiles:
@@ -84,12 +87,24 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - .:/root/code
 
+  sh_grafana:
+    image: docker-registry:5000/smarthome/sh_grafana
+    container_name: sh_grafana
+    hostname: sh_grafana
+    ports:
+      - "${grafana_port}:3000"
+    profiles:
+      - pi
+    volumes:
+      - sh_grafana_volume:/var/lib/grafana
+
   sh_redis:
     image: docker-registry:5000/smarthome/sh_redis
     container_name: sh_redis
     hostname: sh_redis
     ports:
       - "${redis_port}:6379"
+      - "${redis_ui_port}:8001"
     profiles:
       - pi
 
@@ -110,5 +125,5 @@ volumes:
     name: sh_deconz_hub_volume
   portainer_data_volume:
     name: portainer_data_volume
-  docker_registry_volume:
-    name: docker_registry_volume
+  sh_grafana_volume:
+    name: sh_grafana_volume

@@ -35,6 +35,21 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   # pi -------------------------------------------------------------------------
+  sh_db:
+    image: docker-registry:5000/smarthome/sh_db
+    container_name: sh_db
+    hostname: sh_db
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - POSTGRES_USER=${db_user}
+      - POSTGRES_PASSWORD=${db_password}
+    ports:
+      - "${db_port}:5432"
+    profiles:
+      - pi
+    volumes:
+      - sh_db_volume:/home/postgres/pgdata/data
+      - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
 
   sh_deconz_hub:
     image: docker-registry:5000/smarthome/sh_deconz_hub
@@ -55,22 +70,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - sh_deconz_hub_volume:/opt/deCONZ
-
-  sh_db:
-    image: docker-registry:5000/smarthome/sh_db
-    container_name: sh_db
-    hostname: sh_db
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf
-    environment:
-      - POSTGRES_USER=${db_user}
-      - POSTGRES_PASSWORD=${db_password}
-    ports:
-      - "${db_port}:5432"
-    profiles:
-      - pi
-    volumes:
-      - sh_db_volume:/home/postgres/pgdata/data
-      - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
 
   sh_driver_deconz:
     image: docker-registry:5000/smarthome/sh_driver_deconz

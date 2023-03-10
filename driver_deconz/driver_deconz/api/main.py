@@ -12,6 +12,7 @@ from shared.fastapi import (
     Path,
     status,
 )
+from shared.tasks_runner import ITaskRunnerAdd
 
 from ..deconz.sensors.base_sensor import BaseSensor
 from .dependencies import Dependencies, SensorCollection
@@ -23,10 +24,11 @@ class Api(BaseApi):
     def __init__(
         self,
         depends_sensors: SensorCollection,
+        runner: ITaskRunnerAdd,
         port: int = 8000,
     ) -> None:
         """Construct API."""
-        super().__init__(port=port)
+        super().__init__(port=port, runner=runner)
         self.__depends = Dependencies(
             sensors=depends_sensors,
         )

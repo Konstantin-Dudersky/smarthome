@@ -6,7 +6,7 @@
 import logging
 from typing import Any, Final, Iterable
 
-from shared.messagebus import MessagebusProtocolAppend
+from shared.simple_deque import ISimpleDequeAppend
 from shared.patterns import SingletonMeta
 
 from .base_sensor import BaseSensor
@@ -30,7 +30,7 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
     def __init__(
         self,
         sensors: Iterable[BaseSensor[Any]],
-        messagebus: MessagebusProtocolAppend,
+        messagebus: ISimpleDequeAppend,
     ) -> None:
         """Коллеция датчиков."""
         self.__by_uniqueid: TCollection = self.__view_by_uniqueid(sensors)

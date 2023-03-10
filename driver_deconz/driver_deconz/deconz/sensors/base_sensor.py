@@ -7,7 +7,7 @@ from typing import Generic, Type, TypeVar
 
 from pydantic import BaseModel, Field, ValidationError
 
-from shared.messagebus import MessagebusProtocolAppend
+from shared.simple_deque import ISimpleDequeAppend
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
@@ -57,7 +57,7 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         self.__model_state = model_state
 
         self._data = model.construct()
-        self._messagebus: MessagebusProtocolAppend | None = None
+        self._messagebus: ISimpleDequeAppend | None = None
 
     def __repr__(self) -> str:
         """Represent as string."""
@@ -79,7 +79,7 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         return self._data
 
     @property
-    def messagebus(self) -> MessagebusProtocolAppend:
+    def messagebus(self) -> ISimpleDequeAppend:
         """Ссылка на шину сообщений."""
         if self._messagebus is None:
             msg: str = "Ссылка на шину сообщений на задана"
@@ -88,7 +88,7 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         return self._messagebus
 
     @messagebus.setter
-    def messagebus(self, messagebus: MessagebusProtocolAppend) -> None:
+    def messagebus(self, messagebus: ISimpleDequeAppend) -> None:
         self._messagebus = messagebus
 
     @abc.abstractmethod

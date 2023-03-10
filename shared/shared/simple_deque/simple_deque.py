@@ -1,9 +1,9 @@
 from collections import deque
 
-from .protocols import MessagebusProtocolAppend, MessagebusProtocolPop
+from .protocols import ISimpleDequeAppend, ISimpleDequePop
 
 
-class MessageBus(MessagebusProtocolAppend, MessagebusProtocolPop):
+class SimpleDeque(ISimpleDequeAppend, ISimpleDequePop):
     def __init__(self, maxlen: int = 100) -> None:
         self.__collection: deque[str] = deque(maxlen=maxlen)
 

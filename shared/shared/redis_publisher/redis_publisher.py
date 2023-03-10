@@ -1,31 +1,30 @@
 import asyncio
-
 from ipaddress import IPv4Address
-from typing import Coroutine, Iterable
+from typing import cast
 
 from redis.asyncio import Redis
 
-from shared.messagebus import MessagebusProtocolPop
-from shared.async_tasks import TasksProtocol
+from shared.simple_deque import ISimpleDequePop, ISimpleDequeAppend, SimpleDeque
+from shared.tasks_runner import ITaskRunnerAdd
 
 
-class RedisPublisher(TasksProtocol):
+class RedisPublisher(object):
     def __init__(
         self,
         host: IPv4Address,
         port: int,
-        messagebus: MessagebusProtocolPop,
+        runner: ITaskRunnerAdd,
     ):
         self.__client: Redis[str] = Redis(
             host=str(host),
             port=port,
         )
-        self.__messagebus = messagebus
+        self.__messagebus: ISimpleDequePop = SimpleDeque()
+        runner.add_task(type(self).__name__, self.__task())
 
     @property
-    def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
-        """Перечень задач для запуска."""
-        return {self.__task()}
+    def messages(self) -> ISimpleDequeAppend:
+        return cast(ISimpleDequeAppend, self.__messagebus)
 
     async def __task(self) -> None:
         while True:

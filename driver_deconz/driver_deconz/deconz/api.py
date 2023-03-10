@@ -6,11 +6,11 @@
 import asyncio
 import logging
 from ipaddress import IPv4Address
-from typing import Coroutine, Final, Iterable
+from typing import Final
 
 import httpx
 from pydantic import SecretStr
-from shared.async_tasks import TasksProtocol
+from shared.tasks_runner import ITaskRunnerAdd
 
 from . import exceptions
 
@@ -41,11 +41,12 @@ def _check_status_code(
     return True
 
 
-class Api(TasksProtocol):
+class Api(object):
     """Чтение данных по REST API."""
 
     def __init__(
         self,
+        runner: ITaskRunnerAdd,
         host: IPv4Address,
         port_api: int,
         api_key: SecretStr,
@@ -61,11 +62,7 @@ class Api(TasksProtocol):
         )
         self.__seconds_between_polls = seconds_between_polls
         self.__full_state: str | None = None
-
-    @property
-    def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
-        """Перечень задач для запуска."""
-        return {self.__task()}
+        runner.add_task(type(self).__name__, self.__task())
 
     @property
     def full_state(self) -> str:

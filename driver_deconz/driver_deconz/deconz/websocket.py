@@ -6,9 +6,9 @@
 import json
 import logging
 from ipaddress import IPv4Address
-from typing import Any, Coroutine, Final, Iterable
+from typing import Any, Final
 
-from shared.async_tasks import TasksProtocol
+from shared.tasks_runner import ITaskRunnerAdd
 from websockets import client, exceptions
 
 from .websocket_buffer import WebsocketBuffer, WebsocketBufferItem
@@ -19,13 +19,14 @@ log.setLevel(logging.DEBUG)
 WS_URL: Final[str] = "ws://{host}:{port}"
 
 
-class Websocket(TasksProtocol):
+class Websocket(object):
     """Получение данных с устройств по протоколу websocket."""
 
     def __init__(
         self,
         host: IPv4Address,
         port: int,
+        runner: ITaskRunnerAdd,
     ) -> None:
         """Получение данных с устройств по протоколу websocket."""
         self.__url = WS_URL.format(
@@ -33,13 +34,7 @@ class Websocket(TasksProtocol):
             port=port,
         )
         self.__buffer = WebsocketBuffer()
-
-    @property
-    def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
-        """Перечень задач для запуска."""
-        return {
-            self.__task(),
-        }
+        runner.add_task(type(self).__name__, self.__task())
 
     def get(self) -> WebsocketBufferItem:
         """Возвращает и удаляет сообщение из буфера."""

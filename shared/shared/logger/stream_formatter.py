@@ -1,5 +1,7 @@
 """Форматирование вывода в консоль."""
 
+# pyright: reportUnnecessaryComparison=false
+
 import logging
 
 from .const import CHAR_IN_LINE, FORMAT

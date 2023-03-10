@@ -3,10 +3,9 @@
 import asyncio
 import logging
 from ipaddress import IPv4Address
-from typing import Coroutine, Iterable
 
 from pydantic import SecretStr
-from shared.async_tasks import TasksProtocol
+from shared.tasks_runner import ITaskRunnerAdd
 
 from .api import Api
 from .api_full_state_parse import ParseFullState
@@ -18,7 +17,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 
 
-class Deconz(TasksProtocol):
+class Deconz(object):
     """Основной класс для управления данными."""
 
     def __init__(
@@ -28,6 +27,7 @@ class Deconz(TasksProtocol):
         port_ws: int,
         api_key: SecretStr,
         sensosrs: SensorCollection,
+        runner: ITaskRunnerAdd,
     ) -> None:
         """Основной класс для управления данными."""
         self.__api = Api(
@@ -35,18 +35,11 @@ class Deconz(TasksProtocol):
             port_api=port_api,
             api_key=api_key,
             logging_level=logging.INFO,
+            runner=runner,
         )
-        self.__ws = Websocket(host, port_ws)
+        self.__ws = Websocket(host, port_ws, runner=runner)
         self.__sensors = sensosrs
-
-    @property
-    def async_tasks(self) -> Iterable[Coroutine[None, None, None]]:
-        """Перечень задач для запуска."""
-        return {
-            *self.__api.async_tasks,
-            *self.__ws.async_tasks,
-            self.__task(),
-        }
+        runner.add_task(type(self).__name__, self.__task())
 
     async def __task(self) -> None:
         """Задача для циклического выполнения."""

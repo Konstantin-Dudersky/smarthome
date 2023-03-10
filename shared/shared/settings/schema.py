@@ -47,9 +47,6 @@ class SettingsSchema(BaseSettings):
     db_host: ipaddress.IPv4Address = DEFAULT_IP
     db_port: int = 5432
 
-    driver_deconz_host: ipaddress.IPv4Address = DEFAULT_IP
-    driver_deconz_port: int = 8012
-
     deconz_hub_api_key: SecretStr = SecretStr("API_KEY")
     deconz_hub_host: ipaddress.IPv4Address = DEFAULT_IP
     deconz_hub_port_api: int = 8010
@@ -57,9 +54,15 @@ class SettingsSchema(BaseSettings):
     deconz_hub_port_ws: int = 8011
     deconz_hub_vnc_password: SecretStr = SecretStr("password")
 
+    driver_deconz_host: ipaddress.IPv4Address = DEFAULT_IP
+    driver_deconz_port: int = 8012
+
+    grafana_port: int = 8013
+
     pgadmin_email: EmailStr = EmailStr("test@mail.com")
     pgadmin_password: SecretStr = SecretStr("password")
     pgadmin_port: int = 8080
 
     redis_host: ipaddress.IPv4Address = DEFAULT_IP
     redis_port: int = 6379
+    redis_ui_port: int = 8014

@@ -20,14 +20,14 @@ CREATE TYPE agg_type AS ENUM (
 
 -- table raw
 CREATE TABLE raw (
-    ts          TIMESTAMPTZ       NOT NULL,
-    entity      NUMERIC           NOT NULL,
-    attr        VARCHAR(128)      NOT NULL,
-    value       DOUBLE PRECISION  NULL,
-    status      STATUS_TYPE       NOT NULL,
-    agg         AGG_TYPE          NOT NULL,
-    aggts       TIMESTAMPTZ       NULL,
-    aggnext     AGG_TYPE[]        NULL,
+    ts          TIMESTAMPTZ         NOT NULL,
+    entity      TEXT                NOT NULL,
+    attr        TEXT                NOT NULL,
+    value       DOUBLE PRECISION    NULL,
+    status      STATUS_TYPE         NOT NULL,
+    agg         AGG_TYPE            NOT NULL,
+    aggts       TIMESTAMPTZ         NULL,
+    aggnext     AGG_TYPE[]          NULL,
     UNIQUE (ts, entity, attr, agg)
 );
 SELECT create_hypertable(

@@ -2,11 +2,10 @@
 import asyncio
 import logging
 
-from shared.async_tasks import TasksRunner
 from shared.logger import Logger
-from shared.messagebus import MessageBus
 from shared.redis_publisher import RedisPublisher
 from shared.settings import SettingsStore
+from shared.tasks_runner import TasksRunner
 
 from .api.main import Api
 from .deconz import sensors
@@ -20,7 +19,13 @@ log.setLevel(logging.DEBUG)
 
 settings = SettingsStore("../.env").settings
 
-messagebus = MessageBus()
+runner = TasksRunner()
+
+redis_pub = RedisPublisher(
+    host=settings.redis_host,
+    port=settings.redis_port,
+    runner=runner,
+)
 
 sensors = sensors.SensorCollection(
     sensors={
@@ -45,28 +50,22 @@ sensors = sensors.SensorCollection(
             name="daylight",
         ),
     },
-    messagebus=messagebus,
+    messagebus=redis_pub.messages,
 )
 
-runner = TasksRunner(
-    {
-        Deconz(
-            host=settings.deconz_hub_host,
-            port_api=settings.deconz_hub_port_api,
-            port_ws=settings.deconz_hub_port_ws,
-            api_key=settings.deconz_hub_api_key,
-            sensosrs=sensors,
-        ),
-        Api(
-            port=settings.driver_deconz_port,
-            depends_sensors=sensors,
-        ),
-        RedisPublisher(
-            host=settings.redis_host,
-            port=settings.redis_port,
-            messagebus=messagebus,
-        ),
-    },
+Deconz(
+    host=settings.deconz_hub_host,
+    port_api=settings.deconz_hub_port_api,
+    port_ws=settings.deconz_hub_port_ws,
+    api_key=settings.deconz_hub_api_key,
+    sensosrs=sensors,
+    runner=runner,
+)
+
+Api(
+    port=settings.driver_deconz_port,
+    depends_sensors=sensors,
+    runner=runner,
 )
 
 

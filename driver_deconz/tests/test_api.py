@@ -3,13 +3,15 @@ from fastapi.testclient import TestClient
 from driver_deconz.api.main import Api
 from driver_deconz.deconz import sensors
 
-from shared.messagebus import MessageBus
+from shared.simple_deque import SimpleDeque
+from shared.tasks_runner import TasksRunner
 
 api = Api(
     depends_sensors=sensors.SensorCollection(
         sensors=[],
-        messagebus=MessageBus(),
+        messagebus=SimpleDeque(),
     ),
+    runner=TasksRunner(),
 )
 client = TestClient(api.app)
 

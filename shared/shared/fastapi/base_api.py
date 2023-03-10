@@ -6,16 +6,21 @@ from typing import Coroutine, Iterable
 import uvicorn
 from fastapi import FastAPI
 
-from ..async_tasks import TasksProtocol
+from shared.tasks_runner import ITaskRunnerAdd
 
 
-class BaseApi(abc.ABC, TasksProtocol):
+class BaseApi(abc.ABC):
     """FastAPI."""
 
-    def __init__(self, port: int = 8000) -> None:
+    def __init__(
+        self,
+        runner: ITaskRunnerAdd,
+        port: int = 8000,
+    ) -> None:
         """FastAPI."""
         self.__port = port
         self.__app = FastAPI()
+        runner.add_task(type(self).__name__, self.__task())
 
     @property
     def app(self) -> FastAPI:

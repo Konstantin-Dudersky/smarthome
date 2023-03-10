@@ -11,34 +11,37 @@
 !include <tupadr3/font-awesome-5/telegram>
 !include <tupadr3/font-awesome-5/thermometer>
 
-System_Boundary($alias=14, $label="smarthome") {
+System_Boundary($alias=15, $label="smarthome") {
     Container($alias=1, $label="web app", $techn="angular", $sprite=angular)
     Container($alias=2, $label="desktop app", $techn="angular, tauri", $sprite=angular)
     Container_Ext($alias=3, $label="deconz_hub", $techn="REST API, websockets", $sprite=server)
-    Container_Boundary($alias=11, $label="raspberry") {
+    Container_Boundary($alias=12, $label="raspberry") {
         Component($alias=4, $label="API", $techn="FastAPI", $sprite=python)
         Component($alias=5, $label="weather-service", $techn="Python", $sprite=python)
-        Component($alias=6, $label="driver_deconz", $techn="httpx, websockets", $sprite=python)
-        Component($alias=7, $label="driver_yeelight", $techn="asyncio stream", $sprite=python)
-        ComponentQueue($alias=8, $label="Redis", $techn="Redis", $sprite=redis)
-        ComponentDb($alias=9, $label="db", $descr="Настройки, архивы", $techn="PostgreSQL+TimescaleDB", $sprite=postgresql)
-        Component($alias=10, $label="telegram-service", $techn="telegram", $sprite=python)
+        ComponentDb($alias=6, $label="db", $descr="Настройки, архивы", $techn="PostgreSQL+TimescaleDB", $sprite=postgresql)
+        Component($alias=7, $label="driver_deconz", $techn="httpx, websockets", $sprite=python)
+        Component($alias=8, $label="driver_yeelight", $techn="asyncio stream", $sprite=python)
+        ComponentQueue($alias=9, $label="Redis", $techn="Redis", $sprite=redis)
+        ComponentQueue($alias=10, $label="redis_to_db", $techn="python", $sprite=python)
+        Component($alias=11, $label="telegram-service", $techn="telegram", $sprite=python)
     }
-    Container_Ext($alias=12, $label="Zigbee sensors", $techn="T, P, ...", $sprite=thermometer)
-    Container_Ext($alias=13, $label="Yeelight bulbs", $techn="Yeelight", $sprite=lightbulb)
+    Container_Ext($alias=13, $label="Zigbee sensors", $techn="T, P, ...", $sprite=thermometer)
+    Container_Ext($alias=14, $label="Yeelight bulbs", $techn="Yeelight", $sprite=lightbulb)
 }
-System_Ext($alias=15, $label="Weather", $sprite=sun)
-System_Ext($alias=16, $label="Telegram", $sprite=telegram)
+System_Ext($alias=16, $label="Weather", $sprite=sun)
+System_Ext($alias=17, $label="Telegram", $sprite=telegram)
 
 Rel($from=1, $to=4, $label="Uses", $techn="http")
 Rel($from=2, $to=4, $label="Uses", $techn="http")
-Rel_Back($from=15, $to=5, $label="Uses", $techn="http")
-BiRel($from=6, $to=3, $label="Uses", $techn="http")
-Rel($from=3, $to=12, $label="Uses", $techn="zigbee")
-Rel($from=7, $to=13, $label="R/W", $techn="http,Wi-Fi")
-Rel_Back($from=16, $to=10, $label="send", $techn="http")
-BiRel($from=8, $to=7, $label="r/w")
-BiRel($from=8, $to=6, $label="r/w")
+Rel_Back($from=16, $to=5, $label="Uses", $techn="http")
+BiRel($from=7, $to=3, $label="Uses", $techn="http")
+Rel($from=3, $to=13, $label="Uses", $techn="zigbee")
+Rel($from=8, $to=14, $label="R/W", $techn="http,Wi-Fi")
+Rel_Back($from=17, $to=17, $label="send", $techn="http")
+BiRel($from=9, $to=8, $label="r/w")
+BiRel($from=9, $to=7, $label="r/w")
+Rel($from=10, $to=9, $label="read")
+Rel($from=10, $to=6, $label="write")
 
 SHOW_LEGEND()
 @enduml

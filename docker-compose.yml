@@ -107,6 +107,19 @@ services:
     profiles:
       - pi
 
+  sh_redis_to_db:
+    image: docker-registry:5000/smarthome/sh_redis_to_db
+    container_name: sh_redis_to_db
+    hostname: sh_redis_to_db
+    depends_on:
+      - sh_redis
+      # - db
+    profiles:
+      - pi
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - .:/root/code
+
   sh_setup:
     image: docker-registry:5000/smarthome/sh_setup
     container_name: sh_setup

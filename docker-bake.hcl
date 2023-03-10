@@ -83,7 +83,14 @@ target "sh_redis" {
     platforms = PLATFORMS
 }
 
-
+target "sh_redis_to_db" {
+    contexts = {
+        base_python_image = "target:base_python_image"
+    }
+    dockerfile = "redis_to_db/Dockerfile"
+    tags = [ "${REPO}/smarthome/sh_redis_to_db" ]
+    platforms = PLATFORMS
+}
 
 group "pi" {
     targets = [
@@ -92,6 +99,7 @@ group "pi" {
         "sh_driver_deconz",
         "sh_grafana",
         "sh_redis",
+        "sh_redis_to_db",
         "sh_setup",
     ]
 }

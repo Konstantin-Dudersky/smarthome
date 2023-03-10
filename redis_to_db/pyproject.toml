@@ -1,0 +1,55 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 80
+
+
+[tool.poe.tasks.update_stubs]
+shell = """rm -rf .venv/typings \
+    && pyright --createstub shared
+"""
+
+
+[tool.poetry]
+name = "redis-to-db"
+version = "0.1.0"
+description = ""
+authors = ["konstantin.dudersky <konstantin.dudersky@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "redis_to_db" }]
+
+
+[tool.poetry.dependencies]
+python = "3.11.*"
+
+shared = { path = "../shared", develop = true }
+
+
+[tool.poetry.group.dev.dependencies]
+black = "*"
+poethepoet = "*"
+pytest = "*"
+wemake-python-styleguide = "0.17.0"
+
+
+[tool.poetry.scripts]
+start = "redis_to_db.__main__:main"
+
+
+[tool.pyright]
+pythonPlatform = "Linux"
+pythonVersion = "3.11"
+reportUnnecessaryTypeIgnoreComment = true
+stubPath = '.venv/typings/'
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+log_format = "%(levelname)s: %(asctime)s.%(msecs)03d | %(name)s:%(lineno)d - %(funcName)s\n-> %(message)s"
+log_date_format = "%H:%M:%S"

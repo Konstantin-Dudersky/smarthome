@@ -43,6 +43,14 @@ dia = c4.C4(
                                 c4.sprite.tupadr3.Devicons.python
                             ),
                         ),
+                        db := c4.component.ComponentDb(
+                            label="db",
+                            techn="PostgreSQL+TimescaleDB",
+                            descr="Настройки, архивы",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.postgresql
+                            ),
+                        ),
                         driver_deconz := c4.component.Component(
                             label="driver_deconz",
                             techn="httpx, websockets",
@@ -64,15 +72,14 @@ dia = c4.C4(
                                 c4.sprite.tupadr3.Devicons.redis
                             ),
                         ),
-                        server_db := c4.component.ComponentDb(
-                            label="db",
-                            techn="PostgreSQL+TimescaleDB",
-                            descr="Настройки, архивы",
+                        redis_to_db := c4.component.ComponentQueue(
+                            label="redis_to_db",
+                            techn="python",
                             sprite=c4.sprite.tupadr3.Devicons(
-                                c4.sprite.tupadr3.Devicons.postgresql
+                                c4.sprite.tupadr3.Devicons.python
                             ),
                         ),
-                        server_telegram := c4.component.Component(
+                        telegram := c4.component.Component(
                             label="telegram-service",
                             techn="telegram",
                             sprite=c4.sprite.tupadr3.Devicons(
@@ -129,10 +136,12 @@ dia = c4.C4(
         c4.rel.RelBack(
             label="send",
             begin=telegram,
-            end=server_telegram,
+            end=telegram,
             techn="http",
         ),
         c4.rel.BiRel(begin=redis, end=driver_yeelight, label="r/w"),
         c4.rel.BiRel(begin=redis, end=driver_deconz, label="r/w"),
+        c4.rel.Rel(begin=redis_to_db, end=redis, label="read"),
+        c4.rel.Rel(begin=redis_to_db, end=db, label="write"),
     ],
 )

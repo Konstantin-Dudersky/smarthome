@@ -9,7 +9,8 @@ line-length = 80
 
 [tool.poe.tasks.update_stubs]
 shell = """rm -rf .venv/typings \
-    && pyright --createstub shared
+    && pyright --createstub shared \
+    && pyright --createstub db
 """
 
 
@@ -25,6 +26,7 @@ packages = [{ include = "redis_to_db" }]
 [tool.poetry.dependencies]
 python = "3.11.*"
 
+db = { path = "../db", develop = true }
 shared = { path = "../shared", develop = true }
 
 

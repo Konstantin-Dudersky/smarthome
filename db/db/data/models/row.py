@@ -1,6 +1,6 @@
 """Модель для строки в БД."""
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
 import arrow
 from pydantic import BaseConfig, BaseModel, validator
@@ -18,10 +18,10 @@ class Row(BaseModel):
         arbitrary_types_allowed = True
 
     ts: arrow.Arrow
-    entity: int
+    entity: str
     attr: str
     value: float | None  # noqa: WPS110
-    status: StatusEnum
+    status: StatusEnum = StatusEnum.good
     agg: AggEnum
     aggts: arrow.Arrow | None = None
     aggnext: tuple[AggEnum, ...] | None = None
@@ -59,7 +59,7 @@ class Row(BaseModel):
     @property
     def format_psycopg(self) -> FormatPsycopg:
         """Форматирование данных модели для вставки в зарос psycopg."""
-        dict_query_params = {
+        dict_query_params: dict[str, Any] = {
             "ts": self.ts,
             "entity": self.entity,
             "attr": self.attr,

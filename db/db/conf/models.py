@@ -1,10 +1,6 @@
 """Модели данных в db_conf."""
 
-from sqlalchemy.orm import (
-    DeclarativeBase,
-    Mapped,
-    mapped_column,  # pyright: ignore[reportUnknownVariableType]
-)
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -14,7 +10,7 @@ class Base(DeclarativeBase):
 class Entity(Base):
     """Сущность (Entity) для хранения в timeseries database."""
 
-    __tablename__: str = "entity"  # type: ignore
+    __tablename__: str = "entity"
     # PK
     entity_id: Mapped[int] = mapped_column(primary_key=True)
     # FK

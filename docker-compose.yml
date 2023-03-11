@@ -113,7 +113,7 @@ services:
     hostname: sh_redis_to_db
     depends_on:
       - sh_redis
-      # - db
+      - sh_db
     profiles:
       - pi
     volumes:

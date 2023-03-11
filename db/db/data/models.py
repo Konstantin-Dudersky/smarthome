@@ -7,6 +7,8 @@ from psycopg import Cursor
 from psycopg.rows import RowMaker as _RowMaker
 from pydantic import BaseModel
 
+from .models import AggEnum
+
 
 @dataclass
 class AggDistinct(BaseModel):

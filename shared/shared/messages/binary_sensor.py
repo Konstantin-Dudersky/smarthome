@@ -1,10 +1,9 @@
-"""Датчик с двумя состояниями."""
+"""Датчик открытия с двумя состояниями."""
 
 from .base_message import BaseMessage
 
 
-class BinarySensor(BaseMessage):
+class OpenCloseSensor(BaseMessage):
     """Датчик с двумя состояниями."""
 
-    message_type: str = "BinarySensor"
     opened: bool

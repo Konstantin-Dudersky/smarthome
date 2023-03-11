@@ -1,22 +1,4 @@
-"""Настройки приложения.
-
-Для создания файла с дефолтными настройками запустить функцию create_env():
-
-- создаем задачу poe:
-
-[tool.poe.tasks.create_env]
-help = "Создание файла с настройками"
-script = "src.shared.settings:create_env"
-
-- запускаем:
-
-poetry run poe create_env
-
-Для чтения настроек импортировать:
-
-from src.shared.settings import SettingsSchema, settings_store
-settings: SettingsSchema = settings_store.settings
-"""
+"""Настройки приложения."""
 
 import ipaddress
 import logging

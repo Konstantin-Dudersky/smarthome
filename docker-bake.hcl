@@ -2,6 +2,10 @@
 Запустить сборку и загрузку образов:
 
 docker buildx bake --builder builder -f docker-bake.hcl --push pi
+
+Один образ:
+
+docker buildx bake --builder builder -f docker-bake.hcl --push sh_db
 */
 
 GRAFANA = "9.4.3" // https://hub.docker.com/r/grafana/grafana/tags

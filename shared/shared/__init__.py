@@ -6,6 +6,7 @@ from . import messages
 from . import redis_publisher
 from . import redis_subscriber
 
+
 __all__: list[str] = [
     "Logger",
     "simple_deque",

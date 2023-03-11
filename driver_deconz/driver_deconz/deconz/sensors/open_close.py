@@ -58,8 +58,8 @@ class OpenClose(BaseSensor[Model]):
     def create_messages(self) -> None:
         """Создать сообщения для передачи в брокер."""
         self.messagebus.append(
-            messages.BinarySensor(
-                entity=self.name,
+            messages.OpenCloseSensor(
+                entity_id=self.name,
                 opened=self._data.state.open,
             ).json(),
         )

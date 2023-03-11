@@ -21,7 +21,7 @@ python = "3.11.*"
 alembic = "1.8.1"
 arrow = "1.2.3"
 psycopg = "3.1.4"
-sqlalchemy = "2.0.0b4"
+sqlalchemy = "2.0.5.post1"
 
 shared = { path = "../shared", develop = true }
 
@@ -34,6 +34,7 @@ wemake-python-styleguide = "0.17.0"
 
 
 [tool.pyright]
+include = ["db", "tests"]
 pythonPlatform = "Linux"
 pythonVersion = "3.11"
 reportUnnecessaryTypeIgnoreComment = true

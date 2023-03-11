@@ -2,6 +2,8 @@
 
 import datetime as dt
 
+from shared import messages
+
 from .base_sensor import (
     BaseSensor,
     BaseSensorConfigModel,
@@ -22,7 +24,7 @@ class ConfigModel(BaseSensorConfigModel):
 class StateModel(BaseSensorStateModel):
     """Модель состояния.."""
 
-    humidity: int = 0
+    temperature: int = 0
 
 
 class Model(BaseSensorModel):
@@ -53,4 +55,10 @@ class Temperature(BaseSensor[Model]):
 
     def create_messages(self) -> None:
         """Создать сообщения для передачи в брокер."""
-        pass
+        self.messagebus.append(
+            messages.TemperatureSensor(
+                entity_id=self.name,
+                temperature=self._data.state.temperature / 100.0,
+                ts=self._data.state.lastupdated or dt.datetime.min,
+            ).json(),
+        )

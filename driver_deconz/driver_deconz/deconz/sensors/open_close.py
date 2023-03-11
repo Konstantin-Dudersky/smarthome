@@ -61,5 +61,6 @@ class OpenClose(BaseSensor[Model]):
             messages.OpenCloseSensor(
                 entity_id=self.name,
                 opened=self._data.state.open,
+                ts=self._data.state.lastupdated or dt.datetime.min,
             ).json(),
         )

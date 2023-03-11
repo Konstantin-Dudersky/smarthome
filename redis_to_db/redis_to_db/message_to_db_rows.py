@@ -3,7 +3,7 @@ import logging
 import arrow
 from db.data.models import AggEnum, Row
 from functools import singledispatch
-from shared.messages import OpenCloseSensor
+from shared import messages
 from typing import Final
 
 log = logging.getLogger(__name__)
@@ -24,13 +24,26 @@ def message_to_db_rows(msg: object) -> tuple[Row, ...]:
 
 
 @message_to_db_rows.register
-def _(msg: OpenCloseSensor) -> tuple[Row, ...]:
+def _(msg: messages.OpenCloseSensor) -> tuple[Row, ...]:
     return (
         Row(
-            ts=arrow.now(),
+            ts=arrow.Arrow.fromdatetime(msg.ts),
             entity=msg.entity_id,
             attr="openess",
             value=float(msg.opened),
+            agg=AggEnum.curr,
+        ),
+    )
+
+
+@message_to_db_rows.register
+def _(msg: messages.TemperatureSensor) -> tuple[Row, ...]:
+    return (
+        Row(
+            ts=arrow.Arrow.fromdatetime(msg.ts),
+            entity=msg.entity_id,
+            attr="temperature",
+            value=msg.temperature,
             agg=AggEnum.curr,
         ),
     )

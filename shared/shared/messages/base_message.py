@@ -1,5 +1,7 @@
 """Базовый класс сообщения."""
 
+import datetime as dt
+
 from typing import Self, Type
 
 from pydantic import BaseModel, validator
@@ -10,6 +12,7 @@ class BaseMessage(BaseModel):
 
     entity_id: str
     class_name: str | None = None
+    ts: dt.datetime
 
     @validator("class_name", pre=True, always=True)
     def validate_class_name(

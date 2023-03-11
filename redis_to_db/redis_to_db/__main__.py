@@ -33,12 +33,11 @@ redis_subs = RedisSubscriber(
     port=settings.redis_port,
     runner=runner,
 )
-redis_subs.add_subs(Subs.db, "open_close")
+redis_subs.add_subs(Subs.db, None)
 
 
 database = Database(
     conn_str=ConnectionString(
-        driver="postgresql",
         user=settings.db_user,
         password=settings.db_password,
         host=settings.db_host,
@@ -55,11 +54,11 @@ async def __task() -> None:
                 msg = redis_subs[Subs.db].pop()
             except IndexError:
                 break
-            log.warning(msg)
             async with database.create_session(Row) as session:
                 crud = CrudRows(session, "raw")
                 rows = message_to_db_rows(msg)
                 await crud.create_many(rows)
+                await session.commit()
         await asyncio.sleep(5)
 
 

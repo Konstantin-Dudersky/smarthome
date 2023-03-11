@@ -22,7 +22,7 @@ class ConfigModel(BaseSensorConfigModel):
 class StateModel(BaseSensorStateModel):
     """Модель состояния."""
 
-    temperature: int = 0
+    humidity: int = 0
 
 
 class Model(BaseSensorModel):

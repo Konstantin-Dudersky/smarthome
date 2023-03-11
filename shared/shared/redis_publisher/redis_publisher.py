@@ -19,12 +19,12 @@ class RedisPublisher(object):
             host=str(host),
             port=port,
         )
-        self.__messagebus: ISimpleDequePop = SimpleDeque()
+        self.__messagebus: ISimpleDequePop[str] = SimpleDeque()
         runner.add_task(type(self).__name__, self.__task())
 
     @property
-    def messages(self) -> ISimpleDequeAppend:
-        return cast(ISimpleDequeAppend, self.__messagebus)
+    def messages(self) -> ISimpleDequeAppend[str]:
+        return cast(ISimpleDequeAppend[str], self.__messagebus)
 
     async def __task(self) -> None:
         while True:

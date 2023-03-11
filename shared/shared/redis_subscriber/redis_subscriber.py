@@ -8,13 +8,13 @@ from typing import Any
 from redis.asyncio import Redis
 
 from shared.tasks_runner import ITaskRunnerAdd
-from shared.messages import OpenCloseSensor, BaseMessage
+from shared.messages import BaseMessage, dict_messages
 
 from .subs_collection import SubsCollection
 from ..simple_deque import ISimpleDequePop
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.INFO)
 
 
 class RedisSubscriber(object):
@@ -46,8 +46,8 @@ class RedisSubscriber(object):
                 await asyncio.sleep(0.1)
 
     def __process_message(self, message: str) -> None:
-        base_message = BaseMessage.parse_raw(message)
-        full_message = OpenCloseSensor.parse_raw(message)
+        class_name: str = BaseMessage.parse_raw(message).class_name or ""
+        full_message = dict_messages[class_name].parse_raw(message)
         self.__subs.new_message(full_message.entity_id, full_message)
 
     def add_subs(self, subs_name: str, entity_id: str | None) -> None:

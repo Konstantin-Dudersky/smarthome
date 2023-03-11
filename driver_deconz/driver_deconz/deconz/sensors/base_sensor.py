@@ -20,7 +20,7 @@ class BaseSensorConfigModel(BaseModel):
 class BaseSensorStateModel(BaseModel):
     """Базовая модель состояния."""
 
-    lastupdated: dt.datetime = dt.datetime.min
+    lastupdated: dt.datetime | None = dt.datetime.min
 
 
 class BaseSensorModel(BaseModel):
@@ -57,7 +57,7 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         self.__model_state = model_state
 
         self._data = model.construct()
-        self._messagebus: ISimpleDequeAppend | None = None
+        self._messagebus: ISimpleDequeAppend[str] | None = None
 
     def __repr__(self) -> str:
         """Represent as string."""
@@ -79,7 +79,7 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         return self._data
 
     @property
-    def messagebus(self) -> ISimpleDequeAppend:
+    def messagebus(self) -> ISimpleDequeAppend[str]:
         """Ссылка на шину сообщений."""
         if self._messagebus is None:
             msg: str = "Ссылка на шину сообщений на задана"
@@ -88,7 +88,7 @@ class BaseSensor(abc.ABC, Generic[TSensor]):
         return self._messagebus
 
     @messagebus.setter
-    def messagebus(self, messagebus: ISimpleDequeAppend) -> None:
+    def messagebus(self, messagebus: ISimpleDequeAppend[str]) -> None:
         self._messagebus = messagebus
 
     @abc.abstractmethod

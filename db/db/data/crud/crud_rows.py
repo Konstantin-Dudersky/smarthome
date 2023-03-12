@@ -43,7 +43,7 @@ class CrudRows(object):
             query=CREATE.format(
                 table=self.__table,
                 values=row.format_psycopg.query,
-            ),
+            ).encode(),
             params=row.format_psycopg.params,
         )
         await self.__db.commit()
@@ -63,7 +63,7 @@ class CrudRows(object):
                 query=CREATE.format(
                     table=self.__table,
                     values=query_values_joined,
-                ),
+                ).encode(),
                 params=params_in_single_list,
             )
             await self.__db.commit()
@@ -73,7 +73,7 @@ class CrudRows(object):
         cur: AsyncCursor[Row] = await self.__db.execute(
             query=READ_ALL.format(
                 table=self.__table,
-            ),
+            ).encode(),
         )
         return await cur.fetchall()
 
@@ -82,5 +82,5 @@ class CrudRows(object):
         await self.__db.execute(
             query=DELETE_ALL.format(
                 table=self.__table,
-            ),
+            ).encode(),
         )

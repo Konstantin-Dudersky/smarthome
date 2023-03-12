@@ -12,7 +12,7 @@ model = db.data.models.Row
 rows_to_save: tuple[model, ...] = (
     model(
         ts=arrow.utcnow(),
-        entity=1,
+        entity="1",
         attr="attribute",
         value=None,
         agg=db.data.models.AggEnum.curr,
@@ -25,7 +25,7 @@ rows_to_save: tuple[model, ...] = (
     ),
     model(
         ts=arrow.utcnow(),
-        entity=1,
+        entity="1",
         attr="attribute",
         value=10,
         agg=db.data.models.AggEnum.first,
@@ -35,7 +35,7 @@ rows_to_save: tuple[model, ...] = (
     ),
     model(
         ts=arrow.utcnow(),
-        entity=1,
+        entity="1",
         attr="attribute",
         value=10,
         agg=db.data.models.AggEnum.inc,
@@ -48,7 +48,6 @@ rows_to_save: tuple[model, ...] = (
 
 def test_create_one(database: db.data.Database) -> None:
     async def run() -> None:
-
         async with database.create_session(model) as session:
             crud = db.data.crud.crud_rows.CrudRows(session, "raw")
             await crud.delete_all()
@@ -61,7 +60,6 @@ def test_create_one(database: db.data.Database) -> None:
 
 def test_create_many(database: db.data.Database) -> None:
     async def run() -> None:
-
         async with database.create_session(model) as session:
             crud = db.data.crud.crud_rows.CrudRows(session, "raw")
             await crud.delete_all()
@@ -85,7 +83,7 @@ def test_create_many_large(database: db.data.Database) -> None:
     for _ in range(int(copy_repetions)):
         rows = copy.deepcopy(rows_to_save)
         for row in rows:
-            row.entity = entity_inc
+            row.entity = str(entity_inc)
             entity_inc += 1
         rows_to_save_large.extend(rows)
 
@@ -102,7 +100,6 @@ def test_create_many_large(database: db.data.Database) -> None:
 
 def test_create_one_read_all(database: db.data.Database) -> None:
     async def run() -> None:
-
         async with database.create_session(model) as session:
             crud = db.data.crud.crud_rows.CrudRows(session, "raw")
             for row in rows_to_save:

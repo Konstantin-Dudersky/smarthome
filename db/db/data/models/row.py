@@ -51,10 +51,6 @@ class Row(BaseModel):
                 return tuple(aggnext_enum)
             case None:
                 return None
-            case _:
-                raise ValueError(
-                    "Unknown type of aggnext: {0}".format(type(aggnext)),
-                )
 
     @property
     def format_psycopg(self) -> FormatPsycopg:

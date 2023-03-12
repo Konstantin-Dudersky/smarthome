@@ -90,6 +90,9 @@ services:
     image: docker-registry:5000/smarthome/sh_grafana
     container_name: sh_grafana
     hostname: sh_grafana
+    depends_on:
+      - sh_redis
+      - sh_db
     ports:
       - "${grafana_port}:3000"
     profiles:
@@ -139,3 +142,8 @@ volumes:
     name: portainer_data_volume
   sh_grafana_volume:
     name: sh_grafana_volume
+
+networks:
+  no-internet:
+    driver: bridge
+    internal: true

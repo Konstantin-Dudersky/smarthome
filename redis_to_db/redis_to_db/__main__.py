@@ -1,12 +1,11 @@
 import asyncio
 import logging
 
-import arrow
 from enum import StrEnum, auto
 from db.data.database import Database
 from db.connection_string import ConnectionString
 from db.data.crud import CrudRows
-from db.data.models import Row, AggEnum
+from db.data.models import Row
 from shared.logger import Logger
 from shared.redis_subscriber import RedisSubscriber
 from shared.settings import SettingsStore
@@ -15,7 +14,7 @@ from shared.tasks_runner import TasksRunner
 from .message_to_db_rows import message_to_db_rows
 
 
-class Subs(StrEnum):
+class Subscriptions(StrEnum):
     db = auto()
 
 
@@ -33,7 +32,7 @@ redis_subs = RedisSubscriber(
     port=settings.redis_port,
     runner=runner,
 )
-redis_subs.add_subs(Subs.db, None)
+redis_subs.add_subs(Subscriptions.db, None)
 
 
 database = Database(
@@ -51,7 +50,7 @@ async def __task() -> None:
     while True:
         while True:
             try:
-                msg = redis_subs[Subs.db].pop()
+                msg = redis_subs[Subscriptions.db].pop()
             except IndexError:
                 break
             async with database.create_session(Row) as session:

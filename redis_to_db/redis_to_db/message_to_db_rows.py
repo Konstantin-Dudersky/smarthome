@@ -47,3 +47,55 @@ def _(msg: messages.TemperatureSensor) -> tuple[Row, ...]:
             agg=AggEnum.curr,
         ),
     )
+
+
+@message_to_db_rows.register
+def _(msg: messages.HumiditySensor) -> tuple[Row, ...]:
+    return (
+        Row(
+            ts=arrow.Arrow.fromdatetime(msg.ts),
+            entity=msg.entity_id,
+            attr="humidity",
+            value=msg.humidity,
+            agg=AggEnum.curr,
+        ),
+    )
+
+
+@message_to_db_rows.register
+def _(msg: messages.PressureSensor) -> tuple[Row, ...]:
+    return (
+        Row(
+            ts=arrow.Arrow.fromdatetime(msg.ts),
+            entity=msg.entity_id,
+            attr="pressure",
+            value=msg.pressure,
+            agg=AggEnum.curr,
+        ),
+    )
+
+
+@message_to_db_rows.register
+def _(msg: messages.PresenceSensor) -> tuple[Row, ...]:
+    return (
+        Row(
+            ts=arrow.Arrow.fromdatetime(msg.ts),
+            entity=msg.entity_id,
+            attr="pressure",
+            value=float(msg.presence),
+            agg=AggEnum.curr,
+        ),
+    )
+
+
+@message_to_db_rows.register
+def _(msg: messages.LightLevel) -> tuple[Row, ...]:
+    return (
+        Row(
+            ts=arrow.Arrow.fromdatetime(msg.ts),
+            entity=msg.entity_id,
+            attr="pressure",
+            value=msg.lux,
+            agg=AggEnum.curr,
+        ),
+    )

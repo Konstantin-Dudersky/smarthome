@@ -2,6 +2,8 @@
 
 import datetime as dt
 
+from shared import messages
+
 from .base_sensor import (
     BaseSensor,
     BaseSensorConfigModel,
@@ -53,4 +55,10 @@ class Pressure(BaseSensor[Model]):
 
     def create_messages(self) -> None:
         """Создать сообщения для передачи в брокер."""
-        pass
+        self.messagebus.append(
+            messages.PressureSensor(
+                entity_id=self.name,
+                pressure=self._data.state.pressure * 1000.0,
+                ts=self._data.state.lastupdated or dt.datetime.min,
+            ).json(),
+        )

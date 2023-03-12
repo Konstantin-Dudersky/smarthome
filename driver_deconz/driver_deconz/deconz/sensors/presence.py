@@ -1,4 +1,4 @@
-"""ZHAHumidity."""
+"""ZHAPresence."""
 
 import datetime as dt
 
@@ -16,15 +16,16 @@ class ConfigModel(BaseSensorConfigModel):
     """Модель конфигурации."""
 
     battery: int = 0
+    duration: int = 0
     on: bool = False
     reachable: bool = False
-    offset: int = 0
+    temperature: int = 0
 
 
 class StateModel(BaseSensorStateModel):
     """Модель состояния."""
 
-    humidity: int = 0
+    presence: bool = False
 
 
 class Model(BaseSensorModel):
@@ -32,20 +33,20 @@ class Model(BaseSensorModel):
 
     config: ConfigModel = ConfigModel.construct()
     ep: int = 0
-    lastannounced: dt.datetime | None = dt.datetime.min
+    lastannounced: dt.datetime | None = None
     lastseen: dt.datetime = dt.datetime.min
     state: StateModel = StateModel.construct()
 
 
-class Humidity(BaseSensor[Model]):
-    """Датчик влажности."""
+class Presence(BaseSensor[Model]):
+    """Датчик открытия / закрытия."""
 
     def __init__(
         self,
         uniqueid: str,
         name: str,
     ) -> None:
-        """Датчик влажности."""
+        """Датчик открытия / закрытия."""
         super().__init__(
             uniqueid=uniqueid,
             name=name,
@@ -56,9 +57,9 @@ class Humidity(BaseSensor[Model]):
     def create_messages(self) -> None:
         """Создать сообщения для передачи в брокер."""
         self.messagebus.append(
-            messages.HumiditySensor(
+            messages.PresenceSensor(
                 entity_id=self.name,
-                humidity=self._data.state.humidity / 100.0,
+                presence=self._data.state.presence,
                 ts=self._data.state.lastupdated or dt.datetime.min,
             ).json(),
         )

@@ -21,3 +21,39 @@ class BaseMessage(BaseModel):
     ) -> str:
         """Установить имя класса."""
         return class_name or cls.__name__
+
+
+class OpenCloseSensor(BaseMessage):
+    """Датчик с двумя состояниями."""
+
+    opened: bool
+
+
+class TemperatureSensor(BaseMessage):
+    """Датчик температуры."""
+
+    temperature: float
+
+
+class HumiditySensor(BaseMessage):
+    """Датчик температуры."""
+
+    humidity: float
+
+
+class PressureSensor(BaseMessage):
+    """Датчик температуры."""
+
+    pressure: float
+
+
+class PresenceSensor(BaseMessage):
+    """Датчик присутствия."""
+
+    presence: bool
+
+
+class LightLevel(BaseMessage):
+    """Датчик освещенности."""
+
+    lux: float

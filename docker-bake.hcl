@@ -8,13 +8,27 @@ docker buildx bake --builder builder -f docker-bake.hcl --push pi
 docker buildx bake --builder builder -f docker-bake.hcl --push sh_db
 */
 
-GRAFANA = "9.4.3" // https://hub.docker.com/r/grafana/grafana/tags
-PYTHON_VER = "3.11.2" // https://www.python.org/downloads/
-POETRY_VER = "1.4.0" // https://github.com/python-poetry/poetry
-POSTGRE_VER = "15.2" // https://hub.docker.com/r/timescale/timescaledb-ha/tags
-REDIS = "7.0.6-RC7" // https://hub.docker.com/r/redis/redis-stack/tags
+// https://hub.docker.com/r/deconzcommunity/deconz/tags
+DECONZ_VER = "2.21.00"
+
+// https://hub.docker.com/r/grafana/grafana/tags
+GRAFANA = "9.4.3"
+
+// https://www.python.org/downloads/
+PYTHON_VER = "3.11.2"
+
+// https://github.com/python-poetry/poetry
+POETRY_VER = "1.4.0"
+
+// как TIMESCALEDB_VER
+POSTGRE_VER = "15"
+
+// https://hub.docker.com/r/redis/redis-stack/tags
+REDIS = "7.0.6-RC7"
+
+// https://hub.docker.com/r/timescale/timescaledb/tags?page=1&name=pg15
 TIMESCALEDB_VER = "2.10.1"
-DECONZ_VER = "2.21.00" // https://hub.docker.com/r/deconzcommunity/deconz/tags
+
 
 REPO = "docker-registry:5000"
 

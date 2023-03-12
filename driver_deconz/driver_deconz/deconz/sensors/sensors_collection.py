@@ -30,7 +30,7 @@ class SensorCollection(object, metaclass=SingletonMeta["SensorCollection"]):
     def __init__(
         self,
         sensors: Iterable[BaseSensor[Any]],
-        messagebus: ISimpleDequeAppend,
+        messagebus: ISimpleDequeAppend[str],
     ) -> None:
         """Коллеция датчиков."""
         self.__by_uniqueid: TCollection = self.__view_by_uniqueid(sensors)

@@ -35,19 +35,39 @@ sensors = sensors.SensorCollection(
         ),
         sensors.Temperature(
             uniqueid="00:15:8d:00:03:f0:44:0d-01-0402",
-            name="temperature",
+            name="temperature_room",
         ),
         sensors.Pressure(
             uniqueid="00:15:8d:00:03:f0:44:0d-01-0403",
-            name="pressure",
+            name="pressure_room",
         ),
         sensors.Humidity(
             uniqueid="00:15:8d:00:03:f0:44:0d-01-0405",
-            name="humidity",
+            name="humidity_room",
         ),
         sensors.Daylight(
             uniqueid="00:21:2e:ff:ff:04:82:3b-01",
             name="daylight",
+        ),
+        sensors.Temperature(
+            uniqueid="00:15:8d:00:03:cd:1c:97-01-0402",
+            name="temperature_bath",
+        ),
+        sensors.Pressure(
+            uniqueid="00:15:8d:00:03:cd:1c:97-01-0403",
+            name="pressure_bath",
+        ),
+        sensors.Humidity(
+            uniqueid="00:15:8d:00:03:cd:1c:97-01-0405",
+            name="humidity_bath",
+        ),
+        sensors.Presence(
+            uniqueid="00:15:8d:00:04:14:70:82-01-0406",
+            name="bath_presence_1",
+        ),
+        sensors.LightLevel(
+            uniqueid="00:15:8d:00:04:14:70:82-01-0400",
+            name="bath_light_level_1",
         ),
     },
     messagebus=redis_pub.messages,

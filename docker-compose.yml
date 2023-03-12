@@ -48,7 +48,7 @@ services:
     profiles:
       - pi
     volumes:
-      - sh_db_volume:/home/postgres/pgdata/data
+      - sh_db_volume:/var/lib/postgresql/data
       - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
 
   sh_deconz_hub:

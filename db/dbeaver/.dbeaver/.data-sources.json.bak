@@ -6,11 +6,12 @@
 			"driver": "postgres-jdbc",
 			"name": "postgres",
 			"save-password": true,
+			"read-only": false,
 			"configuration": {
-				"host": "target",
+				"host": "localhost",
 				"port": "5432",
 				"database": "postgres",
-				"url": "jdbc:postgresql://target:5432/postgres",
+				"url": "jdbc:postgresql://localhost:5432/postgres",
 				"configurationType": "MANUAL",
 				"type": "dev",
 				"provider-properties": {
@@ -24,7 +25,8 @@
 					"postgresql.dd.plain.string": "false",
 					"postgresql.dd.tag.string": "false"
 				},
-				"auth-model": "native"
+				"auth-model": "native",
+				"handlers": {}
 			}
 		}
 	},

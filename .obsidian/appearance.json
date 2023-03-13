@@ -1,5 +1,6 @@
 {
   "accentColor": "#ab9df2",
   "baseFontSize": 16,
-  "monospaceFontFamily": "Fira Code"
+  "monospaceFontFamily": "Fira Code",
+  "theme": "obsidian"
 }

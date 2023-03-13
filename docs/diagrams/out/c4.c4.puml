@@ -2,6 +2,7 @@
 !include C4_Dynamic.puml
 !include <tupadr3/common>
 !include <tupadr3/devicons/angular>
+!include <tupadr3/devicons/docker>
 !include <tupadr3/devicons/postgresql>
 !include <tupadr3/devicons/python>
 !include <tupadr3/devicons/redis>
@@ -11,37 +12,43 @@
 !include <tupadr3/font-awesome-5/telegram>
 !include <tupadr3/font-awesome-5/thermometer>
 
-System_Boundary($alias=15, $label="smarthome") {
+System_Boundary($alias=18, $label="smarthome") {
     Container($alias=1, $label="web app", $techn="angular", $sprite=angular)
     Container($alias=2, $label="desktop app", $techn="angular, tauri", $sprite=angular)
-    Container_Ext($alias=3, $label="deconz_hub", $techn="REST API, websockets", $sprite=server)
-    Container_Boundary($alias=12, $label="raspberry") {
-        Component($alias=4, $label="API", $techn="FastAPI", $sprite=python)
-        Component($alias=5, $label="weather-service", $techn="Python", $sprite=python)
-        ComponentDb($alias=6, $label="db", $descr="Настройки, архивы", $techn="PostgreSQL+TimescaleDB", $sprite=postgresql)
+    Container_Boundary($alias=15, $label="raspberry") {
+        Component($alias=3, $label="API", $techn="FastAPI", $sprite=python)
+        Component($alias=4, $label="weather-service", $techn="Python", $sprite=python)
+        ComponentDb($alias=5, $label="db", $descr="Настройки, архивы", $techn="PostgreSQL+TimescaleDB", $sprite=postgresql)
+        Component_Ext($alias=6, $label="deconz_hub", $techn="REST API, websockets", $sprite=server)
         Component($alias=7, $label="driver_deconz", $techn="httpx, websockets", $sprite=python)
         Component($alias=8, $label="driver_yeelight", $techn="asyncio stream", $sprite=python)
-        ComponentQueue($alias=9, $label="Redis", $techn="Redis", $sprite=redis)
-        ComponentQueue($alias=10, $label="redis_to_db", $techn="python", $sprite=python)
-        Component($alias=11, $label="telegram-service", $techn="telegram", $sprite=python)
+        Component($alias=9, $label="grafana", $techn="grafana")
+        Component($alias=10, $label="pgadmin", $techn="pgadmin")
+        Component($alias=11, $label="portainer", $techn="portainer", $sprite=docker)
+        ComponentQueue_Ext($alias=12, $label="redis", $techn="redis", $sprite=redis)
+        ComponentQueue($alias=13, $label="redis_to_db", $techn="python", $sprite=python)
+        Component($alias=14, $label="telegram-service", $techn="telegram", $sprite=python)
     }
-    Container_Ext($alias=13, $label="Zigbee sensors", $techn="T, P, ...", $sprite=thermometer)
-    Container_Ext($alias=14, $label="Yeelight bulbs", $techn="Yeelight", $sprite=lightbulb)
+    Container_Ext($alias=16, $label="Zigbee sensors", $techn="T, P, ...", $sprite=thermometer)
+    Container_Ext($alias=17, $label="Yeelight bulbs", $techn="Yeelight", $sprite=lightbulb)
 }
-System_Ext($alias=16, $label="Weather", $sprite=sun)
-System_Ext($alias=17, $label="Telegram", $sprite=telegram)
+System_Ext($alias=19, $label="Weather", $sprite=sun)
+System_Ext($alias=20, $label="Telegram", $sprite=telegram)
 
-Rel($from=1, $to=4, $label="Uses", $techn="http")
-Rel($from=2, $to=4, $label="Uses", $techn="http")
-Rel_Back($from=16, $to=5, $label="Uses", $techn="http")
-BiRel($from=7, $to=3, $label="Uses", $techn="http")
-Rel($from=3, $to=13, $label="Uses", $techn="zigbee")
-Rel($from=8, $to=14, $label="R/W", $techn="http,Wi-Fi")
-Rel_Back($from=17, $to=17, $label="send", $techn="http")
-BiRel($from=9, $to=8, $label="r/w")
-BiRel($from=9, $to=7, $label="r/w")
-Rel($from=10, $to=9, $label="read")
-Rel($from=10, $to=6, $label="write")
+Rel($from=1, $to=3, $label="Uses", $techn="http")
+Rel($from=2, $to=3, $label="Uses", $techn="http")
+Rel_Back($from=19, $to=4, $label="Uses", $techn="http")
+BiRel($from=7, $to=6, $label="Uses", $techn="http, ws")
+Rel($from=6, $to=16, $label="Uses", $techn="zigbee")
+Rel($from=8, $to=17, $label="R/W", $techn="http,Wi-Fi")
+Rel_Back($from=20, $to=20, $label="send", $techn="http")
+BiRel($from=12, $to=8, $label="r/w")
+Rel_Back($from=12, $to=7, $label="send")
+Rel_Right($from=13, $to=12, $label="read")
+Rel_Left($from=13, $to=5, $label="write")
+Rel($from=9, $to=5, $label="read")
+Rel($from=9, $to=12, $label="read")
+Rel($from=10, $to=5, $label="control")
 
 SHOW_LEGEND()
 @enduml

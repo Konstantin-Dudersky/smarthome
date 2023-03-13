@@ -19,13 +19,6 @@ dia = c4.C4(
                         c4.sprite.tupadr3.Devicons.angular
                     ),
                 ),
-                deconz_hub := c4.container.ContainerExt(
-                    label="deconz_hub",
-                    techn="REST API, websockets",
-                    sprite=c4.sprite.tupadr3.FontAwesome5(
-                        c4.sprite.tupadr3.FontAwesome5.server
-                    ),
-                ),
                 raspberry := c4.container.ContainerBoundary(
                     label="raspberry",
                     components=[
@@ -51,6 +44,13 @@ dia = c4.C4(
                                 c4.sprite.tupadr3.Devicons.postgresql
                             ),
                         ),
+                        deconz_hub := c4.component.ComponentExt(
+                            label="deconz_hub",
+                            techn="REST API, websockets",
+                            sprite=c4.sprite.tupadr3.FontAwesome5(
+                                c4.sprite.tupadr3.FontAwesome5.server
+                            ),
+                        ),
                         driver_deconz := c4.component.Component(
                             label="driver_deconz",
                             techn="httpx, websockets",
@@ -65,9 +65,24 @@ dia = c4.C4(
                                 c4.sprite.tupadr3.Devicons.python
                             ),
                         ),
-                        redis := c4.component.ComponentQueue(
-                            label="Redis",
-                            techn="Redis",
+                        grafana := c4.component.Component(
+                            label="grafana",
+                            techn="grafana",
+                        ),
+                        pgadmin := c4.component.Component(
+                            label="pgadmin",
+                            techn="pgadmin",
+                        ),
+                        portainer := c4.component.Component(
+                            label="portainer",
+                            techn="portainer",
+                            sprite=c4.sprite.tupadr3.Devicons(
+                                c4.sprite.tupadr3.Devicons.docker
+                            ),
+                        ),
+                        redis := c4.component.ComponentQueueExt(
+                            label="redis",
+                            techn="redis",
                             sprite=c4.sprite.tupadr3.Devicons(
                                 c4.sprite.tupadr3.Devicons.redis
                             ),
@@ -124,7 +139,7 @@ dia = c4.C4(
             label="Uses", begin=weather, end=server_weather, techn="http"
         ),
         c4.rel.BiRel(
-            label="Uses", begin=driver_deconz, end=deconz_hub, techn="http"
+            label="Uses", begin=driver_deconz, end=deconz_hub, techn="http, ws"
         ),
         c4.rel.Rel(label="Uses", begin=deconz_hub, end=zigbee, techn="zigbee"),
         c4.rel.Rel(
@@ -140,8 +155,11 @@ dia = c4.C4(
             techn="http",
         ),
         c4.rel.BiRel(begin=redis, end=driver_yeelight, label="r/w"),
-        c4.rel.BiRel(begin=redis, end=driver_deconz, label="r/w"),
-        c4.rel.Rel(begin=redis_to_db, end=redis, label="read"),
-        c4.rel.Rel(begin=redis_to_db, end=db, label="write"),
+        c4.rel.RelBack(begin=redis, end=driver_deconz, label="send"),
+        c4.rel.RelRight(begin=redis_to_db, end=redis, label="read"),
+        c4.rel.RelLeft(begin=redis_to_db, end=db, label="write"),
+        c4.rel.Rel(begin=grafana, end=db, label="read"),
+        c4.rel.Rel(begin=grafana, end=redis, label="read"),
+        c4.rel.Rel(begin=pgadmin, end=db, label="control"),
     ],
 )

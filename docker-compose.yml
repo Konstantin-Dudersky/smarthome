@@ -110,8 +110,8 @@ services:
   redis_to_db:
     container_name: redis_to_db
     depends_on:
-      - redis
       - db
+      - redis
     hostname: redis_to_db
     image: docker-registry:5000/smarthome/redis_to_db
     profiles:

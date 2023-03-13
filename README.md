@@ -1,8 +1,25 @@
 Управление автоматикой в доме.
 
+## Описание
+
 Структурная схема:
 
 ![docs/diagrams/out/c4.svg](docs/diagrams/out/c4.svg)
+
+Сервисы:
+
+| Сервис                                   | Описание                                      | Запуск зависит от |
+| ---------------------------------------- | --------------------------------------------- | ----------------- |
+| [db](db/README.md)                       | База данных PostgreSQL                        |                   |
+| deconz_hub                               |                                               |                   |
+| [driver_deconz](driver_deconz/README.md) | Считывание Zegbee датчиков и передача в Redis | deconz_hub, redis |
+| driver_yeelight                          |                                               | redis             |
+| grafana                                  | Просмотр исторических данных                  | db, redis         |
+| pgadmin                                  | Веб-интерфейс для управления db               |                   |
+| portainer                                | Веб-интерфейс для docker                      |                   |
+| redis                                    | Брокер сообщений                              |                   |
+| [redis_to_db](redis_to_db/README.md)     | Архивация сообщений из брокера                | db, redis         |
+|                                          |                                               |                   |
 
 Документацию можно смотреть в [obsidian](https://obsidian.md/). Открыть корневую папку репозитория (open folder as vault). Затем можно открывать по ярлыку `obsidian.py`.
 

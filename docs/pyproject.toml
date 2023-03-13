@@ -19,8 +19,8 @@ shell = """poetry run sphinx-apidoc -f --separate -o sphinx/in ../shared \
 """
 
 [tool.poe.tasks.update_stubs]
-shell = """rm -rf .venv/typings/konstantin_docs \
-    && pyright --createstub konstantin_docs
+shell = """rm -rf .venv/typings \
+    && pyright --createstub dataclass_to_diagram
 """
 
 

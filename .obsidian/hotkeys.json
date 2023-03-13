@@ -6,10 +6,26 @@
     }
   ],
   "app:open-help": [],
-  "editor:toggle-source": [
+  "editor:toggle-source": [],
+  "markdown:toggle-preview": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "E"
+    },
     {
       "modifiers": [],
-      "key": "F4"
+      "key": "F2"
+    }
+  ],
+  "workspace:edit-file-title": [],
+  "hotkeysplus-obsidian:toggle-readable-length": [
+    {
+      "modifiers": [
+        "Alt"
+      ],
+      "key": "W"
     }
   ]
 }

@@ -11,8 +11,12 @@
             "id": "e1dad8f7892dc9ca",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "preview",
+                "source": true
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "README.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,38 +124,59 @@
             "type": "leaf",
             "state": {
               "type": "outline",
+              "state": {
+                "file": "README.md"
+              }
+            }
+          },
+          {
+            "id": "5cf700139737498c",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
-      "table-editor-obsidian:Advanced Tables Toolbar": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
   "active": "e1dad8f7892dc9ca",
   "lastOpenFiles": [
+    "docs/diagrams/in/__pycache__/c4.cpython-311.pyc.139787440051168",
+    "docs/diagrams/in/c4.py.a65de09252fbe6d0bab6bad2f287d3be.tmp",
+    "redis_to_db/README.md",
+    "README.md",
+    "db/README.md",
+    "docs/README.md",
+    "docs/diagrams/in/__pycache__/db_conf.cpython-311.pyc",
+    "docs/diagrams/in/__pycache__/network.cpython-311.pyc",
+    "docs/diagrams/in/__pycache__/c4.cpython-311.pyc",
+    "docs/diagrams/in/__pycache__",
+    "docs/pyproject.toml",
+    "docs/poetry.lock",
+    "docs/diagrams/pyproject.toml",
+    "docs/diagrams/poetry.lock",
     "Untitled.canvas",
     "docs/todo.md",
     "driver_deconz/README.md",
-    "README.md",
     "docs/Описание.md",
-    "db/README.md",
     "deconz_hub/README.md",
     "docs/diagrams/out/network.png",
-    "docs/README.md",
     "docs/схема.svg"
   ]
 }

@@ -1,65 +1,36 @@
 # Запуск контейнеров:
-# docker compose --profile --pull always pi up -d
+# docker compose --profile pi --pull always up -d
 
 version: '3.8'
 name: smarthome
+
 services:
 
-  # system ---------------------------------------------------------------------
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    hostname: pgadmin
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=${pgadmin_email}
-      - PGADMIN_DEFAULT_PASSWORD=${pgadmin_password}
-    ports:
-      - "${pgadmin_port}:80"
-    profiles:
-      - pi
-    restart: always
-    volumes:
-      - sh_pgadmin_volume:/var/lib/pgadmin
-
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    ports:
-      - "8001:9000"
-    restart: always
-    profiles:
-      - system
-    volumes:
-      - portainer_data_volume:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  # pi -------------------------------------------------------------------------
-  sh_db:
-    image: docker-registry:5000/smarthome/sh_db
-    container_name: sh_db
-    hostname: sh_db
+  db:
+    container_name: db
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     environment:
       - POSTGRES_USER=${db_user}
       - POSTGRES_PASSWORD=${db_password}
+    hostname: db
+    image: docker-registry:5000/smarthome/db
     ports:
       - "${db_port}:5432"
     profiles:
       - pi
     volumes:
-      - sh_db_volume:/var/lib/postgresql/data
+      - db_volume:/var/lib/postgresql/data
       - ./db/postgresql.conf:/etc/postgresql/postgresql.conf
 
-  sh_deconz_hub:
-    image: docker-registry:5000/smarthome/sh_deconz_hub
-    container_name: sh_deconz_hub
-    hostname: sh_deconz_hub
+  deconz_hub:
+    container_name: deconz_hub
     devices:
       - /dev/ttyACM0
     environment:
       - DECONZ_VNC_MODE=1
       - DECONZ_VNC_PASSWORD=${deconz_hub_vnc_password}
+    hostname: deconz_hub
+    image: docker-registry:5000/smarthome/deconz_hub
     ports:
       - "${deconz_hub_port_api}:80"
       - "${deconz_hub_port_ws}:443"
@@ -69,15 +40,15 @@ services:
       - pi
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - sh_deconz_hub_volume:/opt/deCONZ
+      - deconz_hub_volume:/opt/deCONZ
 
-  sh_driver_deconz:
-    image: docker-registry:5000/smarthome/sh_driver_deconz
-    container_name: sh_driver_deconz
-    hostname: sh_driver_deconz
+  driver_deconz:
+    container_name: driver_deconz
     depends_on:
-      - sh_deconz_hub
-      - sh_redis
+      - deconz_hub
+      - redis
+    hostname: driver_deconz
+    image: docker-registry:5000/smarthome/driver_deconz
     ports:
       - "${driver_deconz_port}:${driver_deconz_port}"
     profiles:
@@ -86,64 +57,87 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - .:/root/code
 
-  sh_grafana:
-    image: docker-registry:5000/smarthome/sh_grafana
-    container_name: sh_grafana
-    hostname: sh_grafana
+  grafana:
+    container_name: grafana
     depends_on:
-      - sh_redis
-      - sh_db
+      - redis
+      - db
+    hostname: grafana
+    image: docker-registry:5000/smarthome/grafana
     ports:
       - "${grafana_port}:3000"
     profiles:
       - pi
     volumes:
-      - sh_grafana_volume:/var/lib/grafana
+      - grafana_volume:/var/lib/grafana
 
-  sh_redis:
-    image: docker-registry:5000/smarthome/sh_redis
-    container_name: sh_redis
-    hostname: sh_redis
+  pgadmin:
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${pgadmin_email}
+      - PGADMIN_DEFAULT_PASSWORD=${pgadmin_password}
+    hostname: pgadmin
+    image: docker-registry:5000/smarthome/pgadmin
+    ports:
+      - "${pgadmin_port}:80"
+    restart: always
+    volumes:
+      - pgadmin_volume:/var/lib/pgadmin
+
+  portainer:
+    container_name: portainer
+    hostname: portainer
+    image: docker-registry:5000/smarthome/portainer
+    ports:
+      - "8001:9000"
+    profiles:
+      - system
+    restart: always
+    volumes:
+      - portainer_data_volume:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: docker-registry:5000/smarthome/redis
     ports:
       - "${redis_port}:6379"
       - "${redis_ui_port}:8001"
     profiles:
       - pi
 
-  sh_redis_to_db:
-    image: docker-registry:5000/smarthome/sh_redis_to_db
-    container_name: sh_redis_to_db
-    hostname: sh_redis_to_db
+  redis_to_db:
+    container_name: redis_to_db
     depends_on:
-      - sh_redis
-      - sh_db
+      - redis
+      - db
+    hostname: redis_to_db
+    image: docker-registry:5000/smarthome/redis_to_db
     profiles:
       - pi
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - .:/root/code
 
-  sh_setup:
-    image: docker-registry:5000/smarthome/sh_setup
-    container_name: sh_setup
-    hostname: sh_setup
+  setup:
+    container_name: setup
+    hostname: setup
+    image: docker-registry:5000/smarthome/setup
+    profiles:
+      - nostart
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - .:/root/code
 
 volumes:
-  sh_db_volume:
-    name: sh_db_volume
-  sh_pgadmin_volume:
-    name: sh_pgadmin_volume
-  sh_deconz_hub_volume:
-    name: sh_deconz_hub_volume
+  db_volume:
+    name: db_volume
+  pgadmin_volume:
+    name: pgadmin_volume
+  deconz_hub_volume:
+    name: deconz_hub_volume
   portainer_data_volume:
     name: portainer_data_volume
-  sh_grafana_volume:
-    name: sh_grafana_volume
-
-networks:
-  no-internet:
-    driver: bridge
-    internal: true
+  grafana_volume:
+    name: grafana_volume

@@ -5,7 +5,7 @@ docker buildx bake --builder builder -f docker-bake.hcl --push pi
 
 Один образ:
 
-docker buildx bake --builder builder -f docker-bake.hcl --push sh_db
+docker buildx bake --builder builder -f docker-bake.hcl --push db
 */
 
 // https://hub.docker.com/r/deconzcommunity/deconz/tags
@@ -37,7 +37,7 @@ PLATFORMS = [
     "linux/arm64"
 ]
 
-target "base_python_image" {
+target "_base_python_image" {
     dockerfile = "shared/Dockerfile"
     args = {
         POETRY_VER = "${POETRY_VER}",
@@ -46,9 +46,9 @@ target "base_python_image" {
     platforms = PLATFORMS
 }
 
-target "sh_db" {
+target "db" {
     dockerfile = "db/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_db" ]
+    tags = [ "${REPO}/smarthome/db" ]
     args = {
         POSTGRE_VER = "${POSTGRE_VER}"
         TIMESCALEDB_VER = "${TIMESCALEDB_VER}"
@@ -56,68 +56,82 @@ target "sh_db" {
     platforms = PLATFORMS
 }
 
-target "sh_deconz_hub" {
+target "deconz_hub" {
     dockerfile = "deconz_hub/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_deconz_hub" ]
+    tags = [ "${REPO}/smarthome/deconz_hub" ]
     args = {
         DECONZ_VER="${DECONZ_VER}"
     }
     platforms = PLATFORMS
 }
 
-target "sh_driver_deconz" {
+target "driver_deconz" {
     contexts = {
-        base_python_image = "target:base_python_image"
+        base_python_image = "target:_base_python_image"
     }
     dockerfile = "driver_deconz/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_driver_deconz" ]
+    tags = [ "${REPO}/smarthome/driver_deconz" ]
     platforms = PLATFORMS
 }
 
-target "sh_grafana" {
+target "grafana" {
     dockerfile = "grafana/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_grafana" ]
+    tags = [ "${REPO}/smarthome/grafana" ]
     args = {
         GRAFANA = GRAFANA
     }
     platforms = PLATFORMS
 }
 
-target "sh_setup" {
-    contexts = {
-        base_python_image = "target:base_python_image"
-    }
-    dockerfile = "setup/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_setup" ]
+target "pgadmin" {
+    dockerfile-inline = "FROM dpage/pgadmin4:latest"
+    tags = [ "${REPO}/smarthome/pgadmin" ]
     platforms = PLATFORMS
 }
 
-target "sh_redis" {
+target "portainer" {
+    dockerfile-inline = "FROM portainer/portainer-ce:latest"
+    tags = [ "${REPO}/smarthome/portainer" ]
+    platforms = PLATFORMS
+}
+
+target "redis" {
     dockerfile = "redis/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_redis" ]
+    tags = [ "${REPO}/smarthome/redis" ]
     args = {
         REDIS = REDIS
     }
     platforms = PLATFORMS
 }
 
-target "sh_redis_to_db" {
+target "redis_to_db" {
     contexts = {
-        base_python_image = "target:base_python_image"
+        base_python_image = "target:_base_python_image"
     }
     dockerfile = "redis_to_db/Dockerfile"
-    tags = [ "${REPO}/smarthome/sh_redis_to_db" ]
+    tags = [ "${REPO}/smarthome/redis_to_db" ]
+    platforms = PLATFORMS
+}
+
+target "setup" {
+    contexts = {
+        base_python_image = "target:_base_python_image"
+    }
+    dockerfile = "setup/Dockerfile"
+    tags = [ "${REPO}/smarthome/setup" ]
     platforms = PLATFORMS
 }
 
 group "pi" {
     targets = [
-        "sh_db",
-        "sh_deconz_hub",
-        "sh_driver_deconz",
-        "sh_grafana",
-        "sh_redis",
-        "sh_redis_to_db",
-        "sh_setup",
+        "db",
+        "deconz_hub",
+        "driver_deconz",
+        "grafana",
+        "pgadmin",
+        "portainer",
+        "redis",
+        "redis_to_db",
+        "setup",
     ]
 }

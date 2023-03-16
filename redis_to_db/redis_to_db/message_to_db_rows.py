@@ -3,7 +3,7 @@ import logging
 import arrow
 from db.data.models import AggEnum, Row
 from functools import singledispatch
-from shared import messages
+from shared.messages import messages
 from typing import Final
 
 log = logging.getLogger(__name__)

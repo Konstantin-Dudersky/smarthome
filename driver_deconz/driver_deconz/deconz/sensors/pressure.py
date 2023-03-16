@@ -2,7 +2,7 @@
 
 import datetime as dt
 
-from shared import messages
+from shared.messages import messages
 
 from .base_sensor import (
     BaseSensor,

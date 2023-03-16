@@ -8,7 +8,7 @@ from typing import Any
 from redis.asyncio import Redis
 
 from shared.tasks_runner import ITaskRunnerAdd
-from shared.messages import BaseMessage, dict_messages
+from shared.messages import BaseMessage, messages_dict
 
 from .subs_collection import SubsCollection
 from ..simple_deque import ISimpleDequePop
@@ -47,7 +47,7 @@ class RedisSubscriber(object):
 
     def __process_message(self, message: str) -> None:
         class_name: str = BaseMessage.parse_raw(message).class_name or ""
-        full_message = dict_messages[class_name].parse_raw(message)
+        full_message = messages_dict[class_name].parse_raw(message)
         self.__subs.new_message(full_message.entity_id, full_message)
 
     def add_subs(self, subs_name: str, entity_id: str | None) -> None:

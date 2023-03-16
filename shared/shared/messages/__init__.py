@@ -1,34 +1,11 @@
 """Сообщения для передачи через брокер сообщений."""
 
-from typing import Type
-
-from .base_message import (
-    BaseMessage,
-    HumiditySensor,
-    LightLevel,
-    OpenCloseSensor,
-    PresenceSensor,
-    PressureSensor,
-    TemperatureSensor,
-)
+from . import messages
+from .base_message import BaseMessage
+from .register_message import messages_dict
 
 __all__ = [
     "BaseMessage",
-    "HumiditySensor",
-    "LightLevel",
-    "OpenCloseSensor",
-    "PresenceSensor",
-    "PressureSensor",
-    "TemperatureSensor",
+    "messages",
+    "messages_dict",
 ]
-
-
-# TODO - сделать через декоратор
-dict_messages: dict[str, Type[BaseMessage]] = {
-    "HumiditySensor": HumiditySensor,
-    "LightLevel": LightLevel,
-    "OpenCloseSensor": OpenCloseSensor,
-    "PresenceSensor": PresenceSensor,
-    "PressureSensor": PressureSensor,
-    "TemperatureSensor": TemperatureSensor,
-}
